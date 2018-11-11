@@ -1,0 +1,13 @@
+
+
+.. _stylo_testing_shape:
+
+Stylo.Testing.Shape
+===================
+
+.. automodule:: stylo.testing.shape
+   :members:
+   :undoc-members:
+   :private-members:
+   :show-inheritance:
+

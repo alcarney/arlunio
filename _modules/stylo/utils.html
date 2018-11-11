@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+        <link href="https://fonts.googleapis.com/css?family=Nanum+Myeongjo" rel="stylesheet">
+
+        <!-- TODO: Run CSS + JS through minifiers -->
+        <link rel="stylesheet" href="../../_static/css/main.css" type="text/css" >
+        <link rel="stylesheet" href="../../_static/css/highlight.css " type="text/css" >
+
+        <script type="text/javascript" id="documentation_options"
+                data-url_root="../../"
+                src="../../_static/documentation_options.js"></script>
+        <script async
+                src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"
+                type="application/javascript"></script>
+
+        <title>stylo.utils - Stylo v0.9.0</title>
+
+        
+    </head>
+    <body>
+        <!-- Slightly modified from the basic theme in the Sphinx repository
+        https://github.com/sphinx-doc/sphinx/blob/master/sphinx/themes/basic/layout.html -->
+
+        <div class="header">
+            <a href="../../index.html" id="site-name"><h2>Stylo<sub>v0.9.0</sub></h2></a>
+            <label class="menu-toggle" for="menu-toggle">Menu</label>
+            <input type="checkbox" id="menu-toggle">
+            <div class="nav-sections">
+                <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../using/index.html">User’s Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../extending/index.html">Extending</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contributing/index.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../maths/index.html">Mathematics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/index.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../glossary.html">Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../changes.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../about.html">About the Docs</a></li>
+</ul>
+
+            </div>
+        </div>
+        <div class="nav">
+            <div>
+                <h3 class="nav-header">Page Contents</h3>
+                
+            </div>
+            <form class="search" action="../../search.html" method="get">
+                  <input type="text" name="q" placeholder="Search"/>
+                  <input type="hidden" name="check_keywords" value="yes" />
+                  <input type="hidden" name="area" value="default" />
+            </form>
+        </div>
+        <div class="content">
+<div class="main">
+    <h1>Source code for stylo.utils</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">uuid</span> <span class="k">import</span> <span class="n">uuid4</span>
+<span class="kn">from</span> <span class="nn">inspect</span> <span class="k">import</span> <span class="n">signature</span>
+
+
+<div class="viewcode-block" id="bounded_property"><a class="viewcode-back" href="../../api/stylo_utils.html#stylo.utils.bounded_property">[docs]</a><span class="k">def</span> <span class="nf">bounded_property</span><span class="p">(</span>
+    <span class="n">name</span><span class="p">,</span>
+    <span class="n">bounded_above</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">bounded_above_by</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">bounded_below</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">bounded_below_by</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+<span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Factory function to define a bounded property.</span>
+
+<span class="sd">    This function writes a property definition for a numeric bounded property.</span>
+<span class="sd">    It can be bounded above, below or both and the bound can either be a given</span>
+<span class="sd">    number or another attribute/property on the same class.</span>
+
+<span class="sd">    The bound can be specified by a constant numeric value e.g. :code:`1` or</span>
+<span class="sd">    :code:`2.4` in which case you use the :code:`bounded_above` and</span>
+<span class="sd">    :code:`bounded_below` arguments.</span>
+
+<span class="sd">    Alternatively to specify the bound as the value of an attribute on the</span>
+<span class="sd">    same class then use the :code:`bounded_above_by` and :code:`bounded_below_by`</span>
+<span class="sd">    arugments and pass in the name of the attribute as a string.</span>
+
+<span class="sd">    .. note::</span>
+
+<span class="sd">       You cannot simultaneously use the :code:`bounded_xxx` and</span>
+<span class="sd">       :code:`bounded_xxx_by` version of an argument.</span>
+
+<span class="sd">    :param name: The name of the property</span>
+<span class="sd">    :param bounded_above: The value to bound the property above by. This cannot</span>
+<span class="sd">                          be used in conjunction with :code:`bounded_above_by`</span>
+<span class="sd">    :param bounded_below: The value to bound the property below by. This cannot</span>
+<span class="sd">                          be used in conjunction with :code:`bounded_below_by`</span>
+<span class="sd">    :param bounded_above_by: The name of the attribute to bound the value by. This</span>
+<span class="sd">                             cannot be used in conjunction with :code:`bounded_above`</span>
+<span class="sd">    :param bounded_below_by: The name of the attribute to bound the value by. This</span>
+<span class="sd">                             cannot be used in conjunction with :code:`bounded_below`.</span>
+
+<span class="sd">    :type name: str</span>
+<span class="sd">    :type bounded_above: float, int</span>
+<span class="sd">    :type bounded_below: float, int</span>
+<span class="sd">    :type bounded_below_by: str</span>
+<span class="sd">    :type bounded_above_by: str</span>
+
+<span class="sd">    :raises ValueError: If the given arguments are inconsistent in some way.</span>
+<span class="sd">    :raises TypeError: If the given arguments do not have their expected types</span>
+
+<span class="sd">    :returns: The constructed property instance</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># First check that the given arguments make sense.</span>
+    <span class="k">if</span> <span class="n">bounded_below</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">bounded_below_by</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;You can only use &quot;bounded_below&quot; or &quot;bounded_below_by&quot;&#39;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">bounded_above</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">bounded_above_by</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;You can only use &quot;bounded_above&quot; or &quot;bounded_above_by&quot;&#39;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">bounded_below</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">bounded_below</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">)):</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;The value of bounded_below must be a number.&quot;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">bounded_above</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">bounded_above</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">)):</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;The value of bounded_above must be a number.&quot;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">bounded_below_by</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">bounded_below_by</span><span class="p">,</span> <span class="p">(</span><span class="nb">str</span><span class="p">,)):</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;The value of bounded_below_by must be a string&quot;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">bounded_above_by</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">bounded_above_by</span><span class="p">,</span> <span class="p">(</span><span class="nb">str</span><span class="p">,)):</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;The value of bounded_above_by must be a string&quot;</span><span class="p">)</span>
+
+    <span class="n">hidden_name</span> <span class="o">=</span> <span class="s2">&quot;_&quot;</span> <span class="o">+</span> <span class="n">name</span>
+
+    <span class="n">type_error_message</span> <span class="o">=</span> <span class="s2">&quot;Value of property </span><span class="si">{0}</span><span class="s2"> must be a number&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+    <span class="n">bounded_below_message</span> <span class="o">=</span> <span class="s2">&quot;Value of property </span><span class="si">{0}</span><span class="s2"> must be strictly larger than </span><span class="si">{1}</span><span class="s2">&quot;</span>
+    <span class="n">bounded_below_by_message</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="s2">&quot;Value of property </span><span class="si">{0}</span><span class="s2"> must be strictly larger than the value of property </span><span class="si">{1}</span><span class="s2">&quot;</span>
+    <span class="p">)</span>
+    <span class="n">bounded_above_message</span> <span class="o">=</span> <span class="s2">&quot;Value of property </span><span class="si">{0}</span><span class="s2"> must be strictly less than </span><span class="si">{1}</span><span class="s2">&quot;</span>
+    <span class="n">bounded_above_by_message</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="s2">&quot;Value of property </span><span class="si">{0}</span><span class="s2"> must be strictly less than the value of property </span><span class="si">{1}</span><span class="s2">&quot;</span>
+    <span class="p">)</span>
+
+    <span class="n">checks</span> <span class="o">=</span> <span class="p">[(</span><span class="k">lambda</span> <span class="n">s</span><span class="p">,</span> <span class="n">v</span><span class="p">:</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">)),</span> <span class="ne">TypeError</span><span class="p">(</span><span class="n">type_error_message</span><span class="p">))]</span>
+
+    <span class="k">if</span> <span class="n">bounded_above</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">exception</span> <span class="o">=</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">bounded_above_message</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">bounded_above</span><span class="p">))</span>
+        <span class="n">checks</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="k">lambda</span> <span class="n">s</span><span class="p">,</span> <span class="n">v</span><span class="p">:</span> <span class="n">v</span> <span class="o">&lt;</span> <span class="n">bounded_above</span><span class="p">,</span> <span class="n">exception</span><span class="p">))</span>
+
+    <span class="k">if</span> <span class="n">bounded_above_by</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">exception</span> <span class="o">=</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">bounded_above_by_message</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">bounded_above_by</span><span class="p">))</span>
+        <span class="n">checks</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+            <span class="p">(</span><span class="k">lambda</span> <span class="n">s</span><span class="p">,</span> <span class="n">v</span><span class="p">:</span> <span class="n">v</span> <span class="o">&lt;</span> <span class="n">s</span><span class="o">.</span><span class="fm">__getattribute__</span><span class="p">(</span><span class="n">bounded_above_by</span><span class="p">),</span> <span class="n">exception</span><span class="p">)</span>
+        <span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">bounded_below</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">exception</span> <span class="o">=</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">bounded_below_message</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">bounded_below</span><span class="p">))</span>
+        <span class="n">checks</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="k">lambda</span> <span class="n">s</span><span class="p">,</span> <span class="n">v</span><span class="p">:</span> <span class="n">v</span> <span class="o">&gt;</span> <span class="n">bounded_below</span><span class="p">,</span> <span class="n">exception</span><span class="p">))</span>
+
+    <span class="k">if</span> <span class="n">bounded_below_by</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">exception</span> <span class="o">=</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">bounded_below_by_message</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">bounded_below_by</span><span class="p">))</span>
+        <span class="n">checks</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+            <span class="p">(</span><span class="k">lambda</span> <span class="n">s</span><span class="p">,</span> <span class="n">v</span><span class="p">:</span> <span class="n">v</span> <span class="o">&gt;</span> <span class="n">s</span><span class="o">.</span><span class="fm">__getattribute__</span><span class="p">(</span><span class="n">bounded_below_by</span><span class="p">),</span> <span class="n">exception</span><span class="p">)</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">getter</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="fm">__getattribute__</span><span class="p">(</span><span class="n">hidden_name</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">setter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+
+        <span class="k">for</span> <span class="p">(</span><span class="n">value_ok</span><span class="p">,</span> <span class="n">err</span><span class="p">)</span> <span class="ow">in</span> <span class="n">checks</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">value_ok</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="n">err</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="fm">__setattr__</span><span class="p">(</span><span class="n">hidden_name</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="nb">property</span><span class="p">(</span><span class="n">fget</span><span class="o">=</span><span class="n">getter</span><span class="p">,</span> <span class="n">fset</span><span class="o">=</span><span class="n">setter</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="get_parameters"><a class="viewcode-back" href="../../api/stylo_utils.html#stylo.utils.get_parameters">[docs]</a><span class="k">def</span> <span class="nf">get_parameters</span><span class="p">(</span><span class="n">f</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Given a function f, return a tuple of all its</span>
+<span class="sd">    parameters</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">return</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">signature</span><span class="p">(</span><span class="n">f</span><span class="p">)</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span></div>
+
+
+<div class="viewcode-block" id="MessageBus"><a class="viewcode-back" href="../../api/stylo_utils.html#stylo.utils.MessageBus">[docs]</a><span class="k">class</span> <span class="nc">MessageBus</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;A class that is used behind the scenes to coordinate events and timings of</span>
+<span class="sd">    animations.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">subs</span> <span class="o">=</span> <span class="p">{}</span>
+
+<div class="viewcode-block" id="MessageBus.new_id"><a class="viewcode-back" href="../../api/stylo_utils.html#stylo.utils.MessageBus.new_id">[docs]</a>    <span class="k">def</span> <span class="nf">new_id</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Use this to get a name to use for your events.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">uuid4</span><span class="p">())</span></div>
+
+<div class="viewcode-block" id="MessageBus.register"><a class="viewcode-back" href="../../api/stylo_utils.html#stylo.utils.MessageBus.register">[docs]</a>    <span class="k">def</span> <span class="nf">register</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">,</span> <span class="n">obj</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Register to receive notifications of an event.</span>
+
+<span class="sd">        :param event: The name of the kind of event to receive</span>
+<span class="sd">        :param obj: The object to receive that kind of message.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="n">event</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">subs</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">subs</span><span class="p">[</span><span class="n">event</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">obj</span><span class="p">]</span>
+            <span class="k">return</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">subs</span><span class="p">[</span><span class="n">event</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="MessageBus.send"><a class="viewcode-back" href="../../api/stylo_utils.html#stylo.utils.MessageBus.send">[docs]</a>    <span class="k">def</span> <span class="nf">send</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Send a message to whoever may be listening.&quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="n">event</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">subs</span><span class="p">:</span>
+            <span class="k">return</span>
+
+        <span class="k">for</span> <span class="n">obj</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">subs</span><span class="p">[</span><span class="n">event</span><span class="p">]:</span>
+
+            <span class="n">params</span> <span class="o">=</span> <span class="n">get_parameters</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
+            <span class="n">values</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">params</span><span class="p">}</span>
+
+            <span class="n">obj</span><span class="p">(</span><span class="o">**</span><span class="n">values</span><span class="p">)</span></div></div>
+
+
+<span class="n">_message_bus</span> <span class="o">=</span> <span class="n">MessageBus</span><span class="p">()</span>
+
+
+<div class="viewcode-block" id="get_message_bus"><a class="viewcode-back" href="../../api/stylo_utils.html#stylo.utils.get_message_bus">[docs]</a><span class="k">def</span> <span class="nf">get_message_bus</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;A function that returns an instance of the message bus to ensure everyone uses</span>
+<span class="sd">    the same instance.&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">_message_bus</span></div>
+</pre></div>
+    
+</div>
+        </div>
+        <div class="footer">
+
+            
+                <p>
+                  Powered by <a href="http://www.sphinx-doc.org/">Sphinx</a> 1.8.2 &amp;
+                  <a href="https://github.com/alcarney/topos-theme">Topos Theme</a> 0.0.10
+                </p>
+        </div>
+    </body>
+</html>

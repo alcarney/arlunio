@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+        <link href="https://fonts.googleapis.com/css?family=Nanum+Myeongjo" rel="stylesheet">
+
+        <!-- TODO: Run CSS + JS through minifiers -->
+        <link rel="stylesheet" href="../_static/css/main.css" type="text/css" >
+        <link rel="stylesheet" href="../_static/css/highlight.css " type="text/css" >
+
+        <script type="text/javascript" id="documentation_options"
+                data-url_root="../"
+                src="../_static/documentation_options.js"></script>
+        <script async
+                src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"
+                type="application/javascript"></script>
+
+        <title>Stylo.Domain._factory - Stylo v0.9.0</title>
+
+        
+    </head>
+    <body>
+        <!-- Slightly modified from the basic theme in the Sphinx repository
+        https://github.com/sphinx-doc/sphinx/blob/master/sphinx/themes/basic/layout.html -->
+
+        <div class="header">
+            <a href="../index.html" id="site-name"><h2>Stylo<sub>v0.9.0</sub></h2></a>
+            <label class="menu-toggle" for="menu-toggle">Menu</label>
+            <input type="checkbox" id="menu-toggle">
+            <div class="nav-sections">
+                <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../using/index.html">User’s Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../extending/index.html">Extending</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contributing/index.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../maths/index.html">Mathematics</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../glossary.html">Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changes.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../about.html">About the Docs</a></li>
+</ul>
+
+            </div>
+        </div>
+        <div class="nav">
+            <div>
+                <h3 class="nav-header">Page Contents</h3>
+                <ul>
+<li><a class="reference internal" href="#">Stylo.Domain._factory</a></li>
+</ul>
+
+            </div>
+            <form class="search" action="../search.html" method="get">
+                  <input type="text" name="q" placeholder="Search"/>
+                  <input type="hidden" name="check_keywords" value="yes" />
+                  <input type="hidden" name="area" value="default" />
+            </form>
+        </div>
+        <div class="content">
+<div class="main">
+    <div class="section" id="module-stylo.domain._factory">
+<span id="id1"></span><span id="stylo-domain-factory"></span><h1>Stylo.Domain._factory<a class="headerlink" href="#module-stylo.domain._factory" title="Permalink to this headline">¶</a></h1>
+<p>A <code class="code docutils literal notranslate"><span class="pre">Domain</span></code> is responsible for converting some abstract notion of a mathematical
+space into a discrete representation. Since <code class="code docutils literal notranslate"><span class="pre">stylo</span></code> is about creating images this
+representation is typically a 2D grid of numbers.</p>
+<p>This document details the machinery behind the <code class="code docutils literal notranslate"><span class="pre">Domain</span></code> system. More specifically
+how the <code class="code docutils literal notranslate"><span class="pre">define_domain</span></code> and <code class="code docutils literal notranslate"><span class="pre">define_domain_transform</span></code> functions work. It
+assumes you are already familiar with how the user interacts with <code class="code docutils literal notranslate"><span class="pre">Domain</span></code> objects
+and is written for someone who wishes to understand how they work behind the scenes.</p>
+<p>This module contains all the code that is required to automatically write both the
+definition of a new Domain type and the test case that users can use to verify that
+their implementations of said domains adhere to the expected interface.</p>
+<dl class="function">
+<dt id="stylo.domain._factory.define_domain">
+<code class="descclassname">stylo.domain._factory.</code><code class="descname">define_domain</code><span class="sig-paren">(</span><em>name</em>, <em>parameters</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/stylo/domain/_factory.html#define_domain"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#stylo.domain._factory.define_domain" title="Permalink to this definition">¶</a></dt>
+<dd><p>Given the name and the input parameters, construct the Domain definition.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – The name of the <code class="code docutils literal notranslate"><span class="pre">Domain</span></code></li>
+<li><strong>parameters</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.7)"><em>list</em></a><em>(</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a><em>)</em>) – A list of strings that encode the names of the parameters within
+the domain</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="stylo.domain._factory.define_domain_transform">
+<code class="descclassname">stylo.domain._factory.</code><code class="descname">define_domain_transform</code><span class="sig-paren">(</span><em>base</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/stylo/domain/_factory.html#define_domain_transform"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#stylo.domain._factory.define_domain_transform" title="Permalink to this definition">¶</a></dt>
+<dd><p>This constructs the class definition for a domain transform.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – The name of the base domain</li>
+<li><strong>base</strong> (<em>class</em>) – The class definition of the base domain</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="stylo.domain._factory.domain_call">
+<code class="descclassname">stylo.domain._factory.</code><code class="descname">domain_call</code><span class="sig-paren">(</span><em>self</em>, <em>width</em>, <em>height</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/stylo/domain/_factory.html#domain_call"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#stylo.domain._factory.domain_call" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="stylo.domain._factory.domain_getitem">
+<code class="descclassname">stylo.domain._factory.</code><code class="descname">domain_getitem</code><span class="sig-paren">(</span><em>self</em>, <em>key</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/stylo/domain/_factory.html#domain_getitem"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#stylo.domain._factory.domain_getitem" title="Permalink to this definition">¶</a></dt>
+<dd><p>Enable the domain[…] syntax for domains.</p>
+<p>Domains support the ability to return a function in <code class="code docutils literal notranslate"><span class="pre">(width,</span> <span class="pre">height)</span></code>
+of multiple parameters, for example for a <code class="code docutils literal notranslate"><span class="pre">RealDomain</span></code> you might want a
+function in both the <span class="math notranslate nohighlight">\(x\)</span> and <span class="math notranslate nohighlight">\(y\)</span> coordinates in which case you would
+write</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">values</span> <span class="o">=</span> <span class="n">domain</span><span class="p">[</span><span class="s1">&#39;xy&#39;</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">values</span><span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="n">N</span><span class="p">)</span>
+<span class="go">(array([[x0, x1, ..., xN],</span>
+<span class="go">        [x0, x1, ..., XN],</span>
+<span class="go">        ...</span>
+<span class="go">        [x0, x1, ..., xN]]),</span>
+<span class="go"> array([[y0, y0, ..., y0],</span>
+<span class="go">        [y1, y1, ..., y1],</span>
+<span class="go">        ...,</span>
+<span class="go">        [yN, yN, ..., yN]]))</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The string argument <code class="code docutils literal notranslate"><span class="pre">'xy'</span></code> only works in the case of single letter
+parameters. For multi-character parameters such as <code class="code docutils literal notranslate"><span class="pre">pt</span></code> this argument
+must be some other iterable such as a tuple e.g. <code class="code docutils literal notranslate"><span class="pre">('x',</span> <span class="pre">'pt')</span></code>.</p>
+</div>
+<p>This function constructs the implementation for the <code class="code docutils literal notranslate"><span class="pre">__getitem__</span></code> method that
+will be added to new <code class="code docutils literal notranslate"><span class="pre">Domain</span></code> definitions</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>self</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.7)"><em>object</em></a>) – The standard python instance argument for methods</li>
+<li><strong>key</strong> (<em>iterable</em>) – The input that is given to the getitem syntax e.g. <code class="code docutils literal notranslate"><span class="pre">'xy'</span></code></li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="stylo.domain._factory.domain_property">
+<code class="descclassname">stylo.domain._factory.</code><code class="descname">domain_property</code><span class="sig-paren">(</span><em>base</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/stylo/domain/_factory.html#domain_property"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#stylo.domain._factory.domain_property" title="Permalink to this definition">¶</a></dt>
+<dd><p>Construct the domain property for the domain transform base class.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>base</strong> (<em>class</em>) – The base Domain class</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="stylo.domain._factory.mk_abstractmethod">
+<code class="descclassname">stylo.domain._factory.</code><code class="descname">mk_abstractmethod</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/stylo/domain/_factory.html#mk_abstractmethod"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#stylo.domain._factory.mk_abstractmethod" title="Permalink to this definition">¶</a></dt>
+<dd><p>Construct an abstractmethod that user must override when they create an instance
+of a class.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="stylo.domain._factory.parameter_property">
+<code class="descclassname">stylo.domain._factory.</code><code class="descname">parameter_property</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/stylo/domain/_factory.html#parameter_property"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#stylo.domain._factory.parameter_property" title="Permalink to this definition">¶</a></dt>
+<dd><p>Given the name of the parameter, construct the property definition that calls the
+abstract <code class="code docutils literal notranslate"><span class="pre">_get_name()</span></code> method that users will implement.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – The name of the parameter</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="stylo.domain._factory.parameters_property">
+<code class="descclassname">stylo.domain._factory.</code><code class="descname">parameters_property</code><span class="sig-paren">(</span><em>parameters</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/stylo/domain/_factory.html#parameters_property"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#stylo.domain._factory.parameters_property" title="Permalink to this definition">¶</a></dt>
+<dd><p>Given the list of parameters this function constructs a property that simply
+returns the given list. It doesn’t provide a setter so that the list of parameters
+cannot be overridden.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="stylo.domain._factory.transform_init">
+<code class="descclassname">stylo.domain._factory.</code><code class="descname">transform_init</code><span class="sig-paren">(</span><em>self</em>, <em>domain</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/stylo/domain/_factory.html#transform_init"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#stylo.domain._factory.transform_init" title="Permalink to this definition">¶</a></dt>
+<dd><p>This implements the <code class="code docutils literal notranslate"><span class="pre">__init__</span></code> method for DomainTransform classes.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="stylo.domain._factory.transform_repr">
+<code class="descclassname">stylo.domain._factory.</code><code class="descname">transform_repr</code><span class="sig-paren">(</span><em>self</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/stylo/domain/_factory.html#transform_repr"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#stylo.domain._factory.transform_repr" title="Permalink to this definition">¶</a></dt>
+<dd><p>This implements the <code class="code docutils literal notranslate"><span class="pre">__repr__</span></code> method for DomainTransform classes.</p>
+</dd></dl>
+
+</div>
+
+    
+</div>
+        </div>
+        <div class="footer">
+
+            
+                <p>
+                  Powered by <a href="http://www.sphinx-doc.org/">Sphinx</a> 1.8.2 &amp;
+                  <a href="https://github.com/alcarney/topos-theme">Topos Theme</a> 0.0.10
+                </p>
+        </div>
+    </body>
+</html>

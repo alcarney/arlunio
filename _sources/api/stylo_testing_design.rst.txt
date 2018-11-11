@@ -1,0 +1,13 @@
+
+
+.. _stylo_testing_design:
+
+Stylo.Testing.Design
+====================
+
+.. automodule:: stylo.testing.design
+   :members:
+   :undoc-members:
+   :private-members:
+   :show-inheritance:
+

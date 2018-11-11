@@ -1,0 +1,521 @@
+body {
+    background: white;
+    display: grid;
+    font-family: 'Nanum Myeongjo', serif;
+    grid-template-areas:
+        "header"
+        "main"
+        "sidebar"
+        "footer";
+    grid-template-columns: 100%;
+    margin: 0;
+}
+
+a {
+    color: #ff0000;
+    position: relative;
+    text-decoration: none;
+}
+
+.menu-toggle:before,
+.nav a:before,
+.content a:before,
+.footer a:before {
+    background-color: #ff0000;
+    bottom: 0;
+    content: "";
+    height: 2px;
+    left:0;
+    position: absolute;
+    transition: all 0.3s ease-in-out 0s;
+    width: 0;
+}
+
+.menu-toggle:hover:before,
+.nav a:hover:before,
+.content a:hover:before,
+.footer a:hover:before {
+    width: 100%;
+}
+
+@keyframes bg-fade {
+    0%   {background: #ddd;}
+    100% {background: white;}
+}
+
+:target {
+    animation-name: bg-fade;
+    animation-duration: 4s;
+}
+
+#site-name:before {
+    bottom: 20px;
+}
+
+.main {
+    background: white;
+}
+
+.header {
+    background: white;
+    box-shadow: 1px 1px 2px 2px #ddd;
+    grid-area: header;
+}
+
+.nav-sections {
+    background: white;
+    position: absolute;
+    transition: all 0.5s;
+    transform: translateX(-150px);
+    z-index: 99;
+    box-shadow: 2px 2px 1px 1px #ddd;
+}
+
+.menu-toggle {
+    margin-left: 17px;
+    position: relative;
+    color: #ff0000;
+}
+
+#menu-toggle {
+    display: none;
+}
+
+#menu-toggle:checked ~ .nav-sections {
+    transform: translateX(0px);
+}
+
+#menu-toggle:checked ~ .nav-sections li {
+    opacity: 100;
+}
+
+.nav-sections ul {
+    padding-left: 0;
+}
+
+.nav-sections li {
+    opacity: 0;
+    transition: all 0.5s;
+    list-style: none;
+    padding: 10px;
+    margin-left: 5px;
+}
+
+.toctree-l1.current {
+    border-left: solid 2px #ff0000;
+}
+
+.header sub {
+    color: #ff0000;
+    font-size: 10pt;
+    margin-left: 5px;
+}
+
+.header h2 {
+    margin: 0;
+    color: black;
+    padding: 20px;
+}
+
+.headerlink {
+    display: none;
+}
+
+.content {
+    grid-area: main;
+    margin-left: 15px;
+    margin-right: 15px;
+    margin-bottom: 20px;
+    max-width: 800px;
+    margin-bottom: 20px;
+}
+
+/* -- Main Content  -- */
+.section {
+    padding-bottom: 20px;
+}
+
+.section h1,
+.section h2,
+.section h3 {
+    position: relative;
+    overflow: hidden;
+    padding: 10px;
+}
+
+.section h1:after,
+.section h2:after,
+.section h3:after {
+  content:'';
+  display:inline-block;
+  width:100%;
+  height:2px;
+  position: absolute;
+  top: 50%;
+  background: black;
+  margin-left: 25px;
+}
+
+.section h4,
+.section h5,
+.section h6 {
+    margin: 25px 20px;
+}
+
+.section ul,
+.section ol,
+.highlight {
+    margin: 10px 20px;
+}
+
+.section li {
+    margin: 5px 10px;
+}
+
+.section p {
+    margin: 20px;
+}
+
+.section a {
+    text-decoration: none;
+}
+
+/* -- Sidebar -- */
+.nav {
+    grid-area: sidebar;
+    background: white;
+}
+
+.nav ul {
+    padding: 0;
+}
+
+.nav-header {
+    padding: 10px 5px;
+    margin-top: 0;
+}
+
+/* -- TocTree -- */
+.nav li,
+.nav .toctree-l1,
+.nav .toctree-l2 {
+    list-style: none;
+    padding: 5px 15px;
+}
+
+.nav .toctree-l1.current {
+}
+
+.nav .reference,
+.nav .toctree-l1 a,
+.nav .toctree-l2 a {
+}
+
+/* -- Footer -- */
+.footer {
+    display: flex;
+    justify-content: space-around;
+    grid-area: footer;
+    background: white;
+}
+
+.footer a {
+}
+
+/* -- Admonitions -- */
+.admonition {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 25px 20px;
+    border: solid 1px #ddd;
+}
+
+.admonition-title.first {
+    font-size: 18px;
+    font-weight: 800;
+    padding: 15px;
+    margin: 0;
+    margin-bottom: 15px;
+    background: #eee;
+    align-self: stretch;
+
+}
+
+.error .admonition-title {
+    background: #fee;
+}
+
+.admonition .last {
+    margin: 0 15px;
+}
+
+/* -- Inline Code -- */
+code.literal {
+    font-family: monospace;
+    padding: 2px;
+    background: #eee;
+}
+
+/*-- Glossary -- */
+dl.glossary {
+    margin: 20px;
+}
+
+dl.glossary dt {
+    margin-top: 15px;
+    text-decoration: underline;
+    text-transform: capitalize;
+}
+
+/*-- Figures --*/
+div.figure {
+    margin: 20px;
+}
+
+div.figure img {
+    border: solid 1px #ddd;
+    padding: 10px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.align-center {
+    display: block;
+    margin: auto;
+}
+
+p.caption {
+    margin: 0;
+    padding: 5px;
+    text-align: center;
+    font-size: 10pt;
+    font-style: italic;
+}
+
+/*-- Tables --*/
+table {
+    margin: 20px;
+    border-style: solid;
+    border-collapse: collapse;
+}
+
+thead {
+    border-bottom: solid 1px black;
+}
+
+tbody tr.row-odd {
+    border-top: solid 1px #ddd;
+    border-bottom: solid 1px #ddd;
+}
+
+tbody tr {
+    padding: 5px;
+}
+
+th, td {
+    border: none;
+}
+
+/*-- Autodoc --*/
+dl.class,
+dl.module,
+dl.function,
+dl.attribute {
+    font-size: 16px;
+}
+
+dl.class {
+    margin-left: 25px;
+    margin-bottom: 75px;
+}
+
+dl.function dt,
+dl.class dt {
+    margin: 10px 0;
+    margin-left: 10px;
+    border-bottom: solid 1px black;
+}
+
+dl.function em,
+dl.class em {
+    font-style: normal;
+    color: #ff0000;
+}
+
+dl.function p,
+dl.class p {
+    margin: 20px 0;
+}
+
+dl.method > dt:before {
+    content:"method ";
+    color: #ff0000;
+}
+
+dl.attribute > dt:before {
+    content:"attribute ";
+    color: #ff0000;
+}
+
+dl.function > dt:before {
+    content: "function ";
+    color: #ff0000;
+}
+
+dl > dt > a {
+    float: right;
+}
+
+tr.field {
+    text-align: left;
+}
+
+/* -- Misc Markup --*/
+.versionadded,
+.versionmodified {
+    text-decoration: underline;
+}
+
+/* -- Source Listinings -- */
+.main > .highlight {
+    border-left: double 4px #666;
+    margin: 20px;
+    padding-left: 5px;
+}
+
+.highlight,
+.highlight {
+    padding-left: 5px;
+    border: 1px solid black;
+    border-left: 5px solid #5eba7d;
+    color: black;
+}
+
+.highlight pre {
+    overflow: auto;
+}
+
+.strike {
+    text-decoration: line-through;
+}
+
+/* -- With Line Numbers -- */
+
+table.highlighttable {
+    border: solid 1px black;
+    border-left: 5px solid #5eba7d;
+    width: 95%;
+}
+
+td.code div.highlight {
+    margin:0;
+    border: none;
+}
+
+td.linenos {
+    border-right: solid 1px #ddd;
+    text-align: center;
+}
+
+div.linenodiv {
+    margin-right: -5px;
+}
+
+@media (min-width: 800px) {
+
+    .menu-toggle {
+        display: none;
+    }
+
+    .nav-sections {
+        padding-right: 25px;
+        transition: none;
+        position: static;
+        transform: none;
+        box-shadow: none;
+    }
+
+    .nav-sections li {
+        float: left;
+        opacity: 100;
+        transition: none;
+        padding: 0 10px;
+        margin-left: 0;
+    }
+
+    .nav {
+        padding-top: 30px
+    }
+
+    .header .toctree-l1.current {
+        border-left: none;
+        border-bottom: solid 2px #ff0000;
+    }
+
+    .header .toctree-l1 {
+      position: relative;
+    }
+
+    .header .toctree-l1:before {
+        background-color: #ff0000;
+        bottom: -2px;
+        content: "";
+        height: 2px;
+        left:0;
+        position: absolute;
+        transition: all 0.3s ease-in-out 0s;
+        width: 0;
+    }
+
+    .header .toctree-l1:hover:before {
+        width: 100%;
+    }
+
+    .header .toctree-l1.current:hover:before {
+        width: 0;
+    }
+
+    .header {
+        align-items: flex-start;
+        flex-direction: column;
+        display: flex;
+        justify-content: space-between;
+        position: sticky;
+        top: 0;
+        z-index: 1;
+    }
+
+    .admonition {
+        flex-direction: row;
+    }
+
+    .admonition-title.first {
+        margin-bottom: 0;
+    }
+}
+
+@media (min-width: 900px) {
+    .header {
+        flex-direction: row;
+        align-items: flex-end;
+    }
+}
+
+/* -- Desktop Styles -- */
+@media (min-width: 1275px) {
+    body {
+        grid-template-areas:
+            "header header"
+            "main sidebar"
+            "footer footer";
+        grid-template-columns: auto 300px;
+        grid-template-rows: auto auto 150px;
+    }
+
+
+    .footer {
+        border-top: 1px solid #ff0000;
+    }
+}

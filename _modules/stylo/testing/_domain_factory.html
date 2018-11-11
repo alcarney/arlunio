@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+        <link href="https://fonts.googleapis.com/css?family=Nanum+Myeongjo" rel="stylesheet">
+
+        <!-- TODO: Run CSS + JS through minifiers -->
+        <link rel="stylesheet" href="../../../_static/css/main.css" type="text/css" >
+        <link rel="stylesheet" href="../../../_static/css/highlight.css " type="text/css" >
+
+        <script type="text/javascript" id="documentation_options"
+                data-url_root="../../../"
+                src="../../../_static/documentation_options.js"></script>
+        <script async
+                src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"
+                type="application/javascript"></script>
+
+        <title>stylo.testing._domain_factory - Stylo v0.9.0</title>
+
+        
+    </head>
+    <body>
+        <!-- Slightly modified from the basic theme in the Sphinx repository
+        https://github.com/sphinx-doc/sphinx/blob/master/sphinx/themes/basic/layout.html -->
+
+        <div class="header">
+            <a href="../../../index.html" id="site-name"><h2>Stylo<sub>v0.9.0</sub></h2></a>
+            <label class="menu-toggle" for="menu-toggle">Menu</label>
+            <input type="checkbox" id="menu-toggle">
+            <div class="nav-sections">
+                <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../using/index.html">User’s Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../extending/index.html">Extending</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../contributing/index.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../maths/index.html">Mathematics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/index.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../glossary.html">Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../changes.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../about.html">About the Docs</a></li>
+</ul>
+
+            </div>
+        </div>
+        <div class="nav">
+            <div>
+                <h3 class="nav-header">Page Contents</h3>
+                
+            </div>
+            <form class="search" action="../../../search.html" method="get">
+                  <input type="text" name="q" placeholder="Search"/>
+                  <input type="hidden" name="check_keywords" value="yes" />
+                  <input type="hidden" name="area" value="default" />
+            </form>
+        </div>
+        <div class="content">
+<div class="main">
+    <h1>Source code for stylo.testing._domain_factory</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;This module contains functions that automate the process of writing base test classes</span>
+<span class="sd">for :code:`Domain` objects.</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">pytest</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">hypothesis</span> <span class="k">import</span> <span class="n">given</span>
+
+<span class="kn">from</span> <span class="nn">stylo.testing.strategies</span> <span class="k">import</span> <span class="n">dimension</span>
+
+
+<span class="n">DOMAIN_TEST_DOCSTRING</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">A base class to use when testing </span><span class="si">{0}</span><span class="s2"> implementations.</span>
+
+<span class="s2">When writing your test case declare it as follows:</span>
+
+<span class="s2">.. code-block:: python</span>
+
+<span class="s2">   from unittest import TestCase</span>
+<span class="s2">   from stylo.testing.domain import Base</span><span class="si">{0}</span><span class="s2">Test</span>
+
+<span class="s2">   class TestMyDomain(TestCase, Base</span><span class="si">{0}</span><span class="s2">Test):</span>
+<span class="s2">       ...</span>
+
+
+<span class="s2">.. note::</span>
+
+<span class="s2">   The order in which you include these classes is *very* important.</span>
+
+<span class="s2">You also need to define a :code:`setUp()` method to set the :code:`domain` attribute to</span>
+<span class="s2">be an instance of your class.</span>
+
+<span class="s2">.. code-block:: python</span>
+
+<span class="s2">   def setUp(self):</span>
+<span class="s2">       self.domain = MyDomain()</span>
+
+<span class="s2">If you follow these steps in addition to the test cases you write checking the</span>
+<span class="s2">specifics of your class it will also be checked to see that it conforms to the behavior</span>
+<span class="s2">that is expected from every </span><span class="si">{0}</span><span class="s2"> instance.</span>
+<span class="s2">&quot;&quot;&quot;</span>
+
+<span class="n">PARAMETER_READ_ONLY_DOCSTRING</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;Ensure that the :code:`</span><span class="si">{0}</span><span class="s2">` property is read only.&quot;&quot;&quot;</span>
+
+
+<span class="n">PARAMETER_DOCSTRING</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">Ensure that the :code:`</span><span class="si">{0}</span><span class="s2">` property works as expected.</span>
+
+<span class="s2">The :code:`</span><span class="si">{0}</span><span class="s2">` property should:</span>
+
+<span class="s2">- Return a function in width and height.</span>
+<span class="s2">- When called it should return a numpy array.</span>
+<span class="s2">- The array should have shape :code:`(height, width)`</span>
+<span class="s2">&quot;&quot;&quot;</span>
+
+
+<div class="viewcode-block" id="parameter_read_only_check"><a class="viewcode-back" href="../../../api/stylo_testing_domain_factory.html#stylo.testing._domain_factory.parameter_read_only_check">[docs]</a><span class="k">def</span> <span class="nf">parameter_read_only_check</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Given the name of a parameter to check, make sure that the corresponding</span>
+<span class="sd">    attribute is read-only.</span>
+
+<span class="sd">    :param name: The name of the parameter</span>
+<span class="sd">    :type name: str</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">check</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">with</span> <span class="n">pytest</span><span class="o">.</span><span class="n">raises</span><span class="p">(</span><span class="ne">AttributeError</span><span class="p">)</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">domain</span><span class="o">.</span><span class="fm">__setattr__</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertIn</span><span class="p">(</span><span class="s2">&quot;can&#39;t set attribute&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">err</span><span class="o">.</span><span class="n">value</span><span class="p">))</span>
+
+    <span class="n">check</span><span class="o">.</span><span class="vm">__doc__</span> <span class="o">=</span> <span class="n">PARAMETER_READ_ONLY_DOCSTRING</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">check</span></div>
+
+
+<div class="viewcode-block" id="parameter_check"><a class="viewcode-back" href="../../../api/stylo_testing_domain_factory.html#stylo.testing._domain_factory.parameter_check">[docs]</a><span class="k">def</span> <span class="nf">parameter_check</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Given the name of a parameter to check, make sure that the corresponding</span>
+<span class="sd">    attribute returns a function that works as expected.</span>
+
+<span class="sd">    :param name: The name of the parameter</span>
+<span class="sd">    :type name: str</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">context</span> <span class="o">=</span> <span class="n">given</span><span class="p">(</span><span class="n">width</span><span class="o">=</span><span class="n">dimension</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="n">dimension</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">check</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">):</span>
+
+        <span class="n">param</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">domain</span><span class="o">.</span><span class="fm">__getattribute__</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span>
+            <span class="n">callable</span><span class="p">(</span><span class="n">param</span><span class="p">),</span> <span class="s2">&quot;The </span><span class="si">{}</span><span class="s2"> property should return a function&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+        <span class="p">)</span>
+
+        <span class="n">ps</span> <span class="o">=</span> <span class="n">param</span><span class="p">(</span><span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span>
+            <span class="nb">isinstance</span><span class="p">(</span><span class="n">ps</span><span class="p">,</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,)),</span> <span class="s2">&quot;The function should return a numpy array&quot;</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span>
+            <span class="p">(</span><span class="n">height</span><span class="p">,</span> <span class="n">width</span><span class="p">),</span>
+            <span class="n">ps</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span>
+            <span class="s2">&quot;The resulting array should have shape (height, width)&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+
+    <span class="n">check</span><span class="o">.</span><span class="vm">__doc__</span> <span class="o">=</span> <span class="n">PARAMETER_DOCSTRING</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">context</span><span class="p">(</span><span class="n">check</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="define_domain_test"><a class="viewcode-back" href="../../../api/stylo_testing_domain_factory.html#stylo.testing._domain_factory.define_domain_test">[docs]</a><span class="k">def</span> <span class="nf">define_domain_test</span><span class="p">(</span><span class="n">domain</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Given a domain definition, write the test class that will automatically verify</span>
+<span class="sd">    that a given subclass follows the expected interface.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">test_name</span> <span class="o">=</span> <span class="s2">&quot;Base&quot;</span> <span class="o">+</span> <span class="n">domain</span><span class="o">.</span><span class="vm">__name__</span> <span class="o">+</span> <span class="s2">&quot;Test&quot;</span>
+
+    <span class="n">attributes</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;__doc__&quot;</span><span class="p">:</span> <span class="n">DOMAIN_TEST_DOCSTRING</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">domain</span><span class="o">.</span><span class="vm">__name__</span><span class="p">)}</span>
+
+    <span class="k">for</span> <span class="n">param</span> <span class="ow">in</span> <span class="n">domain</span><span class="o">.</span><span class="n">_parameters</span><span class="p">:</span>
+        <span class="n">read_only</span> <span class="o">=</span> <span class="s2">&quot;test_parameter_</span><span class="si">{}</span><span class="s2">_read_only&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">param</span><span class="p">)</span>
+        <span class="n">p</span> <span class="o">=</span> <span class="s2">&quot;test_parameter_</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">param</span><span class="p">)</span>
+
+        <span class="n">attributes</span><span class="p">[</span><span class="n">read_only</span><span class="p">]</span> <span class="o">=</span> <span class="n">parameter_read_only_check</span><span class="p">(</span><span class="n">param</span><span class="p">)</span>
+        <span class="n">attributes</span><span class="p">[</span><span class="n">p</span><span class="p">]</span> <span class="o">=</span> <span class="n">parameter_check</span><span class="p">(</span><span class="n">param</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="nb">type</span><span class="p">(</span><span class="n">test_name</span><span class="p">,</span> <span class="p">(),</span> <span class="n">attributes</span><span class="p">)</span></div>
+</pre></div>
+    
+</div>
+        </div>
+        <div class="footer">
+
+            
+                <p>
+                  Powered by <a href="http://www.sphinx-doc.org/">Sphinx</a> 1.8.2 &amp;
+                  <a href="https://github.com/alcarney/topos-theme">Topos Theme</a> 0.0.10
+                </p>
+        </div>
+    </body>
+</html>

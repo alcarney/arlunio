@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+        <link href="https://fonts.googleapis.com/css?family=Nanum+Myeongjo" rel="stylesheet">
+
+        <!-- TODO: Run CSS + JS through minifiers -->
+        <link rel="stylesheet" href="../../_static/css/main.css" type="text/css" >
+        <link rel="stylesheet" href="../../_static/css/highlight.css " type="text/css" >
+
+        <script type="text/javascript" id="documentation_options"
+                data-url_root="../../"
+                src="../../_static/documentation_options.js"></script>
+        <script async
+                src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"
+                type="application/javascript"></script>
+
+        <title>The Documentation Build Process - Stylo v0.9.0</title>
+
+        
+    </head>
+    <body>
+        <!-- Slightly modified from the basic theme in the Sphinx repository
+        https://github.com/sphinx-doc/sphinx/blob/master/sphinx/themes/basic/layout.html -->
+
+        <div class="header">
+            <a href="../../index.html" id="site-name"><h2>Stylo<sub>v0.9.0</sub></h2></a>
+            <label class="menu-toggle" for="menu-toggle">Menu</label>
+            <input type="checkbox" id="menu-toggle">
+            <div class="nav-sections">
+                <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../using/index.html">User’s Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../extending/index.html">Extending</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../maths/index.html">Mathematics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/index.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../glossary.html">Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../changes.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../about.html">About the Docs</a></li>
+</ul>
+
+            </div>
+        </div>
+        <div class="nav">
+            <div>
+                <h3 class="nav-header">Page Contents</h3>
+                <ul>
+<li><a class="reference internal" href="#">The Documentation Build Process</a><ul>
+<li><a class="reference internal" href="#introducing-tox">Introducing tox</a></li>
+<li><a class="reference internal" href="#declaring-dependencies">Declaring Dependencies</a></li>
+<li><a class="reference internal" href="#build-overview">Build Overview</a><ul>
+<li><a class="reference internal" href="#building-the-api-reference">Building the API Reference</a></li>
+<li><a class="reference internal" href="#building-the-documentation">Building the Documentation</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            </div>
+            <form class="search" action="../../search.html" method="get">
+                  <input type="text" name="q" placeholder="Search"/>
+                  <input type="hidden" name="check_keywords" value="yes" />
+                  <input type="hidden" name="area" value="default" />
+            </form>
+        </div>
+        <div class="content">
+<div class="main">
+    <div class="section" id="the-documentation-build-process">
+<span id="contribute-ref-docs-build"></span><h1>The Documentation Build Process<a class="headerlink" href="#the-documentation-build-process" title="Permalink to this headline">¶</a></h1>
+<p>This page describes the build process for the documentation in detail. If you
+are only looking for the command to build the documentation it is the following:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>$ pipenv run docs
+</pre></div>
+</div>
+<p>If however you need to know more details about the build process or are simply
+curious then please read on!</p>
+<div class="section" id="introducing-tox">
+<h2>Introducing tox<a class="headerlink" href="#introducing-tox" title="Permalink to this headline">¶</a></h2>
+<p>We use <a class="reference internal" href="../../glossary.html#term-tox"><span class="xref std std-term">tox</span></a> to build our documentation as it will handle the installation
+of the dependencies and give us more control over the environment in which they
+are built.</p>
+<p>The build is handled by the <code class="code docutils literal notranslate"><span class="pre">docs-build</span></code> environment and is defined in the
+<code class="code docutils literal notranslate"><span class="pre">tox.ini</span></code> file at the root of the repository. The command given at the top
+of this page is a shortcut for the real but more cryptic command to build the
+documentation which is:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>$ pipenv run tox -q -e docs-build
+</pre></div>
+</div>
+<p>Below is the complete build definition.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="n">testenv</span><span class="p">:</span><span class="n">docs</span><span class="o">-</span><span class="n">build</span><span class="p">]</span>
+<span class="n">deps</span> <span class="o">=</span>
+    <span class="n">sphinx</span>
+    <span class="n">sphinx</span><span class="o">-</span><span class="n">stylo</span>
+    <span class="n">topos</span><span class="o">-</span><span class="n">theme</span>
+    <span class="n">pytest</span>
+<span class="n">whitelist_externals</span> <span class="o">=</span> <span class="n">echo</span>
+<span class="n">commands</span> <span class="o">=</span>
+
+    <span class="n">echo</span> <span class="o">-</span><span class="n">e</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">==&gt; Writing reference documentation</span><span class="se">\n</span><span class="s2">&quot;</span>
+    <span class="n">python</span> <span class="n">scripts</span><span class="o">/</span><span class="n">apidoc</span><span class="o">.</span><span class="n">py</span> <span class="o">-</span><span class="n">m</span> <span class="n">stylo</span> <span class="o">-</span><span class="n">o</span> <span class="n">docs</span><span class="o">/</span><span class="n">api</span>
+
+    <span class="n">echo</span> <span class="o">-</span><span class="n">e</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">==&gt; Building documentation </span><span class="se">\n</span><span class="s2">&quot;</span>
+    <span class="n">sphinx</span><span class="o">-</span><span class="n">build</span> <span class="o">-</span><span class="n">M</span> <span class="n">linkcheck</span> <span class="o">./</span><span class="n">docs</span> <span class="o">./</span><span class="n">docs</span><span class="o">/</span><span class="n">_build</span>  <span class="o">-</span><span class="n">E</span> <span class="o">-</span><span class="n">a</span> <span class="o">-</span><span class="n">j</span> <span class="n">auto</span>
+    <span class="n">sphinx</span><span class="o">-</span><span class="n">build</span> <span class="o">-</span><span class="n">M</span> <span class="n">doctest</span> <span class="o">./</span><span class="n">docs</span> <span class="o">./</span><span class="n">docs</span><span class="o">/</span><span class="n">_build</span>  <span class="o">-</span><span class="n">E</span> <span class="o">-</span><span class="n">a</span> <span class="o">-</span><span class="n">j</span> <span class="n">auto</span>
+    <span class="n">sphinx</span><span class="o">-</span><span class="n">build</span> <span class="o">-</span><span class="n">M</span> <span class="n">html</span> <span class="o">./</span><span class="n">docs</span> <span class="o">./</span><span class="n">docs</span><span class="o">/</span><span class="n">_build</span>  <span class="o">-</span><span class="n">E</span> <span class="o">-</span><span class="n">a</span> <span class="o">-</span><span class="n">j</span> <span class="n">auto</span>
+
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Unlike the rest of this document, the box above is extracted from the current
+version of <code class="code docutils literal notranslate"><span class="pre">tox.ini</span></code> and will always be up to date. If what you read
+on this page doesn’t match, that’s most likely a sign that this page is
+out of date and an <a class="reference external" href="https://github.com/alcarney/stylo/issues/new">issue</a>
+should be raised.</p>
+</div>
+</div>
+<div class="section" id="declaring-dependencies">
+<h2>Declaring Dependencies<a class="headerlink" href="#declaring-dependencies" title="Permalink to this headline">¶</a></h2>
+<p>Using the <code class="code docutils literal notranslate"><span class="pre">deps</span></code> variable we declare to tox which dependencies we need
+installed into the environment in order to build the documentation.</p>
+<ul class="simple">
+<li><a class="reference external" href="http://www.sphinx-doc.org/en/master/">Sphinx</a>: This does the bulk of the work, compiling <code class="code docutils literal notranslate"><span class="pre">.rst</span></code> files in the
+<code class="code docutils literal notranslate"><span class="pre">docs/</span></code> folder into a HTML website that we can publish.</li>
+<li><a class="reference external" href="https://topos-theme.readthedocs.io/en/latest/">topos-theme</a>: Sphinx can be extended in a number of ways, one of these is
+via custom HTML themes. <code class="code docutils literal notranslate"><span class="pre">topos-theme</span></code> extends Sphinx to provide the
+theme that controls how this site appears.</li>
+<li><a class="reference external" href="https://docs.pytest.org/en/latest/">pytest</a>: Not something you would typically see in a docs build, pytest
+is used to run a number of test files that generate most of the example images
+you see on this site.</li>
+</ul>
+<p>We also make use of the <code class="code docutils literal notranslate"><span class="pre">whitelist_externals</span></code> variable to suppress
+warnings about using the <code class="code docutils literal notranslate"><span class="pre">echo</span></code> command that is not part of the
+environment.</p>
+</div>
+<div class="section" id="build-overview">
+<h2>Build Overview<a class="headerlink" href="#build-overview" title="Permalink to this headline">¶</a></h2>
+<p>The build breaks down into the following stages.</p>
+<ol class="arabic simple">
+<li>The <a class="reference internal" href="../../glossary.html#term-docstrings"><span class="xref std std-term">docstrings</span></a> are converted into the <a class="reference internal" href="../../api/index.html#api-reference"><span class="std std-ref">API Reference</span></a> section</li>
+<li>All the links are checked to ensure that they are not broken</li>
+<li>Any <code class="code docutils literal notranslate"><span class="pre">testsetup::</span></code>, <code class="code docutils literal notranslate"><span class="pre">testcode::</span></code> or <code class="code docutils literal notranslate"><span class="pre">doctest::</span></code> sections are
+executed to ensure that they work.</li>
+<li>Finally the documentation is built into a HTML website ready for publishing.</li>
+</ol>
+<div class="section" id="building-the-api-reference">
+<h3>Building the API Reference<a class="headerlink" href="#building-the-api-reference" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>python scripts/apidoc.py -m stylo -o docs/api
+</pre></div>
+</div>
+<p>Writing the <a class="reference internal" href="../../api/index.html#api-reference"><span class="std std-ref">API Reference</span></a> section is entirely automated. The
+<code class="code docutils literal notranslate"><span class="pre">apidoc.py</span></code> searches through the <code class="code docutils literal notranslate"><span class="pre">stylo</span></code> package for all the python
+modules and generates an rst file for each one containing an
+<code class="code docutils literal notranslate"><span class="pre">..</span> <span class="pre">automodule::</span></code> definition.</p>
+<p>The <a class="reference external" href="http://www.sphinx-doc.org/en/master/usage/extensions/autodoc.html">autodoc</a> Sphinx extension then extracts the docstrings from each item in
+those modules and uses them to write the documentation you see in the API
+Reference section.</p>
+<p>For full details on the <code class="code docutils literal notranslate"><span class="pre">apidoc.py</span></code> script please see the
+<a class="reference internal" href="apidoc.html#contribute-reference-apidoc"><span class="std std-ref">Apidoc.py</span></a> page.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">While Sphinx does come with an <code class="code docutils literal notranslate"><span class="pre">sphinx-apidoc</span></code> command that acheives
+the same goal as this script it produces an output that doesn’t quite work
+with the format of this site. By writing our own script we have more control
+over the output can can modify it as needed.</p>
+</div>
+</div>
+<div class="section" id="building-the-documentation">
+<h3>Building the Documentation<a class="headerlink" href="#building-the-documentation" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>sphinx-build -M linkcheck ./docs ./docs/_build -E -a -j auto
+sphinx-build -M doctest ./docs ./docs/_build -E -a -j auto
+sphinx-build -M html ./docs ./docs/_build -E -a -j auto
+</pre></div>
+</div>
+<p>This is where the bulk of the work happens, everything up until now has been
+prep work. If you were to stop the build before these commands run you would
+still only have a <code class="code docutils literal notranslate"><span class="pre">docs/</span></code> folder full of images and rst files. The only
+thing the previous commands are doing is generating the rst files we don’t have
+to write by hand. With these three commands we pass everything off to Sphinx and
+let it generate the website.</p>
+<p>Sphinx comes with a number of <a class="reference external" href="http://www.sphinx-doc.org/en/stable/usage/builders/">builders</a> a builder takes your documentation and
+performs a task with it. These tasks can be anything from generating an
+<code class="code docutils literal notranslate"><span class="pre">epub</span></code> to an XML representation of your documents.</p>
+<p>Our build uses 3 builders:</p>
+<ul>
+<li><p class="first"><code class="code docutils literal notranslate"><span class="pre">linkcheck</span></code>: This looks at all the links in the documentation and checks
+to ensure that they are not broken</p>
+</li>
+<li><p class="first"><code class="code docutils literal notranslate"><span class="pre">doctest</span></code>: The looks for code examples contained in the following
+directives:</p>
+<ul class="simple">
+<li><code class="code docutils literal notranslate"><span class="pre">..</span> <span class="pre">testsetup::</span></code></li>
+<li><code class="code docutils literal notranslate"><span class="pre">..</span> <span class="pre">testcode::</span></code></li>
+<li><code class="code docutils literal notranslate"><span class="pre">..</span> <span class="pre">testoutput::</span></code></li>
+<li><code class="code docutils literal notranslate"><span class="pre">..</span> <span class="pre">testcleanup::</span></code></li>
+<li><code class="code docutils literal notranslate"><span class="pre">..</span> <span class="pre">doctest::</span></code></li>
+</ul>
+<p>It then runs all the code it can find and will fail the build if the code does
+not work as described.</p>
+</li>
+<li><p class="first"><code class="code docutils literal notranslate"><span class="pre">html</span></code>: The main event, this produces the HTML website found in the
+<code class="code docutils literal notranslate"><span class="pre">docs/_build/html</span></code> directory which we publish to GitHub Pages.</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+
+    
+</div>
+        </div>
+        <div class="footer">
+
+            
+                <p>
+                  Powered by <a href="http://www.sphinx-doc.org/">Sphinx</a> 1.8.2 &amp;
+                  <a href="https://github.com/alcarney/topos-theme">Topos Theme</a> 0.0.10
+                </p>
+        </div>
+    </body>
+</html>

@@ -1,0 +1,13 @@
+
+
+.. _stylo_shape_curves:
+
+Stylo.Shape.Curves
+==================
+
+.. automodule:: stylo.shape.curves
+   :members:
+   :undoc-members:
+   :private-members:
+   :show-inheritance:
+

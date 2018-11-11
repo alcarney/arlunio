@@ -1,0 +1,13 @@
+
+
+.. _stylo__version:
+
+Stylo._version
+==============
+
+.. automodule:: stylo._version
+   :members:
+   :undoc-members:
+   :private-members:
+   :show-inheritance:
+

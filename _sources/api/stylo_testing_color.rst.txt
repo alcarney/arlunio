@@ -1,0 +1,13 @@
+
+
+.. _stylo_testing_color:
+
+Stylo.Testing.Color
+===================
+
+.. automodule:: stylo.testing.color
+   :members:
+   :undoc-members:
+   :private-members:
+   :show-inheritance:
+

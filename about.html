@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+        <link href="https://fonts.googleapis.com/css?family=Nanum+Myeongjo" rel="stylesheet">
+
+        <!-- TODO: Run CSS + JS through minifiers -->
+        <link rel="stylesheet" href="_static/css/main.css" type="text/css" >
+        <link rel="stylesheet" href="_static/css/highlight.css " type="text/css" >
+
+        <script type="text/javascript" id="documentation_options"
+                data-url_root="./"
+                src="_static/documentation_options.js"></script>
+        <script async
+                src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"
+                type="application/javascript"></script>
+
+        <title>About the Docs - Stylo v0.9.0</title>
+
+        
+    </head>
+    <body>
+        <!-- Slightly modified from the basic theme in the Sphinx repository
+        https://github.com/sphinx-doc/sphinx/blob/master/sphinx/themes/basic/layout.html -->
+
+        <div class="header">
+            <a href="index.html" id="site-name"><h2>Stylo<sub>v0.9.0</sub></h2></a>
+            <label class="menu-toggle" for="menu-toggle">Menu</label>
+            <input type="checkbox" id="menu-toggle">
+            <div class="nav-sections">
+                <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="using/index.html">User’s Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="extending/index.html">Extending</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contributing/index.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="maths/index.html">Mathematics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/index.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="glossary.html">Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="changes.html">Changelog</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">About the Docs</a></li>
+</ul>
+
+            </div>
+        </div>
+        <div class="nav">
+            <div>
+                <h3 class="nav-header">Page Contents</h3>
+                <ul>
+<li><a class="reference internal" href="#">About the Docs</a><ul>
+<li><a class="reference internal" href="#the-many-kind-of-user">The Many Kind of User</a><ul>
+<li><a class="reference internal" href="#user">User</a></li>
+<li><a class="reference internal" href="#extender">Extender</a></li>
+<li><a class="reference internal" href="#contributor">Contributor</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#the-four-kinds-of-documentation">The Four Kinds of Documentation</a><ul>
+<li><a class="reference internal" href="#tutorials">Tutorials</a></li>
+<li><a class="reference internal" href="#examples">Examples</a></li>
+<li><a class="reference internal" href="#background">Background</a></li>
+<li><a class="reference internal" href="#reference">Reference</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            </div>
+            <form class="search" action="search.html" method="get">
+                  <input type="text" name="q" placeholder="Search"/>
+                  <input type="hidden" name="check_keywords" value="yes" />
+                  <input type="hidden" name="area" value="default" />
+            </form>
+        </div>
+        <div class="content">
+<div class="main">
+    <div class="section" id="about-the-docs">
+<span id="about-docs"></span><h1>About the Docs<a class="headerlink" href="#about-the-docs" title="Permalink to this headline">¶</a></h1>
+<p>This is a short guide that aims to help you get the most from the documentation.
+Documentation is grouped first by what kind of user you are, then by what kind of
+information you are after.</p>
+<div class="section" id="the-many-kind-of-user">
+<h2>The Many Kind of User<a class="headerlink" href="#the-many-kind-of-user" title="Permalink to this headline">¶</a></h2>
+<p>What you want to know will be affected by how you use <code class="code docutils literal notranslate"><span class="pre">stylo</span></code>, a core contributor
+will want to know different information from a user who is using <code class="code docutils literal notranslate"><span class="pre">stylo</span></code> for the
+first time. Documentation on this site is mostly written with one of the following types
+of user in mind.</p>
+<div class="section" id="user">
+<h3>User<a class="headerlink" href="#user" title="Permalink to this headline">¶</a></h3>
+<p>A user is anyone who takes what is provided by the <code class="code docutils literal notranslate"><span class="pre">stylo</span></code> package and uses it to
+create images. They are not looking to build on it in anyway. If this is you then head
+on over to the <a class="reference internal" href="using/index.html#use"><span class="std std-ref">User’s Guide</span></a>.</p>
+</div>
+<div class="section" id="extender">
+<h3>Extender<a class="headerlink" href="#extender" title="Permalink to this headline">¶</a></h3>
+<p>This is a more advanced user, they are looking to take some of the tools and objects
+that are a part of <code class="code docutils literal notranslate"><span class="pre">stylo</span></code> and extend them in some way. For example they could be
+looking to write custom <code class="code docutils literal notranslate"><span class="pre">Shape</span></code> and <code class="code docutils literal notranslate"><span class="pre">Domain</span></code> objects either for their own
+personal use or to develop a 3rd party package for others. Guides on how to do this and
+more can be found in the <a class="reference internal" href="extending/index.html#extend"><span class="std std-ref">Extending</span></a> section.</p>
+</div>
+<div class="section" id="contributor">
+<h3>Contributor<a class="headerlink" href="#contributor" title="Permalink to this headline">¶</a></h3>
+<p>This is anyone looking to contribute to <code class="code docutils literal notranslate"><span class="pre">stylo</span></code> itself whether that is by writing
+more documentation, adding a new feature or just generally helping out with the project.
+If you’d like to get involved then head over to the <a class="reference internal" href="contributing/index.html#contribute"><span class="std std-ref">Contributing</span></a> section for more
+details.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">If you have better terms for the groups outlined above I’d love to hear them :)</p>
+</div>
+</div>
+</div>
+<div class="section" id="the-four-kinds-of-documentation">
+<h2>The Four Kinds of Documentation<a class="headerlink" href="#the-four-kinds-of-documentation" title="Permalink to this headline">¶</a></h2>
+<p>Once you have found the section of the site that is relevant to you, documentation is
+broken down further by what kind of information you are after. Different kinds of
+information is best presented in a certain style.</p>
+<p>Here is a brief breakdown of the main styles in use on this site. But be sure to refer
+to this <a class="reference external" href="https://www.divio.com/blog/documentation/">article</a> as it does a better job at explaining this than I could.</p>
+<div class="section" id="tutorials">
+<h3>Tutorials<a class="headerlink" href="#tutorials" title="Permalink to this headline">¶</a></h3>
+<div class="admonition-todo admonition" id="index-0">
+<p class="first admonition-title">Todo</p>
+<p class="last">Link to the various tutorials.</p>
+</div>
+<p>Tutorials act as introductions to ideas and concepts, e.g. you want to create an image
+but don’t know where to start. They won’t tell you everything and they’ll mostly focus
+on the how, but it should be enough to get you started and point you in the right
+direction when you want to know more.</p>
+</div>
+<div class="section" id="examples">
+<h3>Examples<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h3>
+<div class="admonition-todo admonition" id="index-1">
+<p class="first admonition-title">Todo</p>
+<p class="last">Link to the example section.</p>
+</div>
+<p>Examples (called “How To Guides” in the <a class="reference external" href="https://www.divio.com/blog/documentation/">article</a>) demonstrate the usage of various
+features in order to realise some specific result such as using the <code class="code docutils literal notranslate"><span class="pre">Rotation</span></code>
+to rotate some domain. They will assume that you already know the basics of
+working with the features shown as little explanation will be offered. Examples are all
+about the end result.</p>
+</div>
+<div class="section" id="background">
+<h3>Background<a class="headerlink" href="#background" title="Permalink to this headline">¶</a></h3>
+<div class="admonition-todo admonition" id="index-2">
+<p class="first admonition-title">Todo</p>
+<p class="last">Link to the mathematics section.</p>
+</div>
+<p>Background documentation (referred to as “Explanations” in the <a class="reference external" href="https://www.divio.com/blog/documentation/">article</a>) is written
+with the aim of deepening your knowledge on a particular topic. This is to provide extra
+context as to why certain decisions were made or how a particular feature is implemented.
+Since <code class="code docutils literal notranslate"><span class="pre">stylo</span></code> builds on a number of mathematical concepts, you will mostly find
+articles introducing them here.</p>
+</div>
+<div class="section" id="reference">
+<h3>Reference<a class="headerlink" href="#reference" title="Permalink to this headline">¶</a></h3>
+<div class="admonition-todo admonition" id="index-3">
+<p class="first admonition-title">Todo</p>
+<p class="last">Link to the various reference sections.</p>
+</div>
+<p>Reference documentation is where you go to find out the answers to “What …?” questions
+for example</p>
+<ul class="simple">
+<li>What are the arguments to <code class="code docutils literal notranslate"><span class="pre">method_x</span></code>?</li>
+<li>What is the name of that domain transform again?</li>
+<li>What do I need to do to save an image?</li>
+</ul>
+<p>This style of documentation is for when you already understand the concepts involved and
+you know what you need to do but need to look up specific details.</p>
+</div>
+</div>
+</div>
+
+    
+</div>
+        </div>
+        <div class="footer">
+
+            
+                <p>
+                  Powered by <a href="http://www.sphinx-doc.org/">Sphinx</a> 1.8.2 &amp;
+                  <a href="https://github.com/alcarney/topos-theme">Topos Theme</a> 0.0.10
+                </p>
+        </div>
+    </body>
+</html>

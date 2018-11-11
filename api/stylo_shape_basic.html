@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+        <link href="https://fonts.googleapis.com/css?family=Nanum+Myeongjo" rel="stylesheet">
+
+        <!-- TODO: Run CSS + JS through minifiers -->
+        <link rel="stylesheet" href="../_static/css/main.css" type="text/css" >
+        <link rel="stylesheet" href="../_static/css/highlight.css " type="text/css" >
+
+        <script type="text/javascript" id="documentation_options"
+                data-url_root="../"
+                src="../_static/documentation_options.js"></script>
+        <script async
+                src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"
+                type="application/javascript"></script>
+
+        <title>Stylo.Shape.Basic - Stylo v0.9.0</title>
+
+        
+    </head>
+    <body>
+        <!-- Slightly modified from the basic theme in the Sphinx repository
+        https://github.com/sphinx-doc/sphinx/blob/master/sphinx/themes/basic/layout.html -->
+
+        <div class="header">
+            <a href="../index.html" id="site-name"><h2>Stylo<sub>v0.9.0</sub></h2></a>
+            <label class="menu-toggle" for="menu-toggle">Menu</label>
+            <input type="checkbox" id="menu-toggle">
+            <div class="nav-sections">
+                <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../using/index.html">User’s Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../extending/index.html">Extending</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contributing/index.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../maths/index.html">Mathematics</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../glossary.html">Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changes.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../about.html">About the Docs</a></li>
+</ul>
+
+            </div>
+        </div>
+        <div class="nav">
+            <div>
+                <h3 class="nav-header">Page Contents</h3>
+                <ul>
+<li><a class="reference internal" href="#">Stylo.Shape.Basic</a></li>
+</ul>
+
+            </div>
+            <form class="search" action="../search.html" method="get">
+                  <input type="text" name="q" placeholder="Search"/>
+                  <input type="hidden" name="check_keywords" value="yes" />
+                  <input type="hidden" name="area" value="default" />
+            </form>
+        </div>
+        <div class="content">
+<div class="main">
+    <div class="section" id="module-stylo.shape.basic">
+<span id="id1"></span><span id="stylo-shape-basic"></span><h1>Stylo.Shape.Basic<a class="headerlink" href="#module-stylo.shape.basic" title="Permalink to this headline">¶</a></h1>
+<p>This module defines the standard shapes you would expect to see from any graphics
+package such as lines, simple curves, circles, squares, ellipses etc.</p>
+<dl class="class">
+<dt id="stylo.shape.basic.Circle">
+<em class="property">class </em><code class="descclassname">stylo.shape.basic.</code><code class="descname">Circle</code><span class="sig-paren">(</span><em>x=0</em>, <em>y=0</em>, <em>r=0.5</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/stylo/shape/basic.html#Circle"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#stylo.shape.basic.Circle" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#stylo.shape.basic.Ellipse" title="stylo.shape.basic.Ellipse"><code class="xref py py-class docutils literal notranslate"><span class="pre">stylo.shape.basic.Ellipse</span></code></a></p>
+<p>Mathematically a circle can be defined as the set of all
+points <span class="math notranslate nohighlight">\((x, y)\)</span> that satisfy</p>
+<div class="math notranslate nohighlight">
+\[\]</div>
+<p>(x - x_0)^2 + (y - y_0)^2 = r^2</p>
+<p>This function returns another function which when given
+a point <code class="code docutils literal notranslate"><span class="pre">(x,</span> <span class="pre">y)</span></code> will return <code class="code docutils literal notranslate"><span class="pre">True</span></code> if that
+point is in the circle</p>
+<dl class="attribute">
+<dt id="stylo.shape.basic.Circle._abc_cache">
+<code class="descname">_abc_cache</code><em class="property"> = &lt;_weakrefset.WeakSet object&gt;</em><a class="headerlink" href="#stylo.shape.basic.Circle._abc_cache" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="stylo.shape.basic.Circle._abc_negative_cache">
+<code class="descname">_abc_negative_cache</code><em class="property"> = &lt;_weakrefset.WeakSet object&gt;</em><a class="headerlink" href="#stylo.shape.basic.Circle._abc_negative_cache" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="stylo.shape.basic.Circle._abc_negative_cache_version">
+<code class="descname">_abc_negative_cache_version</code><em class="property"> = 47</em><a class="headerlink" href="#stylo.shape.basic.Circle._abc_negative_cache_version" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="stylo.shape.basic.Circle._abc_registry">
+<code class="descname">_abc_registry</code><em class="property"> = &lt;_weakrefset.WeakSet object&gt;</em><a class="headerlink" href="#stylo.shape.basic.Circle._abc_registry" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="stylo.shape.basic.Ellipse">
+<em class="property">class </em><code class="descclassname">stylo.shape.basic.</code><code class="descname">Ellipse</code><span class="sig-paren">(</span><em>x=0</em>, <em>y=0</em>, <em>a=2</em>, <em>b=1</em>, <em>r=0.5</em>, <em>pt=0.01</em>, <em>fill=False</em>, <em>start_angle=None</em>, <em>end_angle=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/stylo/shape/basic.html#Ellipse"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#stylo.shape.basic.Ellipse" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="stylo_shape_shape.html#stylo.shape.shape.Shape" title="stylo.shape.shape.Shape"><code class="xref py py-class docutils literal notranslate"><span class="pre">stylo.shape.shape.Shape</span></code></a></p>
+<p>One way of defining an ellipse centered at <span class="math notranslate nohighlight">\((x_0, y_0)\)</span> is through the
+implicit equation.</p>
+<div class="math notranslate nohighlight">
+\[\frac{(x - x_0)^2}{a^2} + \frac{(y - y_0)^2}{b^2} - r^2 = 0\]</div>
+<p>where:</p>
+<ul class="simple">
+<li><span class="math notranslate nohighlight">\(a\)</span> is known as the semi-major axis. Larger values stretch the ellipse along
+the <span class="math notranslate nohighlight">\(x\)</span>-direction</li>
+<li><span class="math notranslate nohighlight">\(b\)</span> is known as the semi-minor axis. Larger values stretch the ellipse along
+the <span class="math notranslate nohighlight">\(y\)</span>-direction</li>
+<li><span class="math notranslate nohighlight">\(r\)</span> is the radius and controls the overall size.</li>
+</ul>
+<p>By playing around with this definition we can draw just the outline of the ellipse
+with a given thickness or a filled in version of the ellipse.</p>
+<dl class="attribute">
+<dt id="stylo.shape.basic.Ellipse._abc_cache">
+<code class="descname">_abc_cache</code><em class="property"> = &lt;_weakrefset.WeakSet object&gt;</em><a class="headerlink" href="#stylo.shape.basic.Ellipse._abc_cache" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="stylo.shape.basic.Ellipse._abc_negative_cache">
+<code class="descname">_abc_negative_cache</code><em class="property"> = &lt;_weakrefset.WeakSet object&gt;</em><a class="headerlink" href="#stylo.shape.basic.Ellipse._abc_negative_cache" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="stylo.shape.basic.Ellipse._abc_negative_cache_version">
+<code class="descname">_abc_negative_cache_version</code><em class="property"> = 47</em><a class="headerlink" href="#stylo.shape.basic.Ellipse._abc_negative_cache_version" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="stylo.shape.basic.Ellipse._abc_registry">
+<code class="descname">_abc_registry</code><em class="property"> = &lt;_weakrefset.WeakSet object&gt;</em><a class="headerlink" href="#stylo.shape.basic.Ellipse._abc_registry" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="stylo.shape.basic.Ellipse._get_ellipse">
+<code class="descname">_get_ellipse</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/stylo/shape/basic.html#Ellipse._get_ellipse"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#stylo.shape.basic.Ellipse._get_ellipse" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a function that will draw an ellipse as a curve.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="stylo.shape.basic.Ellipse._get_filled_ellipse">
+<code class="descname">_get_filled_ellipse</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/stylo/shape/basic.html#Ellipse._get_filled_ellipse"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#stylo.shape.basic.Ellipse._get_filled_ellipse" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a function that will draw a filled in ellipse.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="stylo.shape.basic.Ellipse.draw">
+<code class="descname">draw</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/stylo/shape/basic.html#Ellipse.draw"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#stylo.shape.basic.Ellipse.draw" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="stylo.shape.basic.Line">
+<em class="property">class </em><code class="descclassname">stylo.shape.basic.</code><code class="descname">Line</code><span class="sig-paren">(</span><em>p1=None</em>, <em>p2=None</em>, <em>pt=0.01</em>, <em>extend=False</em>, <em>above=False</em>, <em>below=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/stylo/shape/basic.html#Line"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#stylo.shape.basic.Line" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="stylo_shape_shape.html#stylo.shape.shape.Shape" title="stylo.shape.shape.Shape"><code class="xref py py-class docutils literal notranslate"><span class="pre">stylo.shape.shape.Shape</span></code></a></p>
+<p>We can define a line joining two points <span class="math notranslate nohighlight">\(p_1, p_2\)</span> implicitly using the
+following equation.</p>
+<div class="math notranslate nohighlight">
+\[f(x, y) = \frac{(y_2 - y_1)}{(x_2 - x_1)}(x - x_1) + (y_1 - y) = 0\]</div>
+<p>where:</p>
+<ul class="simple">
+<li><span class="math notranslate nohighlight">\(x_2 \neq x_1\)</span></li>
+<li><span class="math notranslate nohighlight">\(p_1 = (x_1, y_1)\)</span></li>
+<li><span class="math notranslate nohighlight">\(p_2 = (x_2, y_2)\)</span></li>
+</ul>
+<p>However since a line has no area we would never see it so we need to introduce an
+error margin <span class="math notranslate nohighlight">\(e &gt; 0\)</span>. We will say a point is on the line if</p>
+<div class="math notranslate nohighlight">
+\[|f(x, y)| \leq e\]</div>
+<dl class="attribute">
+<dt id="stylo.shape.basic.Line._abc_cache">
+<code class="descname">_abc_cache</code><em class="property"> = &lt;_weakrefset.WeakSet object&gt;</em><a class="headerlink" href="#stylo.shape.basic.Line._abc_cache" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="stylo.shape.basic.Line._abc_negative_cache">
+<code class="descname">_abc_negative_cache</code><em class="property"> = &lt;_weakrefset.WeakSet object&gt;</em><a class="headerlink" href="#stylo.shape.basic.Line._abc_negative_cache" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="stylo.shape.basic.Line._abc_negative_cache_version">
+<code class="descname">_abc_negative_cache_version</code><em class="property"> = 47</em><a class="headerlink" href="#stylo.shape.basic.Line._abc_negative_cache_version" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="stylo.shape.basic.Line._abc_registry">
+<code class="descname">_abc_registry</code><em class="property"> = &lt;_weakrefset.WeakSet object&gt;</em><a class="headerlink" href="#stylo.shape.basic.Line._abc_registry" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="stylo.shape.basic.Line.draw">
+<code class="descname">draw</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/stylo/shape/basic.html#Line.draw"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#stylo.shape.basic.Line.draw" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="stylo.shape.basic.Rectangle">
+<em class="property">class </em><code class="descclassname">stylo.shape.basic.</code><code class="descname">Rectangle</code><span class="sig-paren">(</span><em>x</em>, <em>y</em>, <em>width</em>, <em>height</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/stylo/shape/basic.html#Rectangle"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#stylo.shape.basic.Rectangle" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="stylo_shape_shape.html#stylo.shape.shape.Shape" title="stylo.shape.shape.Shape"><code class="xref py py-class docutils literal notranslate"><span class="pre">stylo.shape.shape.Shape</span></code></a></p>
+<p>It’s quite simple to define a rectangle, simply pick a
+point <span class="math notranslate nohighlight">\((x_0,y_0)\)</span> that you want to be the center
+and then two numbers which will represent the width and
+height of the rectangle.</p>
+<dl class="attribute">
+<dt id="stylo.shape.basic.Rectangle._abc_cache">
+<code class="descname">_abc_cache</code><em class="property"> = &lt;_weakrefset.WeakSet object&gt;</em><a class="headerlink" href="#stylo.shape.basic.Rectangle._abc_cache" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="stylo.shape.basic.Rectangle._abc_negative_cache">
+<code class="descname">_abc_negative_cache</code><em class="property"> = &lt;_weakrefset.WeakSet object&gt;</em><a class="headerlink" href="#stylo.shape.basic.Rectangle._abc_negative_cache" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="stylo.shape.basic.Rectangle._abc_negative_cache_version">
+<code class="descname">_abc_negative_cache_version</code><em class="property"> = 47</em><a class="headerlink" href="#stylo.shape.basic.Rectangle._abc_negative_cache_version" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="stylo.shape.basic.Rectangle._abc_registry">
+<code class="descname">_abc_registry</code><em class="property"> = &lt;_weakrefset.WeakSet object&gt;</em><a class="headerlink" href="#stylo.shape.basic.Rectangle._abc_registry" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="stylo.shape.basic.Rectangle.draw">
+<code class="descname">draw</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/stylo/shape/basic.html#Rectangle.draw"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#stylo.shape.basic.Rectangle.draw" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="stylo.shape.basic.Square">
+<em class="property">class </em><code class="descclassname">stylo.shape.basic.</code><code class="descname">Square</code><span class="sig-paren">(</span><em>x</em>, <em>y</em>, <em>size</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/stylo/shape/basic.html#Square"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#stylo.shape.basic.Square" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#stylo.shape.basic.Rectangle" title="stylo.shape.basic.Rectangle"><code class="xref py py-class docutils literal notranslate"><span class="pre">stylo.shape.basic.Rectangle</span></code></a></p>
+<dl class="attribute">
+<dt id="stylo.shape.basic.Square._abc_cache">
+<code class="descname">_abc_cache</code><em class="property"> = &lt;_weakrefset.WeakSet object&gt;</em><a class="headerlink" href="#stylo.shape.basic.Square._abc_cache" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="stylo.shape.basic.Square._abc_negative_cache">
+<code class="descname">_abc_negative_cache</code><em class="property"> = &lt;_weakrefset.WeakSet object&gt;</em><a class="headerlink" href="#stylo.shape.basic.Square._abc_negative_cache" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="stylo.shape.basic.Square._abc_negative_cache_version">
+<code class="descname">_abc_negative_cache_version</code><em class="property"> = 47</em><a class="headerlink" href="#stylo.shape.basic.Square._abc_negative_cache_version" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="stylo.shape.basic.Square._abc_registry">
+<code class="descname">_abc_registry</code><em class="property"> = &lt;_weakrefset.WeakSet object&gt;</em><a class="headerlink" href="#stylo.shape.basic.Square._abc_registry" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="stylo.shape.basic.Triangle">
+<em class="property">class </em><code class="descclassname">stylo.shape.basic.</code><code class="descname">Triangle</code><span class="sig-paren">(</span><em>a</em>, <em>b</em>, <em>c</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/stylo/shape/basic.html#Triangle"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#stylo.shape.basic.Triangle" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="stylo_shape_shape.html#stylo.shape.shape.Shape" title="stylo.shape.shape.Shape"><code class="xref py py-class docutils literal notranslate"><span class="pre">stylo.shape.shape.Shape</span></code></a></p>
+<p>A Triangle can be defined by picking three non-collinear points
+<span class="math notranslate nohighlight">\((a, b, c)\)</span> in the form of a tuple each.
+Points inside the triangle are determined using the
+barycentric coordinate system method, which is further explained
+<a class="reference external" href="https://math.stackexchange.com/a/1884485/294670">in this answer</a>
+and the first method
+<a class="reference external" href="http://totologic.blogspot.com/2014/01/accurate-point-in-triangle-test.html">here</a>.</p>
+<dl class="attribute">
+<dt id="stylo.shape.basic.Triangle._abc_cache">
+<code class="descname">_abc_cache</code><em class="property"> = &lt;_weakrefset.WeakSet object&gt;</em><a class="headerlink" href="#stylo.shape.basic.Triangle._abc_cache" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="stylo.shape.basic.Triangle._abc_negative_cache">
+<code class="descname">_abc_negative_cache</code><em class="property"> = &lt;_weakrefset.WeakSet object&gt;</em><a class="headerlink" href="#stylo.shape.basic.Triangle._abc_negative_cache" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="stylo.shape.basic.Triangle._abc_negative_cache_version">
+<code class="descname">_abc_negative_cache_version</code><em class="property"> = 47</em><a class="headerlink" href="#stylo.shape.basic.Triangle._abc_negative_cache_version" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="stylo.shape.basic.Triangle._abc_registry">
+<code class="descname">_abc_registry</code><em class="property"> = &lt;_weakrefset.WeakSet object&gt;</em><a class="headerlink" href="#stylo.shape.basic.Triangle._abc_registry" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="stylo.shape.basic.Triangle.draw">
+<code class="descname">draw</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/stylo/shape/basic.html#Triangle.draw"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#stylo.shape.basic.Triangle.draw" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="stylo.shape.basic.Triangle.get_q">
+<code class="descname">get_q</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/stylo/shape/basic.html#Triangle.get_q"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#stylo.shape.basic.Triangle.get_q" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the denominator for calculating both the barycentric
+coordinates, which absolute value is the double of the area
+of the triangle.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="stylo.shape.basic.Triangle.get_s">
+<code class="descname">get_s</code><span class="sig-paren">(</span><em>x</em>, <em>y</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/stylo/shape/basic.html#Triangle.get_s"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#stylo.shape.basic.Triangle.get_s" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns one of the barycentric coordinates of the triangle using both
+<span class="math notranslate nohighlight">\(a\)</span> and <span class="math notranslate nohighlight">\(c\)</span> points.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="stylo.shape.basic.Triangle.get_t">
+<code class="descname">get_t</code><span class="sig-paren">(</span><em>x</em>, <em>y</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/stylo/shape/basic.html#Triangle.get_t"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#stylo.shape.basic.Triangle.get_t" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns one of the barycentric coordinates of the triangle using both
+<span class="math notranslate nohighlight">\(a\)</span> and <span class="math notranslate nohighlight">\(b\)</span> points.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="stylo.shape.basic.define_ellipse">
+<code class="descclassname">stylo.shape.basic.</code><code class="descname">define_ellipse</code><span class="sig-paren">(</span><em>a</em>, <em>b</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/stylo/shape/basic.html#define_ellipse"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#stylo.shape.basic.define_ellipse" title="Permalink to this definition">¶</a></dt>
+<dd><p>An ellipse can be implicitly defined by the equation.</p>
+<div class="math notranslate nohighlight">
+\[\frac{x^2}{a^2} + \frac{y^2}{b^2} = r^2\]</div>
+<p>where:</p>
+<ul class="simple">
+<li><span class="math notranslate nohighlight">\(a\)</span> is known as the semi-major axis. Larger values stretch the ellipse along
+the <span class="math notranslate nohighlight">\(x\)</span>-direction</li>
+<li><span class="math notranslate nohighlight">\(b\)</span> is known as the semi-minor axis. Larger values stretch the ellipse along
+the <span class="math notranslate nohighlight">\(y\)</span>-direction</li>
+<li><span class="math notranslate nohighlight">\(r\)</span> is the radius and controls the overall size.</li>
+</ul>
+<p>This function will calculate the value of the left hand side of the above equation.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>a</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.7)"><em>float</em></a>) – The value of the semi-major axis</li>
+<li><strong>b</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.7)"><em>float</em></a>) – The value of the semi-minor axis.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">The function in <code class="code docutils literal notranslate"><span class="pre">(x,</span> <span class="pre">y)</span></code> for the left hand side of the equation</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p>above.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="stylo.shape.basic.define_line">
+<code class="descclassname">stylo.shape.basic.</code><code class="descname">define_line</code><span class="sig-paren">(</span><em>p1</em>, <em>p2</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/stylo/shape/basic.html#define_line"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#stylo.shape.basic.define_line" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a function than can be used to determine if a given point lies on the line
+joining the points <span class="math notranslate nohighlight">\(p_1\)</span> and <span class="math notranslate nohighlight">\(p_2\)</span>.</p>
+<p>This function assumes that your line is <strong>not</strong> vertical.</p>
+<p>The function returned will be the implicit form of a straight line</p>
+<div class="math notranslate nohighlight">
+\[f(x, y) = \frac{(y_2 - y_1)}{(x_2 - x_1)}(x - x_1) + (y_1 - y)\]</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>p1</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.7)"><em>tuple</em></a>) – The <span class="math notranslate nohighlight">\((x_1, y_1)\)</span> coordinate of <span class="math notranslate nohighlight">\(p_1\)</span></li>
+<li><strong>p2</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.7)"><em>tuple</em></a>) – The <span class="math notranslate nohighlight">\((x_2, y_2)\)</span> coordinate of <span class="math notranslate nohighlight">\(p2\)</span></li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+
+    
+</div>
+        </div>
+        <div class="footer">
+
+            
+                <p>
+                  Powered by <a href="http://www.sphinx-doc.org/">Sphinx</a> 1.8.2 &amp;
+                  <a href="https://github.com/alcarney/topos-theme">Topos Theme</a> 0.0.10
+                </p>
+        </div>
+    </body>
+</html>

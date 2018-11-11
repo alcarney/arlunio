@@ -1,0 +1,13 @@
+
+
+.. _stylo_color_colormap:
+
+Stylo.Color.Colormap
+====================
+
+.. automodule:: stylo.color.colormap
+   :members:
+   :undoc-members:
+   :private-members:
+   :show-inheritance:
+

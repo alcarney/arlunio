@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+        <link href="https://fonts.googleapis.com/css?family=Nanum+Myeongjo" rel="stylesheet">
+
+        <!-- TODO: Run CSS + JS through minifiers -->
+        <link rel="stylesheet" href="../_static/css/main.css" type="text/css" >
+        <link rel="stylesheet" href="../_static/css/highlight.css " type="text/css" >
+
+        <script type="text/javascript" id="documentation_options"
+                data-url_root="../"
+                src="../_static/documentation_options.js"></script>
+        <script async
+                src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"
+                type="application/javascript"></script>
+
+        <title>Stylo.Domain.Helpers - Stylo v0.9.0</title>
+
+        
+    </head>
+    <body>
+        <!-- Slightly modified from the basic theme in the Sphinx repository
+        https://github.com/sphinx-doc/sphinx/blob/master/sphinx/themes/basic/layout.html -->
+
+        <div class="header">
+            <a href="../index.html" id="site-name"><h2>Stylo<sub>v0.9.0</sub></h2></a>
+            <label class="menu-toggle" for="menu-toggle">Menu</label>
+            <input type="checkbox" id="menu-toggle">
+            <div class="nav-sections">
+                <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../using/index.html">User’s Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../extending/index.html">Extending</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contributing/index.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../maths/index.html">Mathematics</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../glossary.html">Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changes.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../about.html">About the Docs</a></li>
+</ul>
+
+            </div>
+        </div>
+        <div class="nav">
+            <div>
+                <h3 class="nav-header">Page Contents</h3>
+                <ul>
+<li><a class="reference internal" href="#">Stylo.Domain.Helpers</a></li>
+</ul>
+
+            </div>
+            <form class="search" action="../search.html" method="get">
+                  <input type="text" name="q" placeholder="Search"/>
+                  <input type="hidden" name="check_keywords" value="yes" />
+                  <input type="hidden" name="area" value="default" />
+            </form>
+        </div>
+        <div class="content">
+<div class="main">
+    <div class="section" id="module-stylo.domain.helpers">
+<span id="id1"></span><span id="stylo-domain-helpers"></span><h1>Stylo.Domain.Helpers<a class="headerlink" href="#module-stylo.domain.helpers" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="stylo.domain.helpers.CartesianConversion">
+<em class="property">class </em><code class="descclassname">stylo.domain.helpers.</code><code class="descname">CartesianConversion</code><a class="reference internal" href="../_modules/stylo/domain/helpers.html#CartesianConversion"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#stylo.domain.helpers.CartesianConversion" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>A helper class for defining new domain classes.</p>
+<p>Say you are implementing a new class, perhaps the <code class="code docutils literal notranslate"><span class="pre">Rotation</span></code> domain transform
+where the interesting part is the adjustments to the <code class="code docutils literal notranslate"><span class="pre">r</span></code> and <code class="code docutils literal notranslate"><span class="pre">t</span></code>
+coordinates. The implementation of <code class="code docutils literal notranslate"><span class="pre">x</span></code> and <code class="code docutils literal notranslate"><span class="pre">y</span></code> is then done with respect
+to the transformed <code class="code docutils literal notranslate"><span class="pre">r</span></code> and <code class="code docutils literal notranslate"><span class="pre">t</span></code> variables.</p>
+<p>This class provides implementations of the <code class="code docutils literal notranslate"><span class="pre">_get_xs</span></code> and <code class="code docutils literal notranslate"><span class="pre">_get_ys</span></code>
+methods to handle this conversion for you automatically, leaving you to focus on
+implementing the transform that interest you.</p>
+<p>To use this class, simply include it in your <code class="code docutils literal notranslate"><span class="pre">class</span></code> definition as follows</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">MyDomain</span><span class="p">(</span><span class="n">CartesianConversion</span><span class="p">,</span> <span class="n">RealDomain</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="nf">_get_xs</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="o">...</span>
+
+    <span class="k">def</span> <span class="nf">_get_ys</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="o">...</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The order in which the classes are listed is <em>very</em> important.</p>
+</div>
+<dl class="method">
+<dt id="stylo.domain.helpers.CartesianConversion._get_x">
+<code class="descname">_get_x</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/stylo/domain/helpers.html#CartesianConversion._get_x"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#stylo.domain.helpers.CartesianConversion._get_x" title="Permalink to this definition">¶</a></dt>
+<dd><p>The conversion to the <span class="math notranslate nohighlight">\(x\)</span> component in terms of <span class="math notranslate nohighlight">\(r\)</span> and
+<span class="math notranslate nohighlight">\(\theta\)</span></p>
+<div class="math notranslate nohighlight">
+\[x = r\cos{(\theta)}\]</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="stylo.domain.helpers.CartesianConversion._get_y">
+<code class="descname">_get_y</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/stylo/domain/helpers.html#CartesianConversion._get_y"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#stylo.domain.helpers.CartesianConversion._get_y" title="Permalink to this definition">¶</a></dt>
+<dd><p>The conversion to the <span class="math notranslate nohighlight">\(y\)</span> component in terms of <span class="math notranslate nohighlight">\(r\)</span> and
+<span class="math notranslate nohighlight">\(\theta\)</span></p>
+<div class="math notranslate nohighlight">
+\[y = r\sin{(\theta)}\]</div>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="stylo.domain.helpers.PolarConversion">
+<em class="property">class </em><code class="descclassname">stylo.domain.helpers.</code><code class="descname">PolarConversion</code><a class="reference internal" href="../_modules/stylo/domain/helpers.html#PolarConversion"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#stylo.domain.helpers.PolarConversion" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>A helper class for defining new domain classes.</p>
+<p>Say you are implementing a new class, perhaps the <code class="code docutils literal notranslate"><span class="pre">Translation</span></code> domain
+transform where the interesting part of that class is implementing the shift in
+<code class="code docutils literal notranslate"><span class="pre">x</span></code> or the shift in <code class="code docutils literal notranslate"><span class="pre">y</span></code>. The implementation of the <code class="code docutils literal notranslate"><span class="pre">r</span></code> and
+<code class="code docutils literal notranslate"><span class="pre">t</span></code> is then done with respect to the shifted <code class="code docutils literal notranslate"><span class="pre">x</span></code> and <code class="code docutils literal notranslate"><span class="pre">y</span></code></p>
+<p>This class provides implementations of the <code class="code docutils literal notranslate"><span class="pre">_get_rs</span></code> and <code class="code docutils literal notranslate"><span class="pre">_get_ts</span></code> that
+handle this conversion for you automatically, leaving you to focus on implementing
+the transform that interest you.</p>
+<p>To use this class, simply include it in your <code class="code docutils literal notranslate"><span class="pre">class</span></code> definition as follows.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">MyDomain</span><span class="p">(</span><span class="n">PolarConversion</span><span class="p">,</span> <span class="n">RealDomain</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="nf">_get_xs</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+       <span class="o">...</span>
+
+     <span class="k">def</span> <span class="nf">_get_ys</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="o">...</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The order in which the classes are listed is <em>very</em> important.</p>
+</div>
+<dl class="method">
+<dt id="stylo.domain.helpers.PolarConversion._get_r">
+<code class="descname">_get_r</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/stylo/domain/helpers.html#PolarConversion._get_r"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#stylo.domain.helpers.PolarConversion._get_r" title="Permalink to this definition">¶</a></dt>
+<dd><p>The conversion to the radial component in terms of <span class="math notranslate nohighlight">\(x\)</span> and <span class="math notranslate nohighlight">\(y\)</span>.</p>
+<div class="math notranslate nohighlight">
+\[r = \sqrt{x^2 + y^2}\]</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="stylo.domain.helpers.PolarConversion._get_t">
+<code class="descname">_get_t</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/stylo/domain/helpers.html#PolarConversion._get_t"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#stylo.domain.helpers.PolarConversion._get_t" title="Permalink to this definition">¶</a></dt>
+<dd><p>The conversion to the angular component in terms of <span class="math notranslate nohighlight">\(x\)</span> and <span class="math notranslate nohighlight">\(y\)</span>.</p>
+<div class="math notranslate nohighlight">
+\[\theta = \tan^{-1}{\left(\frac{y}{x}\right)}\]</div>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+    
+</div>
+        </div>
+        <div class="footer">
+
+            
+                <p>
+                  Powered by <a href="http://www.sphinx-doc.org/">Sphinx</a> 1.8.2 &amp;
+                  <a href="https://github.com/alcarney/topos-theme">Topos Theme</a> 0.0.10
+                </p>
+        </div>
+    </body>
+</html>

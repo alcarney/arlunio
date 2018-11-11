@@ -1,0 +1,13 @@
+
+
+.. _stylo_domain_rectangular:
+
+Stylo.Domain.Rectangular
+========================
+
+.. automodule:: stylo.domain.rectangular
+   :members:
+   :undoc-members:
+   :private-members:
+   :show-inheritance:
+

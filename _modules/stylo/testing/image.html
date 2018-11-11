@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+        <link href="https://fonts.googleapis.com/css?family=Nanum+Myeongjo" rel="stylesheet">
+
+        <!-- TODO: Run CSS + JS through minifiers -->
+        <link rel="stylesheet" href="../../../_static/css/main.css" type="text/css" >
+        <link rel="stylesheet" href="../../../_static/css/highlight.css " type="text/css" >
+
+        <script type="text/javascript" id="documentation_options"
+                data-url_root="../../../"
+                src="../../../_static/documentation_options.js"></script>
+        <script async
+                src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"
+                type="application/javascript"></script>
+
+        <title>stylo.testing.image - Stylo v0.9.0</title>
+
+        
+    </head>
+    <body>
+        <!-- Slightly modified from the basic theme in the Sphinx repository
+        https://github.com/sphinx-doc/sphinx/blob/master/sphinx/themes/basic/layout.html -->
+
+        <div class="header">
+            <a href="../../../index.html" id="site-name"><h2>Stylo<sub>v0.9.0</sub></h2></a>
+            <label class="menu-toggle" for="menu-toggle">Menu</label>
+            <input type="checkbox" id="menu-toggle">
+            <div class="nav-sections">
+                <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../using/index.html">User’s Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../extending/index.html">Extending</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../contributing/index.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../maths/index.html">Mathematics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/index.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../glossary.html">Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../changes.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../about.html">About the Docs</a></li>
+</ul>
+
+            </div>
+        </div>
+        <div class="nav">
+            <div>
+                <h3 class="nav-header">Page Contents</h3>
+                
+            </div>
+            <form class="search" action="../../../search.html" method="get">
+                  <input type="text" name="q" placeholder="Search"/>
+                  <input type="hidden" name="check_keywords" value="yes" />
+                  <input type="hidden" name="area" value="default" />
+            </form>
+        </div>
+        <div class="content">
+<div class="main">
+    <h1>Source code for stylo.testing.image</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">base64</span>
+<span class="kn">from</span> <span class="nn">hypothesis</span> <span class="k">import</span> <span class="n">given</span>
+
+<span class="kn">from</span> <span class="nn">stylo.testing.strategies</span> <span class="k">import</span> <span class="n">dimension</span>
+
+
+<div class="viewcode-block" id="BaseImageTest"><a class="viewcode-back" href="../../../api/stylo_testing_image.html#stylo.testing.image.BaseImageTest">[docs]</a><span class="k">class</span> <span class="nc">BaseImageTest</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;A base class for writing :code:`Image` implementations.</span>
+
+<span class="sd">    When writing your test case for a new :code:`Image` implementation you need to</span>
+<span class="sd">    declare it as follows.</span>
+
+<span class="sd">    .. code-block:: python</span>
+
+<span class="sd">       from unittest import TestCase</span>
+<span class="sd">       from stylo.testing.image import BaseImageTest</span>
+
+<span class="sd">       class TestMyImage(TestCase, BaseImageTest):</span>
+<span class="sd">           ...</span>
+
+<span class="sd">    .. note::</span>
+
+<span class="sd">       The order in which you write the classes is *very* important.</span>
+
+<span class="sd">    You also need to define the :code:`setUp` method to set the :code:`image` attribute</span>
+<span class="sd">    equal to an instance of your image implementation.</span>
+
+<span class="sd">    .. code-block:: python</span>
+
+<span class="sd">       def setUp(self):</span>
+<span class="sd">           self.image = MyImage()</span>
+
+<span class="sd">    Then in addition to any tests you write, your :code:`Image` implementation will be</span>
+<span class="sd">    automatically tested to see if passes the checks defined below.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="BaseImageTest.test_encode"><a class="viewcode-back" href="../../../api/stylo_testing_image.html#stylo.testing.image.BaseImageTest.test_encode">[docs]</a>    <span class="nd">@given</span><span class="p">(</span><span class="n">width</span><span class="o">=</span><span class="n">dimension</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="n">dimension</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">test_encode</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Ensure that if the :code:`encode=True` keyword argument is given then a</span>
+<span class="sd">        base64 encoded string representing the image in PNG format is returned.&quot;&quot;&quot;</span>
+
+        <span class="c1"># Every PNG image starts with the same magic number.</span>
+        <span class="c1"># https://en.wikipedia.org/wiki/Portable_Network_Graphics</span>
+        <span class="n">magic</span> <span class="o">=</span> <span class="n">base64</span><span class="o">.</span><span class="n">b64encode</span><span class="p">(</span><span class="nb">bytes</span><span class="o">.</span><span class="n">fromhex</span><span class="p">(</span><span class="s2">&quot;89504e470d0a1a0a&quot;</span><span class="p">))</span>
+
+        <span class="n">image_bytes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">image</span><span class="p">(</span><span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">,</span> <span class="n">encode</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">image_bytes</span><span class="p">,</span> <span class="p">(</span><span class="nb">bytes</span><span class="p">,)),</span> <span class="s2">&quot;Expected byte string&quot;</span>
+        <span class="k">assert</span> <span class="n">magic</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">11</span><span class="p">]</span> <span class="o">==</span> <span class="n">image_bytes</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">11</span><span class="p">]</span></div></div>
+</pre></div>
+    
+</div>
+        </div>
+        <div class="footer">
+
+            
+                <p>
+                  Powered by <a href="http://www.sphinx-doc.org/">Sphinx</a> 1.8.2 &amp;
+                  <a href="https://github.com/alcarney/topos-theme">Topos Theme</a> 0.0.10
+                </p>
+        </div>
+    </body>
+</html>

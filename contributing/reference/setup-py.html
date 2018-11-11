@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+        <link href="https://fonts.googleapis.com/css?family=Nanum+Myeongjo" rel="stylesheet">
+
+        <!-- TODO: Run CSS + JS through minifiers -->
+        <link rel="stylesheet" href="../../_static/css/main.css" type="text/css" >
+        <link rel="stylesheet" href="../../_static/css/highlight.css " type="text/css" >
+
+        <script type="text/javascript" id="documentation_options"
+                data-url_root="../../"
+                src="../../_static/documentation_options.js"></script>
+        <script async
+                src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"
+                type="application/javascript"></script>
+
+        <title>The Setup.py File - Stylo v0.9.0</title>
+
+        
+    </head>
+    <body>
+        <!-- Slightly modified from the basic theme in the Sphinx repository
+        https://github.com/sphinx-doc/sphinx/blob/master/sphinx/themes/basic/layout.html -->
+
+        <div class="header">
+            <a href="../../index.html" id="site-name"><h2>Stylo<sub>v0.9.0</sub></h2></a>
+            <label class="menu-toggle" for="menu-toggle">Menu</label>
+            <input type="checkbox" id="menu-toggle">
+            <div class="nav-sections">
+                <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../using/index.html">User’s Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../extending/index.html">Extending</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../maths/index.html">Mathematics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/index.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../glossary.html">Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../changes.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../about.html">About the Docs</a></li>
+</ul>
+
+            </div>
+        </div>
+        <div class="nav">
+            <div>
+                <h3 class="nav-header">Page Contents</h3>
+                <ul>
+<li><a class="reference internal" href="#">The Setup.py File</a><ul>
+<li><a class="reference internal" href="#package-metadata">Package Metadata</a><ul>
+<li><a class="reference internal" href="#name-version-description">Name, Version, Description</a></li>
+<li><a class="reference internal" href="#authors-license-classifiers">Authors, License, Classifiers</a></li>
+<li><a class="reference internal" href="#packages-requirements">Packages &amp; Requirements</a></li>
+<li><a class="reference internal" href="#miscellaneous-fields">Miscellaneous Fields</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            </div>
+            <form class="search" action="../../search.html" method="get">
+                  <input type="text" name="q" placeholder="Search"/>
+                  <input type="hidden" name="check_keywords" value="yes" />
+                  <input type="hidden" name="area" value="default" />
+            </form>
+        </div>
+        <div class="content">
+<div class="main">
+    <div class="section" id="the-setup-py-file">
+<span id="contribute-ref-setup-py"></span><h1>The Setup.py File<a class="headerlink" href="#the-setup-py-file" title="Permalink to this headline">¶</a></h1>
+<p>The <code class="code docutils literal notranslate"><span class="pre">setup.py</span></code> file is what the packaging tools use to determine what
+should go into <code class="code docutils literal notranslate"><span class="pre">stylo</span></code> when it is packaged as well as define any metadata
+about the project itself.</p>
+<p>Here is the contents of that file</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">setuptools</span> <span class="kn">import</span> <span class="n">setup</span><span class="p">,</span> <span class="n">find_packages</span>
+
+<span class="kn">from</span> <span class="nn">stylo</span> <span class="kn">import</span> <span class="n">__version__</span>
+
+
+<span class="k">def</span> <span class="nf">readme</span><span class="p">():</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;README.md&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+
+
+<span class="n">setup</span><span class="p">(</span>
+    <span class="n">name</span><span class="o">=</span><span class="s2">&quot;stylo&quot;</span><span class="p">,</span>
+    <span class="n">version</span><span class="o">=</span><span class="n">__version__</span><span class="p">,</span>
+    <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Using a blend of Python and Maths for the creation of images&quot;</span><span class="p">,</span>
+    <span class="n">long_description</span><span class="o">=</span><span class="n">readme</span><span class="p">(),</span>
+    <span class="n">long_description_content_type</span><span class="o">=</span><span class="s2">&quot;text/markdown&quot;</span><span class="p">,</span>
+    <span class="n">classifiers</span><span class="o">=</span><span class="p">[</span>
+        <span class="s2">&quot;Development Status :: 3 - Alpha&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;License :: OSI Approved :: MIT License&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;Programming Language :: Python :: 3.5&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;Programming Language :: Python :: 3.6&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;Programming Language :: Python :: 3.7&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;Programming Language :: Python :: 3 :: Only&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;Topic :: Multimedia :: Graphics&quot;</span><span class="p">,</span>
+    <span class="p">],</span>
+    <span class="n">author</span><span class="o">=</span><span class="s2">&quot;Alex Carney&quot;</span><span class="p">,</span>
+    <span class="n">author_email</span><span class="o">=</span><span class="s2">&quot;alcarneyme@gmail.com&quot;</span><span class="p">,</span>
+    <span class="n">license</span><span class="o">=</span><span class="s2">&quot;MIT&quot;</span><span class="p">,</span>
+    <span class="n">packages</span><span class="o">=</span><span class="n">find_packages</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">,</span> <span class="n">exclude</span><span class="o">=</span><span class="s2">&quot;tests&quot;</span><span class="p">),</span>
+    <span class="n">install_requires</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;Pillow&quot;</span><span class="p">,</span> <span class="s2">&quot;hypothesis&quot;</span><span class="p">,</span> <span class="s2">&quot;matplotlib&quot;</span><span class="p">,</span> <span class="s2">&quot;numpy&quot;</span><span class="p">,</span> <span class="s2">&quot;pytest&quot;</span><span class="p">,</span> <span class="s2">&quot;tqdm&quot;</span><span class="p">],</span>
+    <span class="n">python_requires</span><span class="o">=</span><span class="s2">&quot;&gt;=3.5&quot;</span><span class="p">,</span>
+    <span class="n">setup_requires</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;pytest-runner&quot;</span><span class="p">],</span>
+    <span class="n">test_suite</span><span class="o">=</span><span class="s2">&quot;tests&quot;</span><span class="p">,</span>
+    <span class="n">include_package_data</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+    <span class="n">zip_safe</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>While we won’t go through absolutely everything, here are some of the highlights</p>
+<div class="admonition attention">
+<p class="first admonition-title">Attention</p>
+<p class="last">The box above contains the current version of <code class="code docutils literal notranslate"><span class="pre">setup.py</span></code> extracted from
+the file itself. If what you read below doesn’t match up then it’s an
+indication that this page is out of date and an issue should be raised.</p>
+</div>
+<div class="section" id="package-metadata">
+<h2>Package Metadata<a class="headerlink" href="#package-metadata" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="name-version-description">
+<h3>Name, Version, Description<a class="headerlink" href="#name-version-description" title="Permalink to this headline">¶</a></h3>
+<p>Some standard info about the project, such as its <code class="code docutils literal notranslate"><span class="pre">name</span></code>. The
+<code class="code docutils literal notranslate"><span class="pre">version</span></code> is set to the value of the <code class="code docutils literal notranslate"><span class="pre">__version__</span></code> string from the
+<code class="code docutils literal notranslate"><span class="pre">stylo/_version.py</span></code> file so that it is always up to date. There is also a
+one line <code class="code docutils literal notranslate"><span class="pre">description</span></code> about what <code class="code docutils literal notranslate"><span class="pre">stylo</span></code> does.</p>
+<p>There is also a <code class="code docutils literal notranslate"><span class="pre">long_description</span></code> field, this is what will be displayed
+on the <a class="reference external" href="https://pypi.org/project/stylo/">project</a> page on <a class="reference internal" href="../../glossary.html#term-pypi"><span class="xref std std-term">PyPi</span></a> this is
+generally a project’s README file. Since the <code class="code docutils literal notranslate"><span class="pre">setup.py</span></code> is just regular
+python code we write a <code class="code docutils literal notranslate"><span class="pre">readme()</span></code> function to read the contents of the
+<code class="code docutils literal notranslate"><span class="pre">README.rst</span></code> file so that this field is always up to date.</p>
+</div>
+<div class="section" id="authors-license-classifiers">
+<h3>Authors, License, Classifiers<a class="headerlink" href="#authors-license-classifiers" title="Permalink to this headline">¶</a></h3>
+<p>The <code class="code docutils literal notranslate"><span class="pre">author</span></code> and <code class="code docutils literal notranslate"><span class="pre">author_email</span></code> fields give you some idea about the
+people behind the project and a way to get in touch.</p>
+<p>The <code class="code docutils literal notranslate"><span class="pre">license</span></code> field tells you what license <code class="code docutils literal notranslate"><span class="pre">stylo</span></code> is available
+under and dictates what you can and can’t do with the code. <code class="code docutils literal notranslate"><span class="pre">stylo</span></code> is
+available under the <a class="reference external" href="https://opensource.org/licenses/MIT">MIT License</a> and since I’m not a lawyer I recommend you
+follow the link if you want to know what the terms of the license are all about.</p>
+<p>Then we have a number of <code class="code docutils literal notranslate"><span class="pre">classifiers</span></code>, these are tags that help indicate
+the current state of the project. This can range from anything from the versions
+of Python that are supported to the license the project is available under.
+There are <em>many</em> classifiers to choose from
+<a class="reference external" href="https://pypi.org/pypi?%3Aaction=list_classifiers">here</a> is a full list for
+those who are interested.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">There needs to be a conversation about when people are considered to be
+“core” contributors and therefore should be added to the authors list.</p>
+</div>
+</div>
+<div class="section" id="packages-requirements">
+<h3>Packages &amp; Requirements<a class="headerlink" href="#packages-requirements" title="Permalink to this headline">¶</a></h3>
+<p>Here we get into what is included in the package, we use the
+<code class="code docutils literal notranslate"><span class="pre">find_packages</span></code> function to automatically discover the python files inside
+the <code class="code docutils literal notranslate"><span class="pre">stylo</span></code> folder that need to be included.</p>
+<p>We also need to specify our dependencies in the <code class="code docutils literal notranslate"><span class="pre">install_requires</span></code> field
+so that when people <code class="code docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">stylo</span></code> all of the required packages are
+discovered and installed.</p>
+<p>Those with a keen eye should notice that packages like <code class="code docutils literal notranslate"><span class="pre">hypothesis</span></code> and
+<code class="code docutils literal notranslate"><span class="pre">pytest</span></code> are not typically installation requirements as they are testing
+tools and only required by developers. Normally you would be right, however
+<code class="code docutils literal notranslate"><span class="pre">stylo</span></code> does distribute a number of tests as part of the
+<code class="code docutils literal notranslate"><span class="pre">stylo.testing</span></code> package as part of our extension guarantee. Since these
+packages are required to import objects from this package we include them as
+installation dependencies.</p>
+<p>Finally the <code class="code docutils literal notranslate"><span class="pre">python_requires</span></code> field specifies the minimum version that we
+support.</p>
+</div>
+<div class="section" id="miscellaneous-fields">
+<h3>Miscellaneous Fields<a class="headerlink" href="#miscellaneous-fields" title="Permalink to this headline">¶</a></h3>
+<p>The <code class="code docutils literal notranslate"><span class="pre">setup-requires</span></code> and <code class="code docutils literal notranslate"><span class="pre">test_suite</span></code> fields are a holdover from
+previous versions of <code class="code docutils literal notranslate"><span class="pre">stylo</span></code> where the tests were run using the command
+<code class="code docutils literal notranslate"><span class="pre">python</span> <span class="pre">setup.py</span> <span class="pre">test</span></code>. I am not sure if they are required anymore.</p>
+<p>I am not sure what the <code class="code docutils literal notranslate"><span class="pre">zip_safe</span></code> and <code class="code docutils literal notranslate"><span class="pre">include_package_data</span></code> fields
+are for.</p>
+</div>
+</div>
+</div>
+
+    
+</div>
+        </div>
+        <div class="footer">
+
+            
+                <p>
+                  Powered by <a href="http://www.sphinx-doc.org/">Sphinx</a> 1.8.2 &amp;
+                  <a href="https://github.com/alcarney/topos-theme">Topos Theme</a> 0.0.10
+                </p>
+        </div>
+    </body>
+</html>

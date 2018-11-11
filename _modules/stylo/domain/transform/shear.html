@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+        <link href="https://fonts.googleapis.com/css?family=Nanum+Myeongjo" rel="stylesheet">
+
+        <!-- TODO: Run CSS + JS through minifiers -->
+        <link rel="stylesheet" href="../../../../_static/css/main.css" type="text/css" >
+        <link rel="stylesheet" href="../../../../_static/css/highlight.css " type="text/css" >
+
+        <script type="text/javascript" id="documentation_options"
+                data-url_root="../../../../"
+                src="../../../../_static/documentation_options.js"></script>
+        <script async
+                src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"
+                type="application/javascript"></script>
+
+        <title>stylo.domain.transform.shear - Stylo v0.9.0</title>
+
+        
+    </head>
+    <body>
+        <!-- Slightly modified from the basic theme in the Sphinx repository
+        https://github.com/sphinx-doc/sphinx/blob/master/sphinx/themes/basic/layout.html -->
+
+        <div class="header">
+            <a href="../../../../index.html" id="site-name"><h2>Stylo<sub>v0.9.0</sub></h2></a>
+            <label class="menu-toggle" for="menu-toggle">Menu</label>
+            <input type="checkbox" id="menu-toggle">
+            <div class="nav-sections">
+                <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../using/index.html">User’s Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../extending/index.html">Extending</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../contributing/index.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../maths/index.html">Mathematics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../api/index.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../glossary.html">Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../changes.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../about.html">About the Docs</a></li>
+</ul>
+
+            </div>
+        </div>
+        <div class="nav">
+            <div>
+                <h3 class="nav-header">Page Contents</h3>
+                
+            </div>
+            <form class="search" action="../../../../search.html" method="get">
+                  <input type="text" name="q" placeholder="Search"/>
+                  <input type="hidden" name="check_keywords" value="yes" />
+                  <input type="hidden" name="area" value="default" />
+            </form>
+        </div>
+        <div class="content">
+<div class="main">
+    <h1>Source code for stylo.domain.transform.shear</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">stylo.domain.helpers</span> <span class="k">import</span> <span class="n">PolarConversion</span>
+<span class="kn">from</span> <span class="nn">stylo.domain.transform</span> <span class="k">import</span> <span class="n">RealDomainTransform</span><span class="p">,</span> <span class="n">define_transform</span>
+
+
+<div class="viewcode-block" id="HorizontalShear"><a class="viewcode-back" href="../../../../api/stylo_domain_transform_shear.html#stylo.domain.transform.shear.HorizontalShear">[docs]</a><span class="k">class</span> <span class="nc">HorizontalShear</span><span class="p">(</span><span class="n">PolarConversion</span><span class="p">,</span> <span class="n">RealDomainTransform</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;A horizontal shear transform.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">domain</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">domain</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">k</span> <span class="o">=</span> <span class="o">-</span><span class="n">k</span>
+
+<div class="viewcode-block" id="HorizontalShear._repr"><a class="viewcode-back" href="../../../../api/stylo_domain_transform_shear.html#stylo.domain.transform.shear.HorizontalShear._repr">[docs]</a>    <span class="k">def</span> <span class="nf">_repr</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;HorizontalShear: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">k</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="HorizontalShear._get_y"><a class="viewcode-back" href="../../../../api/stylo_domain_transform_shear.html#stylo.domain.transform.shear.HorizontalShear._get_y">[docs]</a>    <span class="k">def</span> <span class="nf">_get_y</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">domain</span><span class="o">.</span><span class="n">y</span></div>
+
+<div class="viewcode-block" id="HorizontalShear._get_x"><a class="viewcode-back" href="../../../../api/stylo_domain_transform_shear.html#stylo.domain.transform.shear.HorizontalShear._get_x">[docs]</a>    <span class="k">def</span> <span class="nf">_get_x</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+        <span class="n">xs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">domain</span><span class="o">.</span><span class="n">x</span>
+        <span class="n">ys</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">domain</span><span class="o">.</span><span class="n">y</span>
+
+        <span class="k">def</span> <span class="nf">mk_xs</span><span class="p">(</span><span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">xs</span><span class="p">(</span><span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">)</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">k</span> <span class="o">*</span> <span class="n">ys</span><span class="p">(</span><span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">mk_xs</span></div></div>
+
+
+<div class="viewcode-block" id="VerticalShear"><a class="viewcode-back" href="../../../../api/stylo_domain_transform_shear.html#stylo.domain.transform.shear.VerticalShear">[docs]</a><span class="k">class</span> <span class="nc">VerticalShear</span><span class="p">(</span><span class="n">PolarConversion</span><span class="p">,</span> <span class="n">RealDomainTransform</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;A vertical shear transform.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">domain</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">domain</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">k</span> <span class="o">=</span> <span class="o">-</span><span class="n">k</span>
+
+<div class="viewcode-block" id="VerticalShear._repr"><a class="viewcode-back" href="../../../../api/stylo_domain_transform_shear.html#stylo.domain.transform.shear.VerticalShear._repr">[docs]</a>    <span class="k">def</span> <span class="nf">_repr</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;VerticalShear: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">k</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="VerticalShear._get_x"><a class="viewcode-back" href="../../../../api/stylo_domain_transform_shear.html#stylo.domain.transform.shear.VerticalShear._get_x">[docs]</a>    <span class="k">def</span> <span class="nf">_get_x</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">domain</span><span class="o">.</span><span class="n">x</span></div>
+
+<div class="viewcode-block" id="VerticalShear._get_y"><a class="viewcode-back" href="../../../../api/stylo_domain_transform_shear.html#stylo.domain.transform.shear.VerticalShear._get_y">[docs]</a>    <span class="k">def</span> <span class="nf">_get_y</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+        <span class="n">xs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">domain</span><span class="o">.</span><span class="n">x</span>
+        <span class="n">ys</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">domain</span><span class="o">.</span><span class="n">y</span>
+
+        <span class="k">def</span> <span class="nf">mk_ys</span><span class="p">(</span><span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">ys</span><span class="p">(</span><span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">)</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">k</span> <span class="o">*</span> <span class="n">xs</span><span class="p">(</span><span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">mk_ys</span></div></div>
+
+
+<span class="n">vertical_shear</span> <span class="o">=</span> <span class="n">define_transform</span><span class="p">(</span><span class="n">VerticalShear</span><span class="p">)</span>
+<span class="n">horizontal_shear</span> <span class="o">=</span> <span class="n">define_transform</span><span class="p">(</span><span class="n">HorizontalShear</span><span class="p">)</span>
+</pre></div>
+    
+</div>
+        </div>
+        <div class="footer">
+
+            
+                <p>
+                  Powered by <a href="http://www.sphinx-doc.org/">Sphinx</a> 1.8.2 &amp;
+                  <a href="https://github.com/alcarney/topos-theme">Topos Theme</a> 0.0.10
+                </p>
+        </div>
+    </body>
+</html>

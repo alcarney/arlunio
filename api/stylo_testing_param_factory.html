@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+        <link href="https://fonts.googleapis.com/css?family=Nanum+Myeongjo" rel="stylesheet">
+
+        <!-- TODO: Run CSS + JS through minifiers -->
+        <link rel="stylesheet" href="../_static/css/main.css" type="text/css" >
+        <link rel="stylesheet" href="../_static/css/highlight.css " type="text/css" >
+
+        <script type="text/javascript" id="documentation_options"
+                data-url_root="../"
+                src="../_static/documentation_options.js"></script>
+        <script async
+                src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"
+                type="application/javascript"></script>
+
+        <title>Stylo.Testing._param_factory - Stylo v0.9.0</title>
+
+        
+    </head>
+    <body>
+        <!-- Slightly modified from the basic theme in the Sphinx repository
+        https://github.com/sphinx-doc/sphinx/blob/master/sphinx/themes/basic/layout.html -->
+
+        <div class="header">
+            <a href="../index.html" id="site-name"><h2>Stylo<sub>v0.9.0</sub></h2></a>
+            <label class="menu-toggle" for="menu-toggle">Menu</label>
+            <input type="checkbox" id="menu-toggle">
+            <div class="nav-sections">
+                <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../using/index.html">User’s Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../extending/index.html">Extending</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contributing/index.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../maths/index.html">Mathematics</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../glossary.html">Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changes.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../about.html">About the Docs</a></li>
+</ul>
+
+            </div>
+        </div>
+        <div class="nav">
+            <div>
+                <h3 class="nav-header">Page Contents</h3>
+                <ul>
+<li><a class="reference internal" href="#">Stylo.Testing._param_factory</a></li>
+</ul>
+
+            </div>
+            <form class="search" action="../search.html" method="get">
+                  <input type="text" name="q" placeholder="Search"/>
+                  <input type="hidden" name="check_keywords" value="yes" />
+                  <input type="hidden" name="area" value="default" />
+            </form>
+        </div>
+        <div class="content">
+<div class="main">
+    <div class="section" id="module-stylo.testing._param_factory">
+<span id="id1"></span><span id="stylo-testing-param-factory"></span><h1>Stylo.Testing._param_factory<a class="headerlink" href="#module-stylo.testing._param_factory" title="Permalink to this headline">¶</a></h1>
+<p>This module contains functions that automate the process of writing base test classes
+for <code class="code docutils literal notranslate"><span class="pre">ParameterGroup</span></code> objects.</p>
+<dl class="function">
+<dt id="stylo.testing._param_factory.call_check">
+<code class="descclassname">stylo.testing._param_factory.</code><code class="descname">call_check</code><span class="sig-paren">(</span><em>expected_keys</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/stylo/testing/_param_factory.html#call_check"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#stylo.testing._param_factory.call_check" title="Permalink to this definition">¶</a></dt>
+<dd><p>Time dependent parameter groups should be able to be called as a function, taking
+the time <code class="code docutils literal notranslate"><span class="pre">t</span></code> as an argument.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="stylo.testing._param_factory.call_check_numpy">
+<code class="descclassname">stylo.testing._param_factory.</code><code class="descname">call_check_numpy</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/stylo/testing/_param_factory.html#call_check_numpy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#stylo.testing._param_factory.call_check_numpy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Time dependent parameter groups should be able to take numpy arrays as an
+argument.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="stylo.testing._param_factory.define_base_tests">
+<code class="descclassname">stylo.testing._param_factory.</code><code class="descname">define_base_tests</code><span class="sig-paren">(</span><em>pgroup</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/stylo/testing/_param_factory.html#define_base_tests"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#stylo.testing._param_factory.define_base_tests" title="Permalink to this definition">¶</a></dt>
+<dd><p>Define the test cases that are common to every type of parameter group.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>pgroup</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.7)"><em>list</em></a>) – The parameter group to define test cases for.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="stylo.testing._param_factory.define_parameter_group_test">
+<code class="descclassname">stylo.testing._param_factory.</code><code class="descname">define_parameter_group_test</code><span class="sig-paren">(</span><em>pgroup</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/stylo/testing/_param_factory.html#define_parameter_group_test"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#stylo.testing._param_factory.define_parameter_group_test" title="Permalink to this definition">¶</a></dt>
+<dd><p>Given a parameter group, write the test class that will automatically verify that
+a given subclass follows the expected interface.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="stylo.testing._param_factory.define_time_dependent_parameter_group_test">
+<code class="descclassname">stylo.testing._param_factory.</code><code class="descname">define_time_dependent_parameter_group_test</code><span class="sig-paren">(</span><em>pgroup</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/stylo/testing/_param_factory.html#define_time_dependent_parameter_group_test"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#stylo.testing._param_factory.define_time_dependent_parameter_group_test" title="Permalink to this definition">¶</a></dt>
+<dd><p>Given a time dependent parameter group, write the test calss that will
+automatically verify that a given subclass follows the expected interface.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="stylo.testing._param_factory.getitem_check">
+<code class="descclassname">stylo.testing._param_factory.</code><code class="descname">getitem_check</code><span class="sig-paren">(</span><em>keys</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/stylo/testing/_param_factory.html#getitem_check"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#stylo.testing._param_factory.getitem_check" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parameter groups should define <code class="code docutils literal notranslate"><span class="pre">__getitem__</span></code> and return a value for each
+parameter in the group.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="stylo.testing._param_factory.keys_check">
+<code class="descclassname">stylo.testing._param_factory.</code><code class="descname">keys_check</code><span class="sig-paren">(</span><em>expected_keys</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/stylo/testing/_param_factory.html#keys_check"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#stylo.testing._param_factory.keys_check" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parameter groups should define a <code class="code docutils literal notranslate"><span class="pre">keys()</span></code> method that returns the name of
+each of the parameters in the group.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="stylo.testing._param_factory.mapping_check">
+<code class="descclassname">stylo.testing._param_factory.</code><code class="descname">mapping_check</code><span class="sig-paren">(</span><em>expected_keys</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/stylo/testing/_param_factory.html#mapping_check"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#stylo.testing._param_factory.mapping_check" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parameter groups should support the dictionary unpacking syntax <code class="code docutils literal notranslate"><span class="pre">**params</span></code>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="stylo.testing._param_factory.parameter_check">
+<code class="descclassname">stylo.testing._param_factory.</code><code class="descname">parameter_check</code><span class="sig-paren">(</span><em>parameter</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/stylo/testing/_param_factory.html#parameter_check"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#stylo.testing._param_factory.parameter_check" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parameter groups should define a property for each parameter name.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="stylo.testing._param_factory.parameter_check_read_only">
+<code class="descclassname">stylo.testing._param_factory.</code><code class="descname">parameter_check_read_only</code><span class="sig-paren">(</span><em>parameter</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/stylo/testing/_param_factory.html#parameter_check_read_only"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#stylo.testing._param_factory.parameter_check_read_only" title="Permalink to this definition">¶</a></dt>
+<dd><p>The declared parameter should be read only.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="stylo.testing._param_factory.parameters_check">
+<code class="descclassname">stylo.testing._param_factory.</code><code class="descname">parameters_check</code><span class="sig-paren">(</span><em>expected_params</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/stylo/testing/_param_factory.html#parameters_check"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#stylo.testing._param_factory.parameters_check" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parameter groups should define a <code class="code docutils literal notranslate"><span class="pre">parameters</span></code> property that returns a list
+of the parameter names.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="stylo.testing._param_factory.parameters_check_read_only">
+<code class="descclassname">stylo.testing._param_factory.</code><code class="descname">parameters_check_read_only</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/stylo/testing/_param_factory.html#parameters_check_read_only"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#stylo.testing._param_factory.parameters_check_read_only" title="Permalink to this definition">¶</a></dt>
+<dd><p>The <code class="code docutils literal notranslate"><span class="pre">parameters</span></code> property should be read only.</p>
+</dd></dl>
+
+</div>
+
+    
+</div>
+        </div>
+        <div class="footer">
+
+            
+                <p>
+                  Powered by <a href="http://www.sphinx-doc.org/">Sphinx</a> 1.8.2 &amp;
+                  <a href="https://github.com/alcarney/topos-theme">Topos Theme</a> 0.0.10
+                </p>
+        </div>
+    </body>
+</html>

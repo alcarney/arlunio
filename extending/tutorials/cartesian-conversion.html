@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+        <link href="https://fonts.googleapis.com/css?family=Nanum+Myeongjo" rel="stylesheet">
+
+        <!-- TODO: Run CSS + JS through minifiers -->
+        <link rel="stylesheet" href="../../_static/css/main.css" type="text/css" >
+        <link rel="stylesheet" href="../../_static/css/highlight.css " type="text/css" >
+
+        <script type="text/javascript" id="documentation_options"
+                data-url_root="../../"
+                src="../../_static/documentation_options.js"></script>
+        <script async
+                src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"
+                type="application/javascript"></script>
+
+        <title>Using the CartesianConversion Helper - Stylo v0.9.0</title>
+
+        
+    </head>
+    <body>
+        <!-- Slightly modified from the basic theme in the Sphinx repository
+        https://github.com/sphinx-doc/sphinx/blob/master/sphinx/themes/basic/layout.html -->
+
+        <div class="header">
+            <a href="../../index.html" id="site-name"><h2>Stylo<sub>v0.9.0</sub></h2></a>
+            <label class="menu-toggle" for="menu-toggle">Menu</label>
+            <input type="checkbox" id="menu-toggle">
+            <div class="nav-sections">
+                <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../using/index.html">User’s Guide</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">Extending</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contributing/index.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../maths/index.html">Mathematics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/index.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../glossary.html">Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../changes.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../about.html">About the Docs</a></li>
+</ul>
+
+            </div>
+        </div>
+        <div class="nav">
+            <div>
+                <h3 class="nav-header">Page Contents</h3>
+                <ul>
+<li><a class="reference internal" href="#">Using the CartesianConversion Helper</a><ul>
+<li><a class="reference internal" href="#setup">Setup</a></li>
+<li><a class="reference internal" href="#implementation">Implementation</a><ul>
+<li><a class="reference internal" href="#init">__init__</a></li>
+<li><a class="reference internal" href="#repr">_repr</a></li>
+<li><a class="reference internal" href="#get-r">_get_r</a></li>
+<li><a class="reference internal" href="#get-t">_get_t</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#bringing-it-all-together">Bringing It All Together</a></li>
+</ul>
+</li>
+</ul>
+
+            </div>
+            <form class="search" action="../../search.html" method="get">
+                  <input type="text" name="q" placeholder="Search"/>
+                  <input type="hidden" name="check_keywords" value="yes" />
+                  <input type="hidden" name="area" value="default" />
+            </form>
+        </div>
+        <div class="content">
+<div class="main">
+    <div class="section" id="using-the-cartesianconversion-helper">
+<span id="extend-tutorial-cartesian-conversion"></span><h1>Using the CartesianConversion Helper<a class="headerlink" href="#using-the-cartesianconversion-helper" title="Permalink to this headline">¶</a></h1>
+<p>Here is a list of tutorials and resources that this tutorial assumes you are already
+familiar with.</p>
+<ul class="simple">
+<li><a class="reference internal" href="../../maths/polar-coordinates.html#math-polar-coordinates"><span class="std std-ref">Polar Coordinate System</span></a></li>
+<li><a class="reference internal" href="../../maths/cartesian-coordinates.html#math-cartesian-coordinates"><span class="std std-ref">Cartesian Coordinate System</span></a></li>
+<li><a class="reference internal" href="writing-domain-implementation.html#extend-tutorial-domain-implementation"><span class="std std-ref">Writing a Domain Implementation</span></a></li>
+</ul>
+<p>There are occasions when writing a <code class="code docutils literal notranslate"><span class="pre">RealDomain</span></code> implementation, say a
+<code class="code docutils literal notranslate"><span class="pre">Rotation</span></code> transform where all the “interesting” code is contained within the
+<code class="code docutils literal notranslate"><span class="pre">_get_r</span></code> and <code class="code docutils literal notranslate"><span class="pre">_get_t</span></code> methods and all you need is a conversion from polar
+to cartesian coordinates.</p>
+<p>This is where the <a class="reference internal" href="../../api/stylo_domain_helpers.html#stylo.domain.helpers.CartesianConversion" title="stylo.domain.helpers.CartesianConversion"><code class="xref py py-class docutils literal notranslate"><span class="pre">CartesianConversion</span></code></a>
+helper class comes in, it provides implementations of the <code class="code docutils literal notranslate"><span class="pre">_get_x</span></code> and
+<code class="code docutils literal notranslate"><span class="pre">_get_y</span></code> methods to convert them from the <code class="code docutils literal notranslate"><span class="pre">_get_r</span></code> and <code class="code docutils literal notranslate"><span class="pre">_get_t</span></code>
+methods that you provide.</p>
+<p>This tutorial walks you through the process of using this helper to implement an example
+rotation domain transformation.</p>
+<div class="section" id="setup">
+<h2>Setup<a class="headerlink" href="#setup" title="Permalink to this headline">¶</a></h2>
+<p>As with any other domain transformation it starts with us creating a class and
+subclassing <code class="code docutils literal notranslate"><span class="pre">RealDomainTransform</span></code>. However in this case we also include
+<a class="reference internal" href="../../api/stylo_domain_helpers.html#stylo.domain.helpers.CartesianConversion" title="stylo.domain.helpers.CartesianConversion"><code class="xref py py-class docutils literal notranslate"><span class="pre">CartesianConversion</span></code></a> in our list of
+base classes</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">stylo.domain.transform</span> <span class="kn">import</span> <span class="n">RealDomainTransform</span>
+<span class="kn">from</span> <span class="nn">stylo.domain.helpers</span> <span class="kn">import</span> <span class="n">CartesianConversion</span>
+
+
+<span class="k">class</span> <span class="nc">Rotation</span><span class="p">(</span><span class="n">CartesianConversion</span><span class="p">,</span> <span class="n">RealDomainTransform</span><span class="p">):</span>
+    <span class="k">pass</span>
+</pre></div>
+</div>
+<div class="admonition important">
+<p class="first admonition-title">Important</p>
+<p class="last">The order in which these classes are included is <em>very</em> important.
+<code class="code docutils literal notranslate"><span class="pre">CartesianConversion</span></code> must come before the <code class="code docutils literal notranslate"><span class="pre">RealDomainTransform</span></code></p>
+</div>
+<p>If we were to try and create an instance of our class now we will get an error (as is
+expected since <code class="code docutils literal notranslate"><span class="pre">RealDomainTransform</span></code> is an abstract class).</p>
+<div class="highlight-pycon notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">rotate</span> <span class="o">=</span> <span class="n">Rotation</span><span class="p">()</span>
+<span class="gt">Traceback (most recent call last):</span>
+   <span class="c">...</span>
+<span class="gr">TypeError</span>: <span class="n">Can&#39;t instantiate abstract class Rotation with abstract methods  _get_r, _get_t, _repr</span>
+</pre></div>
+</div>
+<p>But notice that <code class="code docutils literal notranslate"><span class="pre">_get_x</span></code> and <code class="code docutils literal notranslate"><span class="pre">_get_y</span></code> don’t appear in the error message, this
+is due to them being implemented by the <code class="code docutils literal notranslate"><span class="pre">CartesianConversion</span></code> helper.</p>
+</div>
+<div class="section" id="implementation">
+<h2>Implementation<a class="headerlink" href="#implementation" title="Permalink to this headline">¶</a></h2>
+<p>If you’ve implemented a domain transform before, the rest should be familiar to you,
+it’s just a case of implementing the remaining methods:</p>
+<ul class="simple">
+<li><code class="code docutils literal notranslate"><span class="pre">__init__</span></code>: We need to take an angle as input from the user</li>
+<li><code class="code docutils literal notranslate"><span class="pre">_repr</span></code>: We need a textual representation of the object, this is used by the
+<code class="code docutils literal notranslate"><span class="pre">__repr__</span></code> method in the <code class="code docutils literal notranslate"><span class="pre">RealDomainTransform</span></code> base class</li>
+<li><code class="code docutils literal notranslate"><span class="pre">_get_r</span></code>: A method to generate the <span class="math notranslate nohighlight">\(r\)</span> values</li>
+<li><code class="code docutils literal notranslate"><span class="pre">_get_t</span></code>: A method to generate the <span class="math notranslate nohighlight">\(\theta\)</span> values and here is where the
+actual rotation will be implemented</li>
+</ul>
+<div class="section" id="init">
+<h3>__init__<a class="headerlink" href="#init" title="Permalink to this headline">¶</a></h3>
+<p>The <code class="code docutils literal notranslate"><span class="pre">__init__</span></code> method is pretty straightforward it’s just a matter of taking a
+value from the user to represent an angle. Just don’t forget to call the
+<code class="code docutils literal notranslate"><span class="pre">__init__</span></code> method on the base class!</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">domain</span><span class="p">,</span> <span class="n">angle</span><span class="p">):</span>
+    <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">domain</span><span class="p">)</span>
+
+    <span class="bp">self</span><span class="o">.</span><span class="n">angle</span> <span class="o">=</span> <span class="n">angle</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="repr">
+<h3>_repr<a class="headerlink" href="#repr" title="Permalink to this headline">¶</a></h3>
+<p>Again nothing too groundbreaking here, just a case of returning some meaningful string
+to represent our rotation to the user.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">_repr</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">return</span> <span class="s2">&quot;Rotation: {:.2f}rad&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">angle</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The reason domain transforms like <code class="code docutils literal notranslate"><span class="pre">RealDomainTransform</span></code> ask you to implement
+<code class="code docutils literal notranslate"><span class="pre">_repr</span></code> and not <code class="code docutils literal notranslate"><span class="pre">__repr__</span></code> is that the base class implements
+<code class="code docutils literal notranslate"><span class="pre">__repr__</span></code> in a way that also displays the domain that the transformation is
+acting upon.</p>
+</div>
+<div class="section" id="get-r">
+<h3>_get_r<a class="headerlink" href="#get-r" title="Permalink to this headline">¶</a></h3>
+<p>The <span class="math notranslate nohighlight">\(r\)</span> values don’t change when rotated so all we need to do is return the
+<span class="math notranslate nohighlight">\(r\)</span> values from the base domain.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">_get_r</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">domain</span><span class="o">.</span><span class="n">r</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="get-t">
+<h3>_get_t<a class="headerlink" href="#get-t" title="Permalink to this headline">¶</a></h3>
+<p>Here is the only non trivial method on this class. We need to get the base domain to
+generate its <span class="math notranslate nohighlight">\(\theta\)</span> values for us which we then <em>take away</em> the user’s angle
+which implements the rotation</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">_get_t</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+    <span class="n">ts</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">domain</span><span class="o">.</span><span class="n">t</span>
+
+    <span class="k">def</span> <span class="nf">mk_ts</span><span class="p">(</span><span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">ts</span><span class="p">(</span><span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">)</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">angle</span>
+
+    <span class="k">return</span> <span class="n">mk_ts</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="bringing-it-all-together">
+<h2>Bringing It All Together<a class="headerlink" href="#bringing-it-all-together" title="Permalink to this headline">¶</a></h2>
+<p>Here is the complete class definition</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">math</span> <span class="kn">import</span> <span class="n">pi</span>
+
+<span class="kn">from</span> <span class="nn">stylo.domain</span> <span class="kn">import</span> <span class="n">UnitSquare</span>
+<span class="kn">from</span> <span class="nn">stylo.domain.helpers</span> <span class="kn">import</span> <span class="n">CartesianConversion</span>
+<span class="kn">from</span> <span class="nn">stylo.domain.transform</span> <span class="kn">import</span> <span class="n">RealDomainTransform</span>
+
+
+<span class="k">class</span> <span class="nc">Rotation</span><span class="p">(</span><span class="n">CartesianConversion</span><span class="p">,</span> <span class="n">RealDomainTransform</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">domain</span><span class="p">,</span> <span class="n">angle</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">domain</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">angle</span> <span class="o">=</span> <span class="n">angle</span>
+
+    <span class="k">def</span> <span class="nf">_repr</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;Rotation: {:.2f}rad&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">angle</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_get_r</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">domain</span><span class="o">.</span><span class="n">r</span>
+
+    <span class="k">def</span> <span class="nf">_get_t</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+        <span class="n">ts</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">domain</span><span class="o">.</span><span class="n">t</span>
+
+        <span class="k">def</span> <span class="nf">mk_ts</span><span class="p">(</span><span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">ts</span><span class="p">(</span><span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">)</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">angle</span>
+
+        <span class="k">return</span> <span class="n">mk_ts</span>
+</pre></div>
+</div>
+<p>Which we can now use to apply a rotation to some domain</p>
+<div class="highlight-pycon notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">rotated</span> <span class="o">=</span> <span class="n">Rotation</span><span class="p">(</span><span class="n">UnitSquare</span><span class="p">(),</span> <span class="n">pi</span><span class="o">/</span><span class="mi">4</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">rotated</span>
+<span class="go">Rotation: 0.79rad</span>
+<span class="go">  UnitSquare: [0, 1] x [0, 1]</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">rotated</span><span class="o">.</span><span class="n">x</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
+<span class="go">array([[0.70710678, 0.94280904, 1.1785113 , 1.41421356],</span>
+<span class="go">       [0.47140452, 0.70710678, 0.94280904, 1.1785113 ],</span>
+<span class="go">       [0.23570226, 0.47140452, 0.70710678, 0.94280904],</span>
+<span class="go">       [0.        , 0.23570226, 0.47140452, 0.70710678]])</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+    
+</div>
+        </div>
+        <div class="footer">
+
+            
+                <p>
+                  Powered by <a href="http://www.sphinx-doc.org/">Sphinx</a> 1.8.2 &amp;
+                  <a href="https://github.com/alcarney/topos-theme">Topos Theme</a> 0.0.10
+                </p>
+        </div>
+    </body>
+</html>

@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+        <link href="https://fonts.googleapis.com/css?family=Nanum+Myeongjo" rel="stylesheet">
+
+        <!-- TODO: Run CSS + JS through minifiers -->
+        <link rel="stylesheet" href="../../_static/css/main.css" type="text/css" >
+        <link rel="stylesheet" href="../../_static/css/highlight.css " type="text/css" >
+
+        <script type="text/javascript" id="documentation_options"
+                data-url_root="../../"
+                src="../../_static/documentation_options.js"></script>
+        <script async
+                src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"
+                type="application/javascript"></script>
+
+        <title>Fork the Repository - Stylo v0.9.0</title>
+
+        
+    </head>
+    <body>
+        <!-- Slightly modified from the basic theme in the Sphinx repository
+        https://github.com/sphinx-doc/sphinx/blob/master/sphinx/themes/basic/layout.html -->
+
+        <div class="header">
+            <a href="../../index.html" id="site-name"><h2>Stylo<sub>v0.9.0</sub></h2></a>
+            <label class="menu-toggle" for="menu-toggle">Menu</label>
+            <input type="checkbox" id="menu-toggle">
+            <div class="nav-sections">
+                <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../using/index.html">User’s Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../extending/index.html">Extending</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../maths/index.html">Mathematics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/index.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../glossary.html">Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../changes.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../about.html">About the Docs</a></li>
+</ul>
+
+            </div>
+        </div>
+        <div class="nav">
+            <div>
+                <h3 class="nav-header">Page Contents</h3>
+                <ul>
+<li><a class="reference internal" href="#">Fork the Repository</a><ul>
+<li><a class="reference internal" href="#before-we-start">Before We Start</a></li>
+<li><a class="reference internal" href="#forking-the-repository">Forking the Repository</a></li>
+<li><a class="reference internal" href="#next-steps">Next Steps</a></li>
+</ul>
+</li>
+</ul>
+
+            </div>
+            <form class="search" action="../../search.html" method="get">
+                  <input type="text" name="q" placeholder="Search"/>
+                  <input type="hidden" name="check_keywords" value="yes" />
+                  <input type="hidden" name="area" value="default" />
+            </form>
+        </div>
+        <div class="content">
+<div class="main">
+    <div class="section" id="fork-the-repository">
+<span id="contribute-tutorial-fork-repository"></span><h1>Fork the Repository<a class="headerlink" href="#fork-the-repository" title="Permalink to this headline">¶</a></h1>
+<p>Forking the repository is often the first step in making a contribution - but
+not always. You do <strong>not</strong> need a fork if you want to:</p>
+<ul class="simple">
+<li><a class="reference internal" href="open-an-issue.html#contribute-tutorial-open-issue"><span class="std std-ref">Open an Issue</span></a></li>
+<li>Make minor adjustments to the documentation e.g. fixing typos, rewording
+paragraphs.</li>
+</ul>
+<p>You <strong>do</strong> need a fork if you want to:</p>
+<ul class="simple">
+<li>Contribute code</li>
+<li>Make larger changes to the documentation e.g. writing new articles</li>
+</ul>
+<div class="section" id="before-we-start">
+<h2>Before We Start<a class="headerlink" href="#before-we-start" title="Permalink to this headline">¶</a></h2>
+<p>In order to fork the repository you need to:</p>
+<ul class="simple">
+<li>Have created an account on <a class="reference external" href="https://github.com/alcarney/stylo">GitHub</a></li>
+<li>Have <a class="reference internal" href="../../glossary.html#term-git"><span class="xref std std-term">git</span></a> installed</li>
+<li>Be comfortable using the command line</li>
+</ul>
+</div>
+<div class="section" id="forking-the-repository">
+<h2>Forking the Repository<a class="headerlink" href="#forking-the-repository" title="Permalink to this headline">¶</a></h2>
+<a class="reference internal image-reference" href="../../_images/the-repo.png"><img alt="../../_images/the-repo.png" class="align-center" src="../../_images/the-repo.png" style="width: 75%;" /></a>
+<ol class="arabic simple">
+<li>Find the main <a class="reference external" href="https://github.com/alcarney/stylo">repository</a> on GitHub</li>
+<li>Click the <code class="code docutils literal notranslate"><span class="pre">Fork</span></code> button that should be just underneath your profile
+picture.</li>
+<li>If you are a member of an organisation GitHub will ask you where you want to
+Fork to repository to, you should probably choose your personal account.</li>
+</ol>
+<p>GitHub will redirect you to your own copy of the repository we will then
+use git to copy (clone) your fork onto your own machine.</p>
+<ol class="arabic simple">
+<li>Click the Green <code class="code docutils literal notranslate"><span class="pre">Clone</span> <span class="pre">or</span> <span class="pre">download</span></code> button that should be just above
+the list of files on the right. A popup box should then appear and provide
+you with the address of your repository, highlight the address and copy it.</li>
+<li>Open your terminal application and navigate to a folder where you want the
+repository to be located and run the following command.</li>
+</ol>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>$ git clone &lt;your_repository_url&gt;
+</pre></div>
+</div>
+<p>Git will then download the repository onto your machine and store it in a folder
+called <code class="code docutils literal notranslate"><span class="pre">stylo</span></code>.</p>
+<p>That’s it! If everything went smoothly you will have successfully forked the
+repository!</p>
+</div>
+<div class="section" id="next-steps">
+<h2>Next Steps<a class="headerlink" href="#next-steps" title="Permalink to this headline">¶</a></h2>
+<p>Forking the repository is just the first step on the journey into making your
+first major contribution, here are some tasks that you will want to do next.</p>
+<div class="admonition-todo admonition" id="index-0">
+<p class="first admonition-title">Todo</p>
+<p class="last">Link to the various tutorials when they exist.</p>
+</div>
+</div>
+</div>
+
+    
+</div>
+        </div>
+        <div class="footer">
+
+            
+                <p>
+                  Powered by <a href="http://www.sphinx-doc.org/">Sphinx</a> 1.8.2 &amp;
+                  <a href="https://github.com/alcarney/topos-theme">Topos Theme</a> 0.0.10
+                </p>
+        </div>
+    </body>
+</html>

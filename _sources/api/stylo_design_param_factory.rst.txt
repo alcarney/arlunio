@@ -1,0 +1,13 @@
+
+
+.. _stylo_design__param_factory:
+
+Stylo.Design._param_factory
+===========================
+
+.. automodule:: stylo.design._param_factory
+   :members:
+   :undoc-members:
+   :private-members:
+   :show-inheritance:
+

@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+        <link href="https://fonts.googleapis.com/css?family=Nanum+Myeongjo" rel="stylesheet">
+
+        <!-- TODO: Run CSS + JS through minifiers -->
+        <link rel="stylesheet" href="../../../_static/css/main.css" type="text/css" >
+        <link rel="stylesheet" href="../../../_static/css/highlight.css " type="text/css" >
+
+        <script type="text/javascript" id="documentation_options"
+                data-url_root="../../../"
+                src="../../../_static/documentation_options.js"></script>
+        <script async
+                src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"
+                type="application/javascript"></script>
+
+        <title>stylo.design._param_factory - Stylo v0.9.0</title>
+
+        
+    </head>
+    <body>
+        <!-- Slightly modified from the basic theme in the Sphinx repository
+        https://github.com/sphinx-doc/sphinx/blob/master/sphinx/themes/basic/layout.html -->
+
+        <div class="header">
+            <a href="../../../index.html" id="site-name"><h2>Stylo<sub>v0.9.0</sub></h2></a>
+            <label class="menu-toggle" for="menu-toggle">Menu</label>
+            <input type="checkbox" id="menu-toggle">
+            <div class="nav-sections">
+                <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../using/index.html">User’s Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../extending/index.html">Extending</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../contributing/index.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../maths/index.html">Mathematics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/index.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../glossary.html">Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../changes.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../about.html">About the Docs</a></li>
+</ul>
+
+            </div>
+        </div>
+        <div class="nav">
+            <div>
+                <h3 class="nav-header">Page Contents</h3>
+                
+            </div>
+            <form class="search" action="../../../search.html" method="get">
+                  <input type="text" name="q" placeholder="Search"/>
+                  <input type="hidden" name="check_keywords" value="yes" />
+                  <input type="hidden" name="area" value="default" />
+            </form>
+        </div>
+        <div class="content">
+<div class="main">
+    <h1>Source code for stylo.design._param_factory</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;A :code:`ParameterGroup` is used to help define and manage a related set of</span>
+<span class="sd">parameters. For example a &quot;Position&quot; parameter group could contain values for the</span>
+<span class="sd">:code:`x` and :code:`y` position of an object. Another &quot;Stickman&quot; property group could</span>
+<span class="sd">contain all the values required to define a stickman with a particular size and shape.</span>
+
+<span class="sd">This module much like the :code:`stylo.domain._factory` module defines a number of</span>
+<span class="sd">functions for declaring new parameter groups of various types. By writing the base</span>
+<span class="sd">classes using code, we can ensure that all property groups follow the same interface.</span>
+
+<span class="sd">Currently the following functions are defined</span>
+
+<span class="sd">- :code:`define_parameter_group`: This defines a base, static parameter group.</span>
+<span class="sd">- :code:`define_time_dependent_parameter_group`: This defines a time-dependent parameter</span>
+<span class="sd">  group, that can take some time :code:`t` and vary in time. It also provides some</span>
+<span class="sd">  utilities for visualising these changes over time.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">abc</span> <span class="k">import</span> <span class="n">ABC</span><span class="p">,</span> <span class="n">abstractmethod</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+
+
+<div class="viewcode-block" id="pgroup_keys"><a class="viewcode-back" href="../../../api/stylo_design_param_factory.html#stylo.design._param_factory.pgroup_keys">[docs]</a><span class="k">def</span> <span class="nf">pgroup_keys</span><span class="p">(</span><span class="n">params</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Provide the implementation of the :code:`keys` method for this parameter group</span>
+
+<span class="sd">    One of the key features of a parameter group is the ability to use the dictionary</span>
+<span class="sd">    unpacking syntax (:code:`**params`) to conveniently pass all the values into a</span>
+<span class="sd">    function as a single unit. This syntax is enabled by implementing two methods</span>
+<span class="sd">    :code:`keys` and :code:`__getitem__`, this function provides the implementation</span>
+<span class="sd">    of the former.</span>
+
+<span class="sd">    :param list params: The list of strings containing the names of the parameters.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">keys</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">params</span>
+
+    <span class="k">return</span> <span class="n">keys</span></div>
+
+
+<div class="viewcode-block" id="pgroup_parameters_prop"><a class="viewcode-back" href="../../../api/stylo_design_param_factory.html#stylo.design._param_factory.pgroup_parameters_prop">[docs]</a><span class="k">def</span> <span class="nf">pgroup_parameters_prop</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;Provide the implementation of the :code:`parameters` property.</span>
+
+<span class="sd">    The :code:`parameters` property returns a list of all the parameter names in the</span>
+<span class="sd">    group.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">parameters</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+
+    <span class="k">return</span> <span class="n">parameters</span></div>
+
+
+<div class="viewcode-block" id="pgroup_getitem"><a class="viewcode-back" href="../../../api/stylo_design_param_factory.html#stylo.design._param_factory.pgroup_getitem">[docs]</a><span class="k">def</span> <span class="nf">pgroup_getitem</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;Provide the implementation of the :code:`__getitem__` method.</span>
+
+<span class="sd">    One of the key features of a parameter group is the ability to use the dictionary</span>
+<span class="sd">    unpacking syntax (:code:`**params`) to conveniently pass all the values into a</span>
+<span class="sd">    function as a single unit. This syntax is enabled by implementing two methods</span>
+<span class="sd">    :code:`keys` and :code:`__getitem__`, this function provides the implementation</span>
+<span class="sd">    of the latter.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_values</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+
+    <span class="k">return</span> <span class="fm">__getitem__</span></div>
+
+
+<div class="viewcode-block" id="pgroup_init"><a class="viewcode-back" href="../../../api/stylo_design_param_factory.html#stylo.design._param_factory.pgroup_init">[docs]</a><span class="k">def</span> <span class="nf">pgroup_init</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;Provide the implementation of the :code:`__init__` method.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_values</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">calculate</span><span class="p">()</span>
+
+    <span class="k">return</span> <span class="fm">__init__</span></div>
+
+
+<div class="viewcode-block" id="pgroup_parameter_prop"><a class="viewcode-back" href="../../../api/stylo_design_param_factory.html#stylo.design._param_factory.pgroup_parameter_prop">[docs]</a><span class="k">def</span> <span class="nf">pgroup_parameter_prop</span><span class="p">(</span><span class="n">param</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Provide the implementation of the property getter for the given parameter name.</span>
+
+<span class="sd">    This enables the :code:`group.param` syntax.</span>
+
+<span class="sd">    :param str param: The parameter name.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">parameter</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_values</span><span class="p">[</span><span class="n">param</span><span class="p">]</span>
+
+    <span class="k">return</span> <span class="n">parameter</span></div>
+
+
+<div class="viewcode-block" id="pgroup_calculate"><a class="viewcode-back" href="../../../api/stylo_design_param_factory.html#stylo.design._param_factory.pgroup_calculate">[docs]</a><span class="k">def</span> <span class="nf">pgroup_calculate</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;Define an abstract method for the user to implement.</span>
+
+<span class="sd">    The user must define this method to return the values dictionary containing each</span>
+<span class="sd">    of the parameters in the group,.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">calculate</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">pass</span>
+
+    <span class="k">return</span> <span class="n">calculate</span></div>
+
+
+<div class="viewcode-block" id="pgroup_repr"><a class="viewcode-back" href="../../../api/stylo_design_param_factory.html#stylo.design._param_factory.pgroup_repr">[docs]</a><span class="k">def</span> <span class="nf">pgroup_repr</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">params</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Provide the implementation of the :code:`__repr__` method.</span>
+
+<span class="sd">    :param str name: The name of the parameter group.</span>
+<span class="sd">    :param: list params: The list of parameter names.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">offset</span> <span class="o">=</span> <span class="nb">max</span><span class="p">([</span><span class="nb">len</span><span class="p">(</span><span class="n">p</span><span class="p">)</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">params</span><span class="p">])</span> <span class="o">+</span> <span class="mi">10</span>
+
+    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+        <span class="n">cls_name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span>
+
+        <span class="n">values</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">p</span> <span class="o">+</span> <span class="s2">&quot;:&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">val</span><span class="p">)</span><span class="o">.</span><span class="n">rjust</span><span class="p">(</span><span class="n">offset</span> <span class="o">-</span> <span class="nb">len</span><span class="p">(</span><span class="n">p</span><span class="p">))</span> <span class="k">for</span> <span class="n">p</span><span class="p">,</span> <span class="n">val</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_values</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
+        <span class="p">]</span>
+
+        <span class="n">ps</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">  &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">values</span><span class="p">)</span>
+        <span class="k">return</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">: </span><span class="si">{}</span><span class="se">\n</span><span class="s2">  </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">cls_name</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">ps</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="fm">__repr__</span></div>
+
+
+<div class="viewcode-block" id="define_base_attributes"><a class="viewcode-back" href="../../../api/stylo_design_param_factory.html#stylo.design._param_factory.define_base_attributes">[docs]</a><span class="k">def</span> <span class="nf">define_base_attributes</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">params</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Define the attributes, methods and properties that are common to every type of</span>
+<span class="sd">    parameter group.</span>
+
+<span class="sd">    :param str name: The name of the parameter group</span>
+<span class="sd">    :param list params: The list of strings containing the parameter names.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">attributes</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;__doc__&quot;</span><span class="p">:</span> <span class="s2">&quot;TODO: Make this docstring useful.&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;__getitem__&quot;</span><span class="p">:</span> <span class="n">pgroup_getitem</span><span class="p">(),</span>
+        <span class="s2">&quot;__repr__&quot;</span><span class="p">:</span> <span class="n">pgroup_repr</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">params</span><span class="p">),</span>
+        <span class="s2">&quot;keys&quot;</span><span class="p">:</span> <span class="n">pgroup_keys</span><span class="p">(</span><span class="n">params</span><span class="p">),</span>
+        <span class="s2">&quot;parameters&quot;</span><span class="p">:</span> <span class="n">pgroup_parameters_prop</span><span class="p">(),</span>
+        <span class="s2">&quot;_parameters&quot;</span><span class="p">:</span> <span class="n">params</span><span class="p">,</span>
+    <span class="p">}</span>
+
+    <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">params</span><span class="p">:</span>
+        <span class="n">attributes</span><span class="p">[</span><span class="n">p</span><span class="p">]</span> <span class="o">=</span> <span class="n">pgroup_parameter_prop</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">attributes</span></div>
+
+
+<div class="viewcode-block" id="get_parameter_names"><a class="viewcode-back" href="../../../api/stylo_design_param_factory.html#stylo.design._param_factory.get_parameter_names">[docs]</a><span class="k">def</span> <span class="nf">get_parameter_names</span><span class="p">(</span><span class="n">parameters</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Convert the parameter string supplied by the user into a list of parameter names.</span>
+
+<span class="sd">    :param list parameters: The comma separated string of parameter names</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">parameters</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="define_parameter_group"><a class="viewcode-back" href="../../../api/stylo_design_param_factory.html#stylo.design._param_factory.define_parameter_group">[docs]</a><span class="k">def</span> <span class="nf">define_parameter_group</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">parameters</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Define a new parameter group.</span>
+
+<span class="sd">    :param str name: The name of the parameter group.</span>
+<span class="sd">    :param list parameters: A list of strings containing the parameter</span>
+<span class="sd">                            names for the group.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">params</span> <span class="o">=</span> <span class="n">get_parameter_names</span><span class="p">(</span><span class="n">parameters</span><span class="p">)</span>
+
+    <span class="n">attributes</span> <span class="o">=</span> <span class="n">define_base_attributes</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">params</span><span class="p">)</span>
+    <span class="n">attributes</span><span class="p">[</span><span class="s2">&quot;__init__&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pgroup_init</span><span class="p">()</span>
+    <span class="n">attributes</span><span class="p">[</span><span class="s2">&quot;calculate&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pgroup_calculate</span><span class="p">()</span>
+
+    <span class="k">return</span> <span class="nb">type</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="p">(</span><span class="n">ABC</span><span class="p">,),</span> <span class="n">attributes</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="tdpgroup_calculate"><a class="viewcode-back" href="../../../api/stylo_design_param_factory.html#stylo.design._param_factory.tdpgroup_calculate">[docs]</a><span class="k">def</span> <span class="nf">tdpgroup_calculate</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;Define an abstract :code:`calculate` method for users to implement.</span>
+
+<span class="sd">    This method will serve the same role as the calculate method in a standard parameter</span>
+<span class="sd">    group, but this one is dependent on time :code:`t`.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">calculate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="p">):</span>
+        <span class="k">pass</span>
+
+    <span class="k">return</span> <span class="n">calculate</span></div>
+
+
+<div class="viewcode-block" id="tdpgroup_init"><a class="viewcode-back" href="../../../api/stylo_design_param_factory.html#stylo.design._param_factory.tdpgroup_init">[docs]</a><span class="k">def</span> <span class="nf">tdpgroup_init</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;Provide the implementation of the :code:`__init__` method.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="p">()</span>
+
+    <span class="k">return</span> <span class="fm">__init__</span></div>
+
+
+<div class="viewcode-block" id="tdpgroup_call"><a class="viewcode-back" href="../../../api/stylo_design_param_factory.html#stylo.design._param_factory.tdpgroup_call">[docs]</a><span class="k">def</span> <span class="nf">tdpgroup_call</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;Provide the implementation of the :code:`__call__` method.</span>
+
+<span class="sd">    This enables the :code:`**params(t)` functionality and use the parameter group as a</span>
+<span class="sd">    time dependent function.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_values</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">calculate</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span>
+
+    <span class="k">return</span> <span class="fm">__call__</span></div>
+
+
+<div class="viewcode-block" id="tdpgroup_plot"><a class="viewcode-back" href="../../../api/stylo_design_param_factory.html#stylo.design._param_factory.tdpgroup_plot">[docs]</a><span class="k">def</span> <span class="nf">tdpgroup_plot</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;Provide the implementation of the :code:`plot` method.</span>
+
+<span class="sd">    This enables users to plot the values as they change over time.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">plot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">start</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">stop</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">N</span><span class="o">=</span><span class="mi">128</span><span class="p">,</span> <span class="n">plot_size</span><span class="o">=</span><span class="mi">8</span><span class="p">):</span>
+
+        <span class="bp">cls</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="vm">__name__</span>
+        <span class="n">base_name</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">__base__</span><span class="o">.</span><span class="vm">__name__</span>
+
+        <span class="n">ts</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="n">stop</span><span class="p">,</span> <span class="n">N</span><span class="p">)</span>
+        <span class="n">values</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">calculate</span><span class="p">(</span><span class="n">ts</span><span class="p">)</span>
+
+        <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="n">plot_size</span><span class="p">,</span> <span class="n">plot_size</span><span class="p">))</span>
+
+        <span class="k">for</span> <span class="n">pname</span><span class="p">,</span> <span class="n">vals</span> <span class="ow">in</span> <span class="n">values</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ts</span><span class="p">,</span> <span class="n">vals</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">pname</span><span class="p">)</span>
+
+        <span class="c1"># Include a legend, title and label the time axis.</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2">: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">base_name</span><span class="p">))</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;Time (seconds)&quot;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">ax</span>
+
+    <span class="k">return</span> <span class="n">plot</span></div>
+
+
+<div class="viewcode-block" id="define_time_dependent_parameter_group"><a class="viewcode-back" href="../../../api/stylo_design_param_factory.html#stylo.design._param_factory.define_time_dependent_parameter_group">[docs]</a><span class="k">def</span> <span class="nf">define_time_dependent_parameter_group</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">parameters</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Define a new time dependent parameter group.</span>
+
+<span class="sd">    :param str name: The name of the parameter group</span>
+<span class="sd">    :param list parameters: A list of strings containing the parameter names for the</span>
+<span class="sd">                            group.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">params</span> <span class="o">=</span> <span class="n">get_parameter_names</span><span class="p">(</span><span class="n">parameters</span><span class="p">)</span>
+    <span class="n">attributes</span> <span class="o">=</span> <span class="n">define_base_attributes</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">params</span><span class="p">)</span>
+
+    <span class="n">attributes</span><span class="p">[</span><span class="s2">&quot;__call__&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">tdpgroup_call</span><span class="p">()</span>
+    <span class="n">attributes</span><span class="p">[</span><span class="s2">&quot;__init__&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">tdpgroup_init</span><span class="p">()</span>
+    <span class="n">attributes</span><span class="p">[</span><span class="s2">&quot;calculate&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">tdpgroup_calculate</span><span class="p">()</span>
+    <span class="n">attributes</span><span class="p">[</span><span class="s2">&quot;plot&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">tdpgroup_plot</span><span class="p">()</span>
+
+    <span class="k">return</span> <span class="nb">type</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="p">(</span><span class="n">ABC</span><span class="p">,),</span> <span class="n">attributes</span><span class="p">)</span></div>
+</pre></div>
+    
+</div>
+        </div>
+        <div class="footer">
+
+            
+                <p>
+                  Powered by <a href="http://www.sphinx-doc.org/">Sphinx</a> 1.8.2 &amp;
+                  <a href="https://github.com/alcarney/topos-theme">Topos Theme</a> 0.0.10
+                </p>
+        </div>
+    </body>
+</html>

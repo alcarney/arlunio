@@ -1,0 +1,13 @@
+
+
+.. _stylo_shape_shape:
+
+Stylo.Shape.Shape
+=================
+
+.. automodule:: stylo.shape.shape
+   :members:
+   :undoc-members:
+   :private-members:
+   :show-inheritance:
+

@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+        <link href="https://fonts.googleapis.com/css?family=Nanum+Myeongjo" rel="stylesheet">
+
+        <!-- TODO: Run CSS + JS through minifiers -->
+        <link rel="stylesheet" href="../_static/css/main.css" type="text/css" >
+        <link rel="stylesheet" href="../_static/css/highlight.css " type="text/css" >
+
+        <script type="text/javascript" id="documentation_options"
+                data-url_root="../"
+                src="../_static/documentation_options.js"></script>
+        <script async
+                src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"
+                type="application/javascript"></script>
+
+        <title>Stylo.Design._param_factory - Stylo v0.9.0</title>
+
+        
+    </head>
+    <body>
+        <!-- Slightly modified from the basic theme in the Sphinx repository
+        https://github.com/sphinx-doc/sphinx/blob/master/sphinx/themes/basic/layout.html -->
+
+        <div class="header">
+            <a href="../index.html" id="site-name"><h2>Stylo<sub>v0.9.0</sub></h2></a>
+            <label class="menu-toggle" for="menu-toggle">Menu</label>
+            <input type="checkbox" id="menu-toggle">
+            <div class="nav-sections">
+                <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../using/index.html">User’s Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../extending/index.html">Extending</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contributing/index.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../maths/index.html">Mathematics</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../glossary.html">Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changes.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../about.html">About the Docs</a></li>
+</ul>
+
+            </div>
+        </div>
+        <div class="nav">
+            <div>
+                <h3 class="nav-header">Page Contents</h3>
+                <ul>
+<li><a class="reference internal" href="#">Stylo.Design._param_factory</a></li>
+</ul>
+
+            </div>
+            <form class="search" action="../search.html" method="get">
+                  <input type="text" name="q" placeholder="Search"/>
+                  <input type="hidden" name="check_keywords" value="yes" />
+                  <input type="hidden" name="area" value="default" />
+            </form>
+        </div>
+        <div class="content">
+<div class="main">
+    <div class="section" id="module-stylo.design._param_factory">
+<span id="id1"></span><span id="stylo-design-param-factory"></span><h1>Stylo.Design._param_factory<a class="headerlink" href="#module-stylo.design._param_factory" title="Permalink to this headline">¶</a></h1>
+<p>A <code class="code docutils literal notranslate"><span class="pre">ParameterGroup</span></code> is used to help define and manage a related set of
+parameters. For example a “Position” parameter group could contain values for the
+<code class="code docutils literal notranslate"><span class="pre">x</span></code> and <code class="code docutils literal notranslate"><span class="pre">y</span></code> position of an object. Another “Stickman” property group could
+contain all the values required to define a stickman with a particular size and shape.</p>
+<p>This module much like the <code class="code docutils literal notranslate"><span class="pre">stylo.domain._factory</span></code> module defines a number of
+functions for declaring new parameter groups of various types. By writing the base
+classes using code, we can ensure that all property groups follow the same interface.</p>
+<p>Currently the following functions are defined</p>
+<ul class="simple">
+<li><code class="code docutils literal notranslate"><span class="pre">define_parameter_group</span></code>: This defines a base, static parameter group.</li>
+<li><code class="code docutils literal notranslate"><span class="pre">define_time_dependent_parameter_group</span></code>: This defines a time-dependent parameter
+group, that can take some time <code class="code docutils literal notranslate"><span class="pre">t</span></code> and vary in time. It also provides some
+utilities for visualising these changes over time.</li>
+</ul>
+<dl class="function">
+<dt id="stylo.design._param_factory.define_base_attributes">
+<code class="descclassname">stylo.design._param_factory.</code><code class="descname">define_base_attributes</code><span class="sig-paren">(</span><em>name</em>, <em>params</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/stylo/design/_param_factory.html#define_base_attributes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#stylo.design._param_factory.define_base_attributes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Define the attributes, methods and properties that are common to every type of
+parameter group.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – The name of the parameter group</li>
+<li><strong>params</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.7)"><em>list</em></a>) – The list of strings containing the parameter names.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="stylo.design._param_factory.define_parameter_group">
+<code class="descclassname">stylo.design._param_factory.</code><code class="descname">define_parameter_group</code><span class="sig-paren">(</span><em>name</em>, <em>parameters</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/stylo/design/_param_factory.html#define_parameter_group"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#stylo.design._param_factory.define_parameter_group" title="Permalink to this definition">¶</a></dt>
+<dd><p>Define a new parameter group.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – The name of the parameter group.</li>
+<li><strong>parameters</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.7)"><em>list</em></a>) – A list of strings containing the parameter
+names for the group.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="stylo.design._param_factory.define_time_dependent_parameter_group">
+<code class="descclassname">stylo.design._param_factory.</code><code class="descname">define_time_dependent_parameter_group</code><span class="sig-paren">(</span><em>name</em>, <em>parameters</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/stylo/design/_param_factory.html#define_time_dependent_parameter_group"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#stylo.design._param_factory.define_time_dependent_parameter_group" title="Permalink to this definition">¶</a></dt>
+<dd><p>Define a new time dependent parameter group.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – The name of the parameter group</li>
+<li><strong>parameters</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.7)"><em>list</em></a>) – A list of strings containing the parameter names for the
+group.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="stylo.design._param_factory.get_parameter_names">
+<code class="descclassname">stylo.design._param_factory.</code><code class="descname">get_parameter_names</code><span class="sig-paren">(</span><em>parameters</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/stylo/design/_param_factory.html#get_parameter_names"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#stylo.design._param_factory.get_parameter_names" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert the parameter string supplied by the user into a list of parameter names.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>parameters</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.7)"><em>list</em></a>) – The comma separated string of parameter names</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="stylo.design._param_factory.pgroup_calculate">
+<code class="descclassname">stylo.design._param_factory.</code><code class="descname">pgroup_calculate</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/stylo/design/_param_factory.html#pgroup_calculate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#stylo.design._param_factory.pgroup_calculate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Define an abstract method for the user to implement.</p>
+<p>The user must define this method to return the values dictionary containing each
+of the parameters in the group,.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="stylo.design._param_factory.pgroup_getitem">
+<code class="descclassname">stylo.design._param_factory.</code><code class="descname">pgroup_getitem</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/stylo/design/_param_factory.html#pgroup_getitem"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#stylo.design._param_factory.pgroup_getitem" title="Permalink to this definition">¶</a></dt>
+<dd><p>Provide the implementation of the <code class="code docutils literal notranslate"><span class="pre">__getitem__</span></code> method.</p>
+<p>One of the key features of a parameter group is the ability to use the dictionary
+unpacking syntax (<code class="code docutils literal notranslate"><span class="pre">**params</span></code>) to conveniently pass all the values into a
+function as a single unit. This syntax is enabled by implementing two methods
+<code class="code docutils literal notranslate"><span class="pre">keys</span></code> and <code class="code docutils literal notranslate"><span class="pre">__getitem__</span></code>, this function provides the implementation
+of the latter.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="stylo.design._param_factory.pgroup_init">
+<code class="descclassname">stylo.design._param_factory.</code><code class="descname">pgroup_init</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/stylo/design/_param_factory.html#pgroup_init"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#stylo.design._param_factory.pgroup_init" title="Permalink to this definition">¶</a></dt>
+<dd><p>Provide the implementation of the <code class="code docutils literal notranslate"><span class="pre">__init__</span></code> method.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="stylo.design._param_factory.pgroup_keys">
+<code class="descclassname">stylo.design._param_factory.</code><code class="descname">pgroup_keys</code><span class="sig-paren">(</span><em>params</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/stylo/design/_param_factory.html#pgroup_keys"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#stylo.design._param_factory.pgroup_keys" title="Permalink to this definition">¶</a></dt>
+<dd><p>Provide the implementation of the <code class="code docutils literal notranslate"><span class="pre">keys</span></code> method for this parameter group</p>
+<p>One of the key features of a parameter group is the ability to use the dictionary
+unpacking syntax (<code class="code docutils literal notranslate"><span class="pre">**params</span></code>) to conveniently pass all the values into a
+function as a single unit. This syntax is enabled by implementing two methods
+<code class="code docutils literal notranslate"><span class="pre">keys</span></code> and <code class="code docutils literal notranslate"><span class="pre">__getitem__</span></code>, this function provides the implementation
+of the former.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>params</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.7)"><em>list</em></a>) – The list of strings containing the names of the parameters.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="stylo.design._param_factory.pgroup_parameter_prop">
+<code class="descclassname">stylo.design._param_factory.</code><code class="descname">pgroup_parameter_prop</code><span class="sig-paren">(</span><em>param</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/stylo/design/_param_factory.html#pgroup_parameter_prop"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#stylo.design._param_factory.pgroup_parameter_prop" title="Permalink to this definition">¶</a></dt>
+<dd><p>Provide the implementation of the property getter for the given parameter name.</p>
+<p>This enables the <code class="code docutils literal notranslate"><span class="pre">group.param</span></code> syntax.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>param</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – The parameter name.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="stylo.design._param_factory.pgroup_parameters_prop">
+<code class="descclassname">stylo.design._param_factory.</code><code class="descname">pgroup_parameters_prop</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/stylo/design/_param_factory.html#pgroup_parameters_prop"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#stylo.design._param_factory.pgroup_parameters_prop" title="Permalink to this definition">¶</a></dt>
+<dd><p>Provide the implementation of the <code class="code docutils literal notranslate"><span class="pre">parameters</span></code> property.</p>
+<p>The <code class="code docutils literal notranslate"><span class="pre">parameters</span></code> property returns a list of all the parameter names in the
+group.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="stylo.design._param_factory.pgroup_repr">
+<code class="descclassname">stylo.design._param_factory.</code><code class="descname">pgroup_repr</code><span class="sig-paren">(</span><em>name</em>, <em>params</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/stylo/design/_param_factory.html#pgroup_repr"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#stylo.design._param_factory.pgroup_repr" title="Permalink to this definition">¶</a></dt>
+<dd><p>Provide the implementation of the <code class="code docutils literal notranslate"><span class="pre">__repr__</span></code> method.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – The name of the parameter group.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Param:</th><td class="field-body">list params: The list of parameter names.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="stylo.design._param_factory.tdpgroup_calculate">
+<code class="descclassname">stylo.design._param_factory.</code><code class="descname">tdpgroup_calculate</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/stylo/design/_param_factory.html#tdpgroup_calculate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#stylo.design._param_factory.tdpgroup_calculate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Define an abstract <code class="code docutils literal notranslate"><span class="pre">calculate</span></code> method for users to implement.</p>
+<p>This method will serve the same role as the calculate method in a standard parameter
+group, but this one is dependent on time <code class="code docutils literal notranslate"><span class="pre">t</span></code>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="stylo.design._param_factory.tdpgroup_call">
+<code class="descclassname">stylo.design._param_factory.</code><code class="descname">tdpgroup_call</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/stylo/design/_param_factory.html#tdpgroup_call"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#stylo.design._param_factory.tdpgroup_call" title="Permalink to this definition">¶</a></dt>
+<dd><p>Provide the implementation of the <code class="code docutils literal notranslate"><span class="pre">__call__</span></code> method.</p>
+<p>This enables the <code class="code docutils literal notranslate"><span class="pre">**params(t)</span></code> functionality and use the parameter group as a
+time dependent function.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="stylo.design._param_factory.tdpgroup_init">
+<code class="descclassname">stylo.design._param_factory.</code><code class="descname">tdpgroup_init</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/stylo/design/_param_factory.html#tdpgroup_init"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#stylo.design._param_factory.tdpgroup_init" title="Permalink to this definition">¶</a></dt>
+<dd><p>Provide the implementation of the <code class="code docutils literal notranslate"><span class="pre">__init__</span></code> method.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="stylo.design._param_factory.tdpgroup_plot">
+<code class="descclassname">stylo.design._param_factory.</code><code class="descname">tdpgroup_plot</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/stylo/design/_param_factory.html#tdpgroup_plot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#stylo.design._param_factory.tdpgroup_plot" title="Permalink to this definition">¶</a></dt>
+<dd><p>Provide the implementation of the <code class="code docutils literal notranslate"><span class="pre">plot</span></code> method.</p>
+<p>This enables users to plot the values as they change over time.</p>
+</dd></dl>
+
+</div>
+
+    
+</div>
+        </div>
+        <div class="footer">
+
+            
+                <p>
+                  Powered by <a href="http://www.sphinx-doc.org/">Sphinx</a> 1.8.2 &amp;
+                  <a href="https://github.com/alcarney/topos-theme">Topos Theme</a> 0.0.10
+                </p>
+        </div>
+    </body>
+</html>

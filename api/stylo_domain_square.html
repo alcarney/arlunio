@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+        <link href="https://fonts.googleapis.com/css?family=Nanum+Myeongjo" rel="stylesheet">
+
+        <!-- TODO: Run CSS + JS through minifiers -->
+        <link rel="stylesheet" href="../_static/css/main.css" type="text/css" >
+        <link rel="stylesheet" href="../_static/css/highlight.css " type="text/css" >
+
+        <script type="text/javascript" id="documentation_options"
+                data-url_root="../"
+                src="../_static/documentation_options.js"></script>
+        <script async
+                src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"
+                type="application/javascript"></script>
+
+        <title>Stylo.Domain.Square - Stylo v0.9.0</title>
+
+        
+    </head>
+    <body>
+        <!-- Slightly modified from the basic theme in the Sphinx repository
+        https://github.com/sphinx-doc/sphinx/blob/master/sphinx/themes/basic/layout.html -->
+
+        <div class="header">
+            <a href="../index.html" id="site-name"><h2>Stylo<sub>v0.9.0</sub></h2></a>
+            <label class="menu-toggle" for="menu-toggle">Menu</label>
+            <input type="checkbox" id="menu-toggle">
+            <div class="nav-sections">
+                <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../using/index.html">User’s Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../extending/index.html">Extending</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contributing/index.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../maths/index.html">Mathematics</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../glossary.html">Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changes.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../about.html">About the Docs</a></li>
+</ul>
+
+            </div>
+        </div>
+        <div class="nav">
+            <div>
+                <h3 class="nav-header">Page Contents</h3>
+                <ul>
+<li><a class="reference internal" href="#">Stylo.Domain.Square</a></li>
+</ul>
+
+            </div>
+            <form class="search" action="../search.html" method="get">
+                  <input type="text" name="q" placeholder="Search"/>
+                  <input type="hidden" name="check_keywords" value="yes" />
+                  <input type="hidden" name="area" value="default" />
+            </form>
+        </div>
+        <div class="content">
+<div class="main">
+    <div class="section" id="module-stylo.domain.square">
+<span id="id1"></span><span id="stylo-domain-square"></span><h1>Stylo.Domain.Square<a class="headerlink" href="#module-stylo.domain.square" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="stylo.domain.square.SquareDomain">
+<em class="property">class </em><code class="descclassname">stylo.domain.square.</code><code class="descname">SquareDomain</code><span class="sig-paren">(</span><em>x_min</em>, <em>x_max</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/stylo/domain/square.html#SquareDomain"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#stylo.domain.square.SquareDomain" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="stylo_domain_rectangular.html#stylo.domain.rectangular.RectangularDomain" title="stylo.domain.rectangular.RectangularDomain"><code class="xref py py-class docutils literal notranslate"><span class="pre">stylo.domain.rectangular.RectangularDomain</span></code></a></p>
+<p>A domain of the form <span class="math notranslate nohighlight">\([a, b] \times [a, b] \subset \mathbb{R}^2\)</span>.</p>
+<dl class="attribute">
+<dt id="stylo.domain.square.SquareDomain._abc_cache">
+<code class="descname">_abc_cache</code><em class="property"> = &lt;_weakrefset.WeakSet object&gt;</em><a class="headerlink" href="#stylo.domain.square.SquareDomain._abc_cache" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="stylo.domain.square.SquareDomain._abc_negative_cache">
+<code class="descname">_abc_negative_cache</code><em class="property"> = &lt;_weakrefset.WeakSet object&gt;</em><a class="headerlink" href="#stylo.domain.square.SquareDomain._abc_negative_cache" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="stylo.domain.square.SquareDomain._abc_negative_cache_version">
+<code class="descname">_abc_negative_cache_version</code><em class="property"> = 47</em><a class="headerlink" href="#stylo.domain.square.SquareDomain._abc_negative_cache_version" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="stylo.domain.square.SquareDomain._abc_registry">
+<code class="descname">_abc_registry</code><em class="property"> = &lt;_weakrefset.WeakSet object&gt;</em><a class="headerlink" href="#stylo.domain.square.SquareDomain._abc_registry" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="stylo.domain.square.SquareDomain.xmax">
+<code class="descname">xmax</code><a class="headerlink" href="#stylo.domain.square.SquareDomain.xmax" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="stylo.domain.square.SquareDomain.xmin">
+<code class="descname">xmin</code><a class="headerlink" href="#stylo.domain.square.SquareDomain.xmin" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="stylo.domain.square.SquareDomain.ymax">
+<code class="descname">ymax</code><a class="headerlink" href="#stylo.domain.square.SquareDomain.ymax" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="stylo.domain.square.SquareDomain.ymin">
+<code class="descname">ymin</code><a class="headerlink" href="#stylo.domain.square.SquareDomain.ymin" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="stylo.domain.square.UnitSquare">
+<em class="property">class </em><code class="descclassname">stylo.domain.square.</code><code class="descname">UnitSquare</code><a class="reference internal" href="../_modules/stylo/domain/square.html#UnitSquare"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#stylo.domain.square.UnitSquare" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#stylo.domain.square.SquareDomain" title="stylo.domain.square.SquareDomain"><code class="xref py py-class docutils literal notranslate"><span class="pre">stylo.domain.square.SquareDomain</span></code></a></p>
+<p>The domain <span class="math notranslate nohighlight">\([0, 1] \times [0, 1] \subset \mathbb{R}^2\)</span>.</p>
+<dl class="attribute">
+<dt id="stylo.domain.square.UnitSquare._abc_cache">
+<code class="descname">_abc_cache</code><em class="property"> = &lt;_weakrefset.WeakSet object&gt;</em><a class="headerlink" href="#stylo.domain.square.UnitSquare._abc_cache" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="stylo.domain.square.UnitSquare._abc_negative_cache">
+<code class="descname">_abc_negative_cache</code><em class="property"> = &lt;_weakrefset.WeakSet object&gt;</em><a class="headerlink" href="#stylo.domain.square.UnitSquare._abc_negative_cache" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="stylo.domain.square.UnitSquare._abc_negative_cache_version">
+<code class="descname">_abc_negative_cache_version</code><em class="property"> = 47</em><a class="headerlink" href="#stylo.domain.square.UnitSquare._abc_negative_cache_version" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="stylo.domain.square.UnitSquare._abc_registry">
+<code class="descname">_abc_registry</code><em class="property"> = &lt;_weakrefset.WeakSet object&gt;</em><a class="headerlink" href="#stylo.domain.square.UnitSquare._abc_registry" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="stylo.domain.square.UnitSquare.xmax">
+<code class="descname">xmax</code><a class="headerlink" href="#stylo.domain.square.UnitSquare.xmax" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="stylo.domain.square.UnitSquare.xmin">
+<code class="descname">xmin</code><a class="headerlink" href="#stylo.domain.square.UnitSquare.xmin" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="stylo.domain.square.UnitSquare.ymax">
+<code class="descname">ymax</code><a class="headerlink" href="#stylo.domain.square.UnitSquare.ymax" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="stylo.domain.square.UnitSquare.ymin">
+<code class="descname">ymin</code><a class="headerlink" href="#stylo.domain.square.UnitSquare.ymin" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+
+    
+</div>
+        </div>
+        <div class="footer">
+
+            
+                <p>
+                  Powered by <a href="http://www.sphinx-doc.org/">Sphinx</a> 1.8.2 &amp;
+                  <a href="https://github.com/alcarney/topos-theme">Topos Theme</a> 0.0.10
+                </p>
+        </div>
+    </body>
+</html>

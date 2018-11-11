@@ -1,0 +1,13 @@
+
+
+.. _stylo_domain_square:
+
+Stylo.Domain.Square
+===================
+
+.. automodule:: stylo.domain.square
+   :members:
+   :undoc-members:
+   :private-members:
+   :show-inheritance:
+

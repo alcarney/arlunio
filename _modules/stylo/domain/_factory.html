@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+        <link href="https://fonts.googleapis.com/css?family=Nanum+Myeongjo" rel="stylesheet">
+
+        <!-- TODO: Run CSS + JS through minifiers -->
+        <link rel="stylesheet" href="../../../_static/css/main.css" type="text/css" >
+        <link rel="stylesheet" href="../../../_static/css/highlight.css " type="text/css" >
+
+        <script type="text/javascript" id="documentation_options"
+                data-url_root="../../../"
+                src="../../../_static/documentation_options.js"></script>
+        <script async
+                src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"
+                type="application/javascript"></script>
+
+        <title>stylo.domain._factory - Stylo v0.9.0</title>
+
+        
+    </head>
+    <body>
+        <!-- Slightly modified from the basic theme in the Sphinx repository
+        https://github.com/sphinx-doc/sphinx/blob/master/sphinx/themes/basic/layout.html -->
+
+        <div class="header">
+            <a href="../../../index.html" id="site-name"><h2>Stylo<sub>v0.9.0</sub></h2></a>
+            <label class="menu-toggle" for="menu-toggle">Menu</label>
+            <input type="checkbox" id="menu-toggle">
+            <div class="nav-sections">
+                <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../using/index.html">User’s Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../extending/index.html">Extending</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../contributing/index.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../maths/index.html">Mathematics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/index.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../glossary.html">Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../changes.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../about.html">About the Docs</a></li>
+</ul>
+
+            </div>
+        </div>
+        <div class="nav">
+            <div>
+                <h3 class="nav-header">Page Contents</h3>
+                
+            </div>
+            <form class="search" action="../../../search.html" method="get">
+                  <input type="text" name="q" placeholder="Search"/>
+                  <input type="hidden" name="check_keywords" value="yes" />
+                  <input type="hidden" name="area" value="default" />
+            </form>
+        </div>
+        <div class="content">
+<div class="main">
+    <h1>Source code for stylo.domain._factory</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;A :code:`Domain` is responsible for converting some abstract notion of a mathematical</span>
+<span class="sd">space into a discrete representation. Since :code:`stylo` is about creating images this</span>
+<span class="sd">representation is typically a 2D grid of numbers.</span>
+
+<span class="sd">This document details the machinery behind the :code:`Domain` system. More specifically</span>
+<span class="sd">how the :code:`define_domain` and :code:`define_domain_transform` functions work. It</span>
+<span class="sd">assumes you are already familiar with how the user interacts with :code:`Domain` objects</span>
+<span class="sd">and is written for someone who wishes to understand how they work behind the scenes.</span>
+
+<span class="sd">This module contains all the code that is required to automatically write both the</span>
+<span class="sd">definition of a new Domain type and the test case that users can use to verify that</span>
+<span class="sd">their implementations of said domains adhere to the expected interface.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">abc</span> <span class="k">import</span> <span class="n">ABC</span><span class="p">,</span> <span class="n">abstractmethod</span>
+<span class="kn">from</span> <span class="nn">textwrap</span> <span class="k">import</span> <span class="n">indent</span>
+
+
+<div class="viewcode-block" id="domain_getitem"><a class="viewcode-back" href="../../../api/stylo_domain_factory.html#stylo.domain._factory.domain_getitem">[docs]</a><span class="k">def</span> <span class="nf">domain_getitem</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Enable the domain[...] syntax for domains.</span>
+
+<span class="sd">    Domains support the ability to return a function in :code:`(width, height)`</span>
+<span class="sd">    of multiple parameters, for example for a :code:`RealDomain` you might want a</span>
+<span class="sd">    function in both the :math:`x` and :math:`y` coordinates in which case you would</span>
+<span class="sd">    write</span>
+
+<span class="sd">    .. code-block:: python</span>
+
+<span class="sd">       &gt;&gt;&gt; values = domain[&#39;xy&#39;]</span>
+<span class="sd">       &gt;&gt;&gt; values(N, N)</span>
+<span class="sd">       (array([[x0, x1, ..., xN],</span>
+<span class="sd">               [x0, x1, ..., XN],</span>
+<span class="sd">               ...</span>
+<span class="sd">               [x0, x1, ..., xN]]),</span>
+<span class="sd">        array([[y0, y0, ..., y0],</span>
+<span class="sd">               [y1, y1, ..., y1],</span>
+<span class="sd">               ...,</span>
+<span class="sd">               [yN, yN, ..., yN]]))</span>
+
+<span class="sd">    .. note::</span>
+
+<span class="sd">       The string argument :code:`&#39;xy&#39;` only works in the case of single letter</span>
+<span class="sd">       parameters. For multi-character parameters such as :code:`pt` this argument</span>
+<span class="sd">       must be some other iterable such as a tuple e.g. :code:`(&#39;x&#39;, &#39;pt&#39;)`.</span>
+
+<span class="sd">    This function constructs the implementation for the :code:`__getitem__` method that</span>
+<span class="sd">    will be added to new :code:`Domain` definitions</span>
+
+<span class="sd">    :param self: The standard python instance argument for methods</span>
+<span class="sd">    :param key: The input that is given to the getitem syntax e.g. :code:`&#39;xy&#39;`</span>
+
+<span class="sd">    :type self: object</span>
+<span class="sd">    :type key: iterable</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">return</span> <span class="k">lambda</span> <span class="n">w</span><span class="p">,</span> <span class="n">h</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">(</span>
+        <span class="bp">self</span><span class="o">.</span><span class="fm">__getattribute__</span><span class="p">(</span><span class="n">p</span><span class="p">)(</span><span class="n">w</span><span class="p">,</span> <span class="n">h</span><span class="p">)</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">key</span> <span class="k">if</span> <span class="n">p</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parameters</span>
+    <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="domain_property"><a class="viewcode-back" href="../../../api/stylo_domain_factory.html#stylo.domain._factory.domain_property">[docs]</a><span class="k">def</span> <span class="nf">domain_property</span><span class="p">(</span><span class="n">base</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Construct the domain property for the domain transform base class.</span>
+
+<span class="sd">    :param base: The base Domain class</span>
+<span class="sd">    :type base: class</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">transform_name</span> <span class="o">=</span> <span class="n">base</span><span class="o">.</span><span class="vm">__name__</span> <span class="o">+</span> <span class="s2">&quot;Transform&quot;</span>
+
+    <span class="k">def</span> <span class="nf">getter</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_domain</span>
+
+    <span class="k">def</span> <span class="nf">setter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="p">(</span><span class="n">base</span><span class="p">,)):</span>
+            <span class="n">message</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">{transform}</span><span class="s2">: Expected </span><span class="si">{base}</span><span class="s2"> instance.&quot;</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
+                <span class="n">message</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">transform</span><span class="o">=</span><span class="n">transform_name</span><span class="p">,</span> <span class="n">base</span><span class="o">=</span><span class="n">base</span><span class="o">.</span><span class="vm">__name__</span><span class="p">)</span>
+            <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_domain</span> <span class="o">=</span> <span class="n">value</span>
+
+    <span class="k">return</span> <span class="nb">property</span><span class="p">(</span><span class="n">fget</span><span class="o">=</span><span class="n">getter</span><span class="p">,</span> <span class="n">fset</span><span class="o">=</span><span class="n">setter</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="domain_call"><a class="viewcode-back" href="../../../api/stylo_domain_factory.html#stylo.domain._factory.domain_call">[docs]</a><span class="k">def</span> <span class="nf">domain_call</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">):</span>
+    <span class="k">return</span> <span class="k">lambda</span> <span class="n">parameters</span><span class="p">:</span> <span class="bp">self</span><span class="p">[</span><span class="n">parameters</span><span class="p">](</span><span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="parameters_property"><a class="viewcode-back" href="../../../api/stylo_domain_factory.html#stylo.domain._factory.parameters_property">[docs]</a><span class="k">def</span> <span class="nf">parameters_property</span><span class="p">(</span><span class="n">parameters</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Given the list of parameters this function constructs a property that simply</span>
+<span class="sd">    returns the given list. It doesn&#39;t provide a setter so that the list of parameters</span>
+<span class="sd">    cannot be overridden.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">getter</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">parameters</span>
+
+    <span class="k">return</span> <span class="nb">property</span><span class="p">(</span><span class="n">fget</span><span class="o">=</span><span class="n">getter</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="parameter_property"><a class="viewcode-back" href="../../../api/stylo_domain_factory.html#stylo.domain._factory.parameter_property">[docs]</a><span class="k">def</span> <span class="nf">parameter_property</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Given the name of the parameter, construct the property definition that calls the</span>
+<span class="sd">    abstract :code:`_get_name()` method that users will implement.</span>
+
+<span class="sd">    :param name: The name of the parameter</span>
+<span class="sd">    :type name: str</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">getter</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="fm">__getattribute__</span><span class="p">(</span><span class="s2">&quot;_get_&quot;</span> <span class="o">+</span> <span class="n">name</span><span class="p">)()</span>
+
+    <span class="k">return</span> <span class="nb">property</span><span class="p">(</span><span class="n">fget</span><span class="o">=</span><span class="n">getter</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="mk_abstractmethod"><a class="viewcode-back" href="../../../api/stylo_domain_factory.html#stylo.domain._factory.mk_abstractmethod">[docs]</a><span class="k">def</span> <span class="nf">mk_abstractmethod</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;Construct an abstractmethod that user must override when they create an instance</span>
+<span class="sd">    of a class.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">method</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">pass</span>
+
+    <span class="k">return</span> <span class="n">abstractmethod</span><span class="p">(</span><span class="n">method</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="transform_init"><a class="viewcode-back" href="../../../api/stylo_domain_factory.html#stylo.domain._factory.transform_init">[docs]</a><span class="k">def</span> <span class="nf">transform_init</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">domain</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;This implements the :code:`__init__` method for DomainTransform classes.&quot;&quot;&quot;</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">domain</span> <span class="o">=</span> <span class="n">domain</span></div>
+
+
+<div class="viewcode-block" id="transform_repr"><a class="viewcode-back" href="../../../api/stylo_domain_factory.html#stylo.domain._factory.transform_repr">[docs]</a><span class="k">def</span> <span class="nf">transform_repr</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;This implements the :code:`__repr__` method for DomainTransform classes.&quot;&quot;&quot;</span>
+    <span class="n">transform</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_repr</span><span class="p">()</span>
+    <span class="n">domain</span> <span class="o">=</span> <span class="nb">repr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">domain</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">transform</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="n">indent</span><span class="p">(</span><span class="n">domain</span><span class="p">,</span> <span class="s2">&quot;  &quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="define_domain"><a class="viewcode-back" href="../../../api/stylo_domain_factory.html#stylo.domain._factory.define_domain">[docs]</a><span class="k">def</span> <span class="nf">define_domain</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">parameters</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Given the name and the input parameters, construct the Domain definition.</span>
+
+<span class="sd">    :param name: The name of the :code:`Domain`</span>
+<span class="sd">    :param parameters: A list of strings that encode the names of the parameters within</span>
+<span class="sd">           the domain</span>
+
+<span class="sd">    :type name: str</span>
+<span class="sd">    :type parameters: list(str)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">params</span> <span class="o">=</span> <span class="n">parameters</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">)</span>
+
+    <span class="n">attributes</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;_parameters&quot;</span><span class="p">:</span> <span class="n">params</span><span class="p">,</span>
+        <span class="s2">&quot;parameters&quot;</span><span class="p">:</span> <span class="n">parameters_property</span><span class="p">(</span><span class="n">params</span><span class="p">),</span>
+        <span class="s2">&quot;__doc__&quot;</span><span class="p">:</span> <span class="s2">&quot;TODO: Make this docstring useful.&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;__getitem__&quot;</span><span class="p">:</span> <span class="n">domain_getitem</span><span class="p">,</span>
+        <span class="s2">&quot;__call__&quot;</span><span class="p">:</span> <span class="n">domain_call</span><span class="p">,</span>
+    <span class="p">}</span>
+
+    <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">params</span><span class="p">:</span>
+        <span class="n">attributes</span><span class="p">[</span><span class="n">p</span><span class="p">]</span> <span class="o">=</span> <span class="n">parameter_property</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
+        <span class="n">attributes</span><span class="p">[</span><span class="s2">&quot;_get_&quot;</span> <span class="o">+</span> <span class="n">p</span><span class="p">]</span> <span class="o">=</span> <span class="n">mk_abstractmethod</span><span class="p">()</span>
+
+    <span class="k">return</span> <span class="nb">type</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="p">(</span><span class="n">ABC</span><span class="p">,),</span> <span class="n">attributes</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="define_domain_transform"><a class="viewcode-back" href="../../../api/stylo_domain_factory.html#stylo.domain._factory.define_domain_transform">[docs]</a><span class="k">def</span> <span class="nf">define_domain_transform</span><span class="p">(</span><span class="n">base</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;This constructs the class definition for a domain transform.</span>
+
+<span class="sd">    :param name: The name of the base domain</span>
+<span class="sd">    :param base: The class definition of the base domain</span>
+
+<span class="sd">    :type name: str</span>
+<span class="sd">    :type base: class</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">transform_name</span> <span class="o">=</span> <span class="n">base</span><span class="o">.</span><span class="vm">__name__</span> <span class="o">+</span> <span class="s2">&quot;Transform&quot;</span>
+
+    <span class="n">attributes</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;__init__&quot;</span><span class="p">:</span> <span class="n">transform_init</span><span class="p">,</span>
+        <span class="s2">&quot;__repr__&quot;</span><span class="p">:</span> <span class="n">transform_repr</span><span class="p">,</span>
+        <span class="s2">&quot;_repr&quot;</span><span class="p">:</span> <span class="n">mk_abstractmethod</span><span class="p">(),</span>
+        <span class="s2">&quot;domain&quot;</span><span class="p">:</span> <span class="n">domain_property</span><span class="p">(</span><span class="n">base</span><span class="p">),</span>
+    <span class="p">}</span>
+
+    <span class="k">return</span> <span class="nb">type</span><span class="p">(</span><span class="n">transform_name</span><span class="p">,</span> <span class="p">(</span><span class="n">base</span><span class="p">,</span> <span class="n">ABC</span><span class="p">),</span> <span class="n">attributes</span><span class="p">)</span></div>
+</pre></div>
+    
+</div>
+        </div>
+        <div class="footer">
+
+            
+                <p>
+                  Powered by <a href="http://www.sphinx-doc.org/">Sphinx</a> 1.8.2 &amp;
+                  <a href="https://github.com/alcarney/topos-theme">Topos Theme</a> 0.0.10
+                </p>
+        </div>
+    </body>
+</html>

@@ -1,0 +1,13 @@
+
+
+.. _stylo_math:
+
+Stylo.Math
+==========
+
+.. automodule:: stylo.math
+   :members:
+   :undoc-members:
+   :private-members:
+   :show-inheritance:
+

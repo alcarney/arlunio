@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+        <link href="https://fonts.googleapis.com/css?family=Nanum+Myeongjo" rel="stylesheet">
+
+        <!-- TODO: Run CSS + JS through minifiers -->
+        <link rel="stylesheet" href="../../../_static/css/main.css" type="text/css" >
+        <link rel="stylesheet" href="../../../_static/css/highlight.css " type="text/css" >
+
+        <script type="text/javascript" id="documentation_options"
+                data-url_root="../../../"
+                src="../../../_static/documentation_options.js"></script>
+        <script async
+                src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"
+                type="application/javascript"></script>
+
+        <title>stylo.domain.helpers - Stylo v0.9.0</title>
+
+        
+    </head>
+    <body>
+        <!-- Slightly modified from the basic theme in the Sphinx repository
+        https://github.com/sphinx-doc/sphinx/blob/master/sphinx/themes/basic/layout.html -->
+
+        <div class="header">
+            <a href="../../../index.html" id="site-name"><h2>Stylo<sub>v0.9.0</sub></h2></a>
+            <label class="menu-toggle" for="menu-toggle">Menu</label>
+            <input type="checkbox" id="menu-toggle">
+            <div class="nav-sections">
+                <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../using/index.html">User’s Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../extending/index.html">Extending</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../contributing/index.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../maths/index.html">Mathematics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/index.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../glossary.html">Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../changes.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../about.html">About the Docs</a></li>
+</ul>
+
+            </div>
+        </div>
+        <div class="nav">
+            <div>
+                <h3 class="nav-header">Page Contents</h3>
+                
+            </div>
+            <form class="search" action="../../../search.html" method="get">
+                  <input type="text" name="q" placeholder="Search"/>
+                  <input type="hidden" name="check_keywords" value="yes" />
+                  <input type="hidden" name="area" value="default" />
+            </form>
+        </div>
+        <div class="content">
+<div class="main">
+    <h1>Source code for stylo.domain.helpers</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+
+<div class="viewcode-block" id="PolarConversion"><a class="viewcode-back" href="../../../api/stylo_domain_helpers.html#stylo.domain.helpers.PolarConversion">[docs]</a><span class="k">class</span> <span class="nc">PolarConversion</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;A helper class for defining new domain classes.</span>
+
+<span class="sd">    Say you are implementing a new class, perhaps the :code:`Translation` domain</span>
+<span class="sd">    transform where the interesting part of that class is implementing the shift in</span>
+<span class="sd">    :code:`x` or the shift in :code:`y`. The implementation of the :code:`r` and</span>
+<span class="sd">    :code:`t` is then done with respect to the shifted :code:`x` and :code:`y`</span>
+
+<span class="sd">    This class provides implementations of the :code:`_get_rs` and :code:`_get_ts` that</span>
+<span class="sd">    handle this conversion for you automatically, leaving you to focus on implementing</span>
+<span class="sd">    the transform that interest you.</span>
+
+<span class="sd">    To use this class, simply include it in your :code:`class` definition as follows.</span>
+
+<span class="sd">    .. code-block:: python</span>
+
+<span class="sd">       class MyDomain(PolarConversion, RealDomain):</span>
+
+<span class="sd">           def _get_xs(self):</span>
+<span class="sd">              ...</span>
+
+<span class="sd">            def _get_ys(self):</span>
+<span class="sd">               ...</span>
+
+<span class="sd">    .. note::</span>
+
+<span class="sd">       The order in which the classes are listed is *very* important.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="PolarConversion._get_r"><a class="viewcode-back" href="../../../api/stylo_domain_helpers.html#stylo.domain.helpers.PolarConversion._get_r">[docs]</a>    <span class="k">def</span> <span class="nf">_get_r</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;The conversion to the radial component in terms of :math:`x` and :math:`y`.</span>
+
+<span class="sd">        .. math::</span>
+
+<span class="sd">           r = \\sqrt{x^2 + y^2}</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">xs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_x</span><span class="p">()</span>
+        <span class="n">ys</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_y</span><span class="p">()</span>
+
+        <span class="k">def</span> <span class="nf">mk_rs</span><span class="p">(</span><span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">):</span>
+
+            <span class="n">x</span> <span class="o">=</span> <span class="n">xs</span><span class="p">(</span><span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">)</span>
+            <span class="n">y</span> <span class="o">=</span> <span class="n">ys</span><span class="p">(</span><span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">)</span>
+
+            <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">x</span> <span class="o">*</span> <span class="n">x</span> <span class="o">+</span> <span class="n">y</span> <span class="o">*</span> <span class="n">y</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">mk_rs</span></div>
+
+<div class="viewcode-block" id="PolarConversion._get_t"><a class="viewcode-back" href="../../../api/stylo_domain_helpers.html#stylo.domain.helpers.PolarConversion._get_t">[docs]</a>    <span class="k">def</span> <span class="nf">_get_t</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;The conversion to the angular component in terms of :math:`x` and :math:`y`.</span>
+
+<span class="sd">        .. math::</span>
+
+<span class="sd">           \\theta = \\tan^{-1}{\\left(\\frac{y}{x}\\right)}</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">xs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_x</span><span class="p">()</span>
+        <span class="n">ys</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_y</span><span class="p">()</span>
+
+        <span class="k">def</span> <span class="nf">mk_ts</span><span class="p">(</span><span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">):</span>
+
+            <span class="n">x</span> <span class="o">=</span> <span class="n">xs</span><span class="p">(</span><span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">)</span>
+            <span class="n">y</span> <span class="o">=</span> <span class="n">ys</span><span class="p">(</span><span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">)</span>
+
+            <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">arctan2</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">mk_ts</span></div></div>
+
+
+<div class="viewcode-block" id="CartesianConversion"><a class="viewcode-back" href="../../../api/stylo_domain_helpers.html#stylo.domain.helpers.CartesianConversion">[docs]</a><span class="k">class</span> <span class="nc">CartesianConversion</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;A helper class for defining new domain classes.</span>
+
+<span class="sd">    Say you are implementing a new class, perhaps the :code:`Rotation` domain transform</span>
+<span class="sd">    where the interesting part is the adjustments to the :code:`r` and :code:`t`</span>
+<span class="sd">    coordinates. The implementation of :code:`x` and :code:`y` is then done with respect</span>
+<span class="sd">    to the transformed :code:`r` and :code:`t` variables.</span>
+
+<span class="sd">    This class provides implementations of the :code:`_get_xs` and :code:`_get_ys`</span>
+<span class="sd">    methods to handle this conversion for you automatically, leaving you to focus on</span>
+<span class="sd">    implementing the transform that interest you.</span>
+
+<span class="sd">    To use this class, simply include it in your :code:`class` definition as follows</span>
+
+<span class="sd">    .. code-block:: python</span>
+
+<span class="sd">       class MyDomain(CartesianConversion, RealDomain):</span>
+
+<span class="sd">           def _get_xs(self):</span>
+<span class="sd">               ...</span>
+
+<span class="sd">           def _get_ys(self):</span>
+<span class="sd">               ...</span>
+
+<span class="sd">    .. note::</span>
+
+<span class="sd">       The order in which the classes are listed is *very* important.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="CartesianConversion._get_x"><a class="viewcode-back" href="../../../api/stylo_domain_helpers.html#stylo.domain.helpers.CartesianConversion._get_x">[docs]</a>    <span class="k">def</span> <span class="nf">_get_x</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;The conversion to the :math:`x` component in terms of :math:`r` and</span>
+<span class="sd">        :math:`\\theta`</span>
+
+<span class="sd">        .. math::</span>
+
+<span class="sd">           x = r\\cos{(\\theta)}</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">rs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_r</span><span class="p">()</span>
+        <span class="n">ts</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_t</span><span class="p">()</span>
+
+        <span class="k">def</span> <span class="nf">mk_xs</span><span class="p">(</span><span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">):</span>
+
+            <span class="n">r</span> <span class="o">=</span> <span class="n">rs</span><span class="p">(</span><span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">)</span>
+            <span class="n">t</span> <span class="o">=</span> <span class="n">ts</span><span class="p">(</span><span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">)</span>
+
+            <span class="k">return</span> <span class="n">r</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">mk_xs</span></div>
+
+<div class="viewcode-block" id="CartesianConversion._get_y"><a class="viewcode-back" href="../../../api/stylo_domain_helpers.html#stylo.domain.helpers.CartesianConversion._get_y">[docs]</a>    <span class="k">def</span> <span class="nf">_get_y</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;The conversion to the :math:`y` component in terms of :math:`r` and</span>
+<span class="sd">        :math:`\\theta`</span>
+
+<span class="sd">        .. math::</span>
+
+<span class="sd">           y = r\\sin{(\\theta)}</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">rs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_r</span><span class="p">()</span>
+        <span class="n">ts</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_t</span><span class="p">()</span>
+
+        <span class="k">def</span> <span class="nf">mk_ys</span><span class="p">(</span><span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">):</span>
+
+            <span class="n">r</span> <span class="o">=</span> <span class="n">rs</span><span class="p">(</span><span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">)</span>
+            <span class="n">t</span> <span class="o">=</span> <span class="n">ts</span><span class="p">(</span><span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">)</span>
+
+            <span class="k">return</span> <span class="n">r</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">mk_ys</span></div></div>
+</pre></div>
+    
+</div>
+        </div>
+        <div class="footer">
+
+            
+                <p>
+                  Powered by <a href="http://www.sphinx-doc.org/">Sphinx</a> 1.8.2 &amp;
+                  <a href="https://github.com/alcarney/topos-theme">Topos Theme</a> 0.0.10
+                </p>
+        </div>
+    </body>
+</html>

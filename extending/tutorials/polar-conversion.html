@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+        <link href="https://fonts.googleapis.com/css?family=Nanum+Myeongjo" rel="stylesheet">
+
+        <!-- TODO: Run CSS + JS through minifiers -->
+        <link rel="stylesheet" href="../../_static/css/main.css" type="text/css" >
+        <link rel="stylesheet" href="../../_static/css/highlight.css " type="text/css" >
+
+        <script type="text/javascript" id="documentation_options"
+                data-url_root="../../"
+                src="../../_static/documentation_options.js"></script>
+        <script async
+                src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"
+                type="application/javascript"></script>
+
+        <title>Using the Polar Conversion Helper - Stylo v0.9.0</title>
+
+        
+    </head>
+    <body>
+        <!-- Slightly modified from the basic theme in the Sphinx repository
+        https://github.com/sphinx-doc/sphinx/blob/master/sphinx/themes/basic/layout.html -->
+
+        <div class="header">
+            <a href="../../index.html" id="site-name"><h2>Stylo<sub>v0.9.0</sub></h2></a>
+            <label class="menu-toggle" for="menu-toggle">Menu</label>
+            <input type="checkbox" id="menu-toggle">
+            <div class="nav-sections">
+                <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../using/index.html">User’s Guide</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">Extending</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contributing/index.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../maths/index.html">Mathematics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/index.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../glossary.html">Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../changes.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../about.html">About the Docs</a></li>
+</ul>
+
+            </div>
+        </div>
+        <div class="nav">
+            <div>
+                <h3 class="nav-header">Page Contents</h3>
+                <ul>
+<li><a class="reference internal" href="#">Using the Polar Conversion Helper</a><ul>
+<li><a class="reference internal" href="#setup">Setup</a></li>
+<li><a class="reference internal" href="#implementation">Implementation</a><ul>
+<li><a class="reference internal" href="#init">__init__</a></li>
+<li><a class="reference internal" href="#repr">_repr</a></li>
+<li><a class="reference internal" href="#get-x">_get_x</a></li>
+<li><a class="reference internal" href="#get-y">_get_y</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#bringing-it-all-together">Bringing It All Together</a></li>
+</ul>
+</li>
+</ul>
+
+            </div>
+            <form class="search" action="../../search.html" method="get">
+                  <input type="text" name="q" placeholder="Search"/>
+                  <input type="hidden" name="check_keywords" value="yes" />
+                  <input type="hidden" name="area" value="default" />
+            </form>
+        </div>
+        <div class="content">
+<div class="main">
+    <div class="section" id="using-the-polar-conversion-helper">
+<span id="extend-tutorial-polar-conversion"></span><h1>Using the Polar Conversion Helper<a class="headerlink" href="#using-the-polar-conversion-helper" title="Permalink to this headline">¶</a></h1>
+<p>Here is a list of tutorials and resources that this tutorial assumes you are already
+familiar with.</p>
+<ul class="simple">
+<li><a class="reference internal" href="../../maths/polar-coordinates.html#math-polar-coordinates"><span class="std std-ref">Polar Coordinate System</span></a></li>
+<li><a class="reference internal" href="../../maths/cartesian-coordinates.html#math-cartesian-coordinates"><span class="std std-ref">Cartesian Coordinate System</span></a></li>
+<li><a class="reference internal" href="writing-domain-implementation.html#extend-tutorial-domain-implementation"><span class="std std-ref">Writing a Domain Implementation</span></a></li>
+</ul>
+<p>There are occasions when writing a <code class="code docutils literal notranslate"><span class="pre">RealDomain</span></code> implementation, say a
+<code class="code docutils literal notranslate"><span class="pre">Translation</span></code> transform where the “interesting” code is contained within the
+<code class="code docutils literal notranslate"><span class="pre">_get_x</span></code> and <code class="code docutils literal notranslate"><span class="pre">_get_y</span></code> methods and all you need is a conversion from
+cartesian to polar coordinates for the other methods.</p>
+<p>This is where the <a class="reference internal" href="../../api/stylo_domain_helpers.html#stylo.domain.helpers.PolarConversion" title="stylo.domain.helpers.PolarConversion"><code class="xref py py-class docutils literal notranslate"><span class="pre">PolarConversion</span></code></a>
+helper class comes in, it provides implementations of <code class="code docutils literal notranslate"><span class="pre">_get_r</span></code> and <code class="code docutils literal notranslate"><span class="pre">_get_t</span></code>
+that convert the <span class="math notranslate nohighlight">\(x\)</span> and <span class="math notranslate nohighlight">\(y\)</span> values generated by your <code class="code docutils literal notranslate"><span class="pre">_get_x</span></code> and
+<code class="code docutils literal notranslate"><span class="pre">_get_y</span></code> methods into their polar equivalents.</p>
+<p>This tutorial walks you through the process of using this helper to implement an example
+translation domain transform.</p>
+<div class="section" id="setup">
+<h2>Setup<a class="headerlink" href="#setup" title="Permalink to this headline">¶</a></h2>
+<p>As with any other domain transformation is starts with us creating a class and
+subclassing <code class="code docutils literal notranslate"><span class="pre">RealDomainTransform</span></code>. However we also include
+<a class="reference internal" href="../../api/stylo_domain_helpers.html#stylo.domain.helpers.PolarConversion" title="stylo.domain.helpers.PolarConversion"><code class="xref py py-class docutils literal notranslate"><span class="pre">PolarConversion</span></code></a> in our list of base
+classes.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">stylo.domain.helpers</span> <span class="kn">import</span> <span class="n">PolarConversion</span>
+<span class="kn">from</span> <span class="nn">stylo.domain.transform</span> <span class="kn">import</span> <span class="n">RealDomainTransform</span>
+
+<span class="k">class</span> <span class="nc">Translation</span><span class="p">(</span><span class="n">PolarConversion</span><span class="p">,</span> <span class="n">RealDomainTransform</span><span class="p">):</span>
+    <span class="k">pass</span>
+</pre></div>
+</div>
+<div class="admonition important">
+<p class="first admonition-title">Important</p>
+<p class="last">The order in which these classes are included is <em>very</em> important.
+<code class="code docutils literal notranslate"><span class="pre">PolarConversion</span></code> must come before <code class="code docutils literal notranslate"><span class="pre">RealDomainTransform</span></code></p>
+</div>
+<p>If we were to try and create an instance of our class right now we will get an error
+(as expected since <code class="code docutils literal notranslate"><span class="pre">RealDomainTransform</span></code> is an abstract class)</p>
+<div class="highlight-pycon notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">translate</span> <span class="o">=</span> <span class="n">Translation</span><span class="p">()</span>
+<span class="gt">Traceback (most recent call last):</span>
+   <span class="c">...</span>
+<span class="gr">TypeError</span>: <span class="n">Can&#39;t instantiate abstract class Translation with abstract methods _get_x, _get_y, _repr</span>
+</pre></div>
+</div>
+<p>But notice that <code class="code docutils literal notranslate"><span class="pre">_get_r</span></code> and <code class="code docutils literal notranslate"><span class="pre">_get_t</span></code> don’t appear in the error message, this
+is due to them being implemented by the <code class="code docutils literal notranslate"><span class="pre">PolarConversion</span></code> helper.</p>
+</div>
+<div class="section" id="implementation">
+<h2>Implementation<a class="headerlink" href="#implementation" title="Permalink to this headline">¶</a></h2>
+<p>If you’ve implemented a domain transform before, the rest should be familiar to you it’s
+a case of implementing the remaining methods.</p>
+<ul class="simple">
+<li><code class="code docutils literal notranslate"><span class="pre">__init__</span></code>: We still need to take input from the user.</li>
+<li><code class="code docutils literal notranslate"><span class="pre">_repr</span></code>: We need a textual representation of the object which will be used by the
+<code class="code docutils literal notranslate"><span class="pre">__repr__</span></code> method in the base class.</li>
+<li><code class="code docutils literal notranslate"><span class="pre">_get_x</span></code>: A method to generate the <span class="math notranslate nohighlight">\(x\)</span> values, here we will implement the
+horizontal shift</li>
+<li><code class="code docutils literal notranslate"><span class="pre">_get_y</span></code>: A method to generate the <span class="math notranslate nohighlight">\(y\)</span> values, here we will implement the
+vertical shift.</li>
+</ul>
+<div class="section" id="init">
+<h3>__init__<a class="headerlink" href="#init" title="Permalink to this headline">¶</a></h3>
+<p>The <code class="code docutils literal notranslate"><span class="pre">__init__</span></code> method is pretty straightforward, it’s a case of taking a couple
+of input values from the user to represent the translation. Just don’t forget to call
+the <code class="code docutils literal notranslate"><span class="pre">__init__</span></code> method on the base class!</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">domain</span><span class="p">,</span> <span class="n">dx</span><span class="p">,</span> <span class="n">dy</span><span class="p">):</span>
+    <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">domain</span><span class="p">)</span>
+
+    <span class="bp">self</span><span class="o">.</span><span class="n">dx</span> <span class="o">=</span> <span class="n">dx</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">dy</span> <span class="o">=</span> <span class="n">dy</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="repr">
+<h3>_repr<a class="headerlink" href="#repr" title="Permalink to this headline">¶</a></h3>
+<p>Again nothing too interesting here, we need to return a string representing our
+translation to the user.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">_repr</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+   <span class="k">return</span> <span class="s2">&quot;Translation: ({}, {})&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dx</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dy</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The reason domain transforms like <code class="code docutils literal notranslate"><span class="pre">RealDomainTransform</span></code> ask you to implement
+<code class="code docutils literal notranslate"><span class="pre">_repr</span></code> and not <code class="code docutils literal notranslate"><span class="pre">__repr__</span></code> is that the base class implements
+<code class="code docutils literal notranslate"><span class="pre">__repr__</span></code> in a way that also displays that the transformation is acting upon.</p>
+</div>
+<div class="section" id="get-x">
+<h3>_get_x<a class="headerlink" href="#get-x" title="Permalink to this headline">¶</a></h3>
+<p>Here we implement the first half of the transform, the horizontal shift. First we need
+to get the <span class="math notranslate nohighlight">\(x\)</span> values from the domain we are acting on and then shift them by the
+value given to us by the user.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">_get_x</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+    <span class="n">xs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">domain</span><span class="o">.</span><span class="n">x</span>
+
+    <span class="k">def</span> <span class="nf">mk_xs</span><span class="p">(</span><span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">xs</span><span class="p">(</span><span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">)</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">dx</span>
+
+    <span class="k">return</span> <span class="n">mk_xs</span>
+</pre></div>
+</div>
+<p>Notice that we need to <em>take away</em> the value given by the user, this is so that when
+they give a positive number the shape they draw is also moved in the positive direction.</p>
+</div>
+<div class="section" id="get-y">
+<h3>_get_y<a class="headerlink" href="#get-y" title="Permalink to this headline">¶</a></h3>
+<p>Here we implement the second hald of the transform, the vertical shift. First we need to
+get the <span class="math notranslate nohighlight">\(y\)</span> values from the domain we are acting on and then shift them by the
+value given by the user.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">_get_y</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+    <span class="n">ys</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">domain</span><span class="o">.</span><span class="n">y</span>
+
+    <span class="k">def</span> <span class="nf">mk_ys</span><span class="p">(</span><span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">ys</span><span class="p">(</span><span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">)</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">dy</span>
+
+    <span class="k">return</span> <span class="n">mk_ys</span>
+</pre></div>
+</div>
+<p>Notice that we need to <em>take away</em> the value given by the user, this is so that when they
+give a positive number the shape they draw is also moved in the positive direction.</p>
+</div>
+</div>
+<div class="section" id="bringing-it-all-together">
+<h2>Bringing It All Together<a class="headerlink" href="#bringing-it-all-together" title="Permalink to this headline">¶</a></h2>
+<p>Here is the complete definition</p>
+<div class="highlight-pycon notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">translated</span> <span class="o">=</span> <span class="n">Translation</span><span class="p">(</span><span class="n">UnitSquare</span><span class="p">(),</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">translated</span>
+<span class="go">Translation: (1, 0)</span>
+<span class="go">  UnitSquare: [0, 1] x [0, 1]</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">translated</span><span class="o">.</span><span class="n">r</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
+<span class="go">array([[1.41421356, 1.20185043, 1.05409255, 1.        ],</span>
+<span class="go">       [1.20185043, 0.94280904, 0.74535599, 0.66666667],</span>
+<span class="go">       [1.05409255, 0.74535599, 0.47140452, 0.33333333],</span>
+<span class="go">       [1.        , 0.66666667, 0.33333333, 0.        ]])</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+    
+</div>
+        </div>
+        <div class="footer">
+
+            
+                <p>
+                  Powered by <a href="http://www.sphinx-doc.org/">Sphinx</a> 1.8.2 &amp;
+                  <a href="https://github.com/alcarney/topos-theme">Topos Theme</a> 0.0.10
+                </p>
+        </div>
+    </body>
+</html>

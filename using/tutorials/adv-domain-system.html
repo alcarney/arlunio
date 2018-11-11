@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+        <link href="https://fonts.googleapis.com/css?family=Nanum+Myeongjo" rel="stylesheet">
+
+        <!-- TODO: Run CSS + JS through minifiers -->
+        <link rel="stylesheet" href="../../_static/css/main.css" type="text/css" >
+        <link rel="stylesheet" href="../../_static/css/highlight.css " type="text/css" >
+
+        <script type="text/javascript" id="documentation_options"
+                data-url_root="../../"
+                src="../../_static/documentation_options.js"></script>
+        <script async
+                src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"
+                type="application/javascript"></script>
+
+        <title>An Introduction to the Domain System - Stylo v0.9.0</title>
+
+        
+    </head>
+    <body>
+        <!-- Slightly modified from the basic theme in the Sphinx repository
+        https://github.com/sphinx-doc/sphinx/blob/master/sphinx/themes/basic/layout.html -->
+
+        <div class="header">
+            <a href="../../index.html" id="site-name"><h2>Stylo<sub>v0.9.0</sub></h2></a>
+            <label class="menu-toggle" for="menu-toggle">Menu</label>
+            <input type="checkbox" id="menu-toggle">
+            <div class="nav-sections">
+                <ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">User’s Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../extending/index.html">Extending</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contributing/index.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../maths/index.html">Mathematics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/index.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../glossary.html">Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../changes.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../about.html">About the Docs</a></li>
+</ul>
+
+            </div>
+        </div>
+        <div class="nav">
+            <div>
+                <h3 class="nav-header">Page Contents</h3>
+                <ul>
+<li><a class="reference internal" href="#">An Introduction to the Domain System</a><ul>
+<li><a class="reference internal" href="#parameter-discovery">Parameter Discovery</a></li>
+<li><a class="reference internal" href="#values-from-a-single-parameter">Values from a Single Parameter</a></li>
+<li><a class="reference internal" href="#values-from-multiple-parameters">Values from Multiple Parameters</a></li>
+</ul>
+</li>
+</ul>
+
+            </div>
+            <form class="search" action="../../search.html" method="get">
+                  <input type="text" name="q" placeholder="Search"/>
+                  <input type="hidden" name="check_keywords" value="yes" />
+                  <input type="hidden" name="area" value="default" />
+            </form>
+        </div>
+        <div class="content">
+<div class="main">
+    <div class="section" id="an-introduction-to-the-domain-system">
+<span id="use-tutorial-domain-system"></span><h1>An Introduction to the Domain System<a class="headerlink" href="#an-introduction-to-the-domain-system" title="Permalink to this headline">¶</a></h1>
+<p><code class="code docutils literal notranslate"><span class="pre">Domains</span></code> are one of the fundamental concepts that make up <code class="code docutils literal notranslate"><span class="pre">stylo</span></code>, however
+most of the time they are hidden from view. You’ve probably defined a number of domains
+and passed them off to other objects but I would be surprised if you have had to
+manipulate them directly. In this tutorial we will introduce the interface that is
+common to every <code class="code docutils literal notranslate"><span class="pre">Domain</span></code> object in <code class="code docutils literal notranslate"><span class="pre">stylo</span></code>. We will also focus on the
+<code class="xref py py-class docutils literal notranslate"><span class="pre">UnitSquare</span></code> domain from the <code class="code docutils literal notranslate"><span class="pre">RealDomain</span></code> family however what will be shown
+here will hold across all domain objects and families.</p>
+<div class="highlight-pycon notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">stylo.domain</span> <span class="kn">import</span> <span class="n">UnitSquare</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">unit_square</span> <span class="o">=</span> <span class="n">UnitSquare</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">unit_square</span>
+<span class="go">UnitSquare: [0, 1] x [0, 1]</span>
+</pre></div>
+</div>
+<div class="section" id="parameter-discovery">
+<h2>Parameter Discovery<a class="headerlink" href="#parameter-discovery" title="Permalink to this headline">¶</a></h2>
+<p>Each domain object will expose one or more parameters, these will be the same for every
+domain object within the same family. These parameters correspond with some aspect of
+the mathematical domain that family represent, for example in the case of the
+<code class="code docutils literal notranslate"><span class="pre">RealDomain</span></code> family these parameters correspond with each of the coordinate
+variables that can be used to address points in space within the domain.</p>
+<p>You can find a list of these parameters in the <code class="code docutils literal notranslate"><span class="pre">parameters</span></code> attribute on any
+<code class="code docutils literal notranslate"><span class="pre">Domain</span></code> instance.</p>
+<div class="highlight-pycon notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">unit_square</span><span class="o">.</span><span class="n">parameters</span>
+<span class="go">[&#39;x&#39;, &#39;y&#39;, &#39;r&#39;, &#39;t&#39;]</span>
+</pre></div>
+</div>
+<p>Which shows us we have the following parameters available:</p>
+<ul class="simple">
+<li><code class="code docutils literal notranslate"><span class="pre">x</span></code>: This corresponds to the <span class="math notranslate nohighlight">\(x\)</span> spatial coordinate variable from the
+<a class="reference internal" href="../../glossary.html#term-cartesian-coordinates"><span class="xref std std-term">cartesian coordinate</span></a> system.</li>
+<li><code class="code docutils literal notranslate"><span class="pre">y</span></code>: This corresponds to the <span class="math notranslate nohighlight">\(y\)</span> spatial coordinate variable from the
+<a class="reference internal" href="../../glossary.html#term-cartesian-coordinates"><span class="xref std std-term">cartesian coordinate</span></a> system.</li>
+<li><code class="code docutils literal notranslate"><span class="pre">r</span></code>: This corresponds to the <span class="math notranslate nohighlight">\(r\)</span> spatial coordinate variable from the
+<a class="reference internal" href="../../glossary.html#term-polar-coordinates"><span class="xref std std-term">polar coordinate</span></a> system</li>
+<li><code class="code docutils literal notranslate"><span class="pre">t</span></code>: This corresponds to the <span class="math notranslate nohighlight">\(\theta\)</span> spatial coordinate variable
+from the <a class="reference internal" href="../../glossary.html#term-polar-coordinates"><span class="xref std std-term">polar coordinate</span></a> system</li>
+</ul>
+</div>
+<div class="section" id="values-from-a-single-parameter">
+<h2>Values from a Single Parameter<a class="headerlink" href="#values-from-a-single-parameter" title="Permalink to this headline">¶</a></h2>
+<p>Now that you know which parameters the domain exposes, you probably want to get some
+values from it. Each domain will expose each of the parameters as an attribute that
+returns a function in width and height. This is how <code class="code docutils literal notranslate"><span class="pre">stylo</span></code> converts abstract
+representations of a mathematical space into a discrete grid of data that can then be
+used to create images with.</p>
+<p>Say for example we wanted to create a <code class="code docutils literal notranslate"><span class="pre">4x4</span></code> image based on the <span class="math notranslate nohighlight">\(x\)</span>
+coordinate, we can generate the data as follows:</p>
+<div class="highlight-pycon notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">xs</span> <span class="o">=</span> <span class="n">unit_square</span><span class="o">.</span><span class="n">x</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">xs</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
+<span class="go">array([[0.        , 0.33333333, 0.66666667, 1.        ],</span>
+<span class="go">       [0.        , 0.33333333, 0.66666667, 1.        ],</span>
+<span class="go">       [0.        , 0.33333333, 0.66666667, 1.        ],</span>
+<span class="go">       [0.        , 0.33333333, 0.66666667, 1.        ]])</span>
+</pre></div>
+</div>
+<p>Alternatively we can do this in one step without the need for the <code class="code docutils literal notranslate"><span class="pre">xs</span></code> variable:</p>
+<div class="highlight-pycon notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">unit_square</span><span class="o">.</span><span class="n">x</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
+<span class="go">array([[0.        , 0.33333333, 0.66666667, 1.        ],</span>
+<span class="go">       [0.        , 0.33333333, 0.66666667, 1.        ],</span>
+<span class="go">       [0.        , 0.33333333, 0.66666667, 1.        ],</span>
+<span class="go">       [0.        , 0.33333333, 0.66666667, 1.        ]])</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="values-from-multiple-parameters">
+<h2>Values from Multiple Parameters<a class="headerlink" href="#values-from-multiple-parameters" title="Permalink to this headline">¶</a></h2>
+<p>There will be situations where you want to retrieve values from multiple parameters at
+once for example when drawing a circle. In this case you would want to know both
+the <span class="math notranslate nohighlight">\(x\)</span> and <span class="math notranslate nohighlight">\(y\)</span> values which we can retrieve using the indexing syntax.</p>
+<p>We can pass in the tuple <code class="code docutils literal notranslate"><span class="pre">('x',</span> <span class="pre">'y')</span></code> and receive a function in width and height
+- much like the case for a single parameter but now it will return a tuple containing
+both of the values we asked for.</p>
+<div class="highlight-pycon notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">values</span> <span class="o">=</span> <span class="n">unit_square</span><span class="p">[(</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">)]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">xs</span><span class="p">,</span> <span class="n">ys</span> <span class="o">=</span> <span class="n">values</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">xs</span>
+<span class="go">array([[0.        , 0.33333333, 0.66666667, 1.        ],</span>
+<span class="go">       [0.        , 0.33333333, 0.66666667, 1.        ],</span>
+<span class="go">       [0.        , 0.33333333, 0.66666667, 1.        ],</span>
+<span class="go">       [0.        , 0.33333333, 0.66666667, 1.        ]])</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ys</span>
+<span class="go">array([[1.        , 1.        , 1.        , 1.        ],</span>
+<span class="go">       [0.66666667, 0.66666667, 0.66666667, 0.66666667],</span>
+<span class="go">       [0.33333333, 0.33333333, 0.33333333, 0.33333333],</span>
+<span class="go">       [0.        , 0.        , 0.        , 0.        ]])</span>
+</pre></div>
+</div>
+<p>Notice that the values will always be returned in the order specified by you.</p>
+<div class="highlight-pycon notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ys</span><span class="p">,</span> <span class="n">xs</span> <span class="o">=</span> <span class="n">unit_square</span><span class="p">[(</span><span class="s1">&#39;y&#39;</span><span class="p">,</span> <span class="s1">&#39;x&#39;</span><span class="p">)](</span><span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ys</span>
+<span class="go">array([[1.        , 1.        , 1.        , 1.        ],</span>
+<span class="go">       [0.66666667, 0.66666667, 0.66666667, 0.66666667],</span>
+<span class="go">       [0.33333333, 0.33333333, 0.33333333, 0.33333333],</span>
+<span class="go">       [0.        , 0.        , 0.        , 0.        ]])</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">xs</span>
+<span class="go">array([[0.        , 0.33333333, 0.66666667, 1.        ],</span>
+<span class="go">       [0.        , 0.33333333, 0.66666667, 1.        ],</span>
+<span class="go">       [0.        , 0.33333333, 0.66666667, 1.        ],</span>
+<span class="go">       [0.        , 0.33333333, 0.66666667, 1.        ]])</span>
+</pre></div>
+</div>
+<div class="admonition-todo admonition" id="index-0">
+<p class="first admonition-title">Todo</p>
+<p class="last">Sum up, and link to additional domain resources.</p>
+</div>
+</div>
+</div>
+
+    
+</div>
+        </div>
+        <div class="footer">
+
+            
+                <p>
+                  Powered by <a href="http://www.sphinx-doc.org/">Sphinx</a> 1.8.2 &amp;
+                  <a href="https://github.com/alcarney/topos-theme">Topos Theme</a> 0.0.10
+                </p>
+        </div>
+    </body>
+</html>

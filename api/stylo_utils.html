@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+        <link href="https://fonts.googleapis.com/css?family=Nanum+Myeongjo" rel="stylesheet">
+
+        <!-- TODO: Run CSS + JS through minifiers -->
+        <link rel="stylesheet" href="../_static/css/main.css" type="text/css" >
+        <link rel="stylesheet" href="../_static/css/highlight.css " type="text/css" >
+
+        <script type="text/javascript" id="documentation_options"
+                data-url_root="../"
+                src="../_static/documentation_options.js"></script>
+        <script async
+                src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"
+                type="application/javascript"></script>
+
+        <title>Stylo.Utils - Stylo v0.9.0</title>
+
+        
+    </head>
+    <body>
+        <!-- Slightly modified from the basic theme in the Sphinx repository
+        https://github.com/sphinx-doc/sphinx/blob/master/sphinx/themes/basic/layout.html -->
+
+        <div class="header">
+            <a href="../index.html" id="site-name"><h2>Stylo<sub>v0.9.0</sub></h2></a>
+            <label class="menu-toggle" for="menu-toggle">Menu</label>
+            <input type="checkbox" id="menu-toggle">
+            <div class="nav-sections">
+                <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../using/index.html">User’s Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../extending/index.html">Extending</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contributing/index.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../maths/index.html">Mathematics</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../glossary.html">Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changes.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../about.html">About the Docs</a></li>
+</ul>
+
+            </div>
+        </div>
+        <div class="nav">
+            <div>
+                <h3 class="nav-header">Page Contents</h3>
+                <ul>
+<li><a class="reference internal" href="#">Stylo.Utils</a></li>
+</ul>
+
+            </div>
+            <form class="search" action="../search.html" method="get">
+                  <input type="text" name="q" placeholder="Search"/>
+                  <input type="hidden" name="check_keywords" value="yes" />
+                  <input type="hidden" name="area" value="default" />
+            </form>
+        </div>
+        <div class="content">
+<div class="main">
+    <div class="section" id="module-stylo.utils">
+<span id="id1"></span><span id="stylo-utils"></span><h1>Stylo.Utils<a class="headerlink" href="#module-stylo.utils" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="stylo.utils.MessageBus">
+<em class="property">class </em><code class="descclassname">stylo.utils.</code><code class="descname">MessageBus</code><a class="reference internal" href="../_modules/stylo/utils.html#MessageBus"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#stylo.utils.MessageBus" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>A class that is used behind the scenes to coordinate events and timings of
+animations.</p>
+<dl class="method">
+<dt id="stylo.utils.MessageBus.new_id">
+<code class="descname">new_id</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/stylo/utils.html#MessageBus.new_id"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#stylo.utils.MessageBus.new_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>Use this to get a name to use for your events.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="stylo.utils.MessageBus.register">
+<code class="descname">register</code><span class="sig-paren">(</span><em>event</em>, <em>obj</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/stylo/utils.html#MessageBus.register"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#stylo.utils.MessageBus.register" title="Permalink to this definition">¶</a></dt>
+<dd><p>Register to receive notifications of an event.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>event</strong> – The name of the kind of event to receive</li>
+<li><strong>obj</strong> – The object to receive that kind of message.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="stylo.utils.MessageBus.send">
+<code class="descname">send</code><span class="sig-paren">(</span><em>event</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/stylo/utils.html#MessageBus.send"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#stylo.utils.MessageBus.send" title="Permalink to this definition">¶</a></dt>
+<dd><p>Send a message to whoever may be listening.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="stylo.utils.bounded_property">
+<code class="descclassname">stylo.utils.</code><code class="descname">bounded_property</code><span class="sig-paren">(</span><em>name</em>, <em>bounded_above=None</em>, <em>bounded_above_by=None</em>, <em>bounded_below=None</em>, <em>bounded_below_by=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/stylo/utils.html#bounded_property"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#stylo.utils.bounded_property" title="Permalink to this definition">¶</a></dt>
+<dd><p>Factory function to define a bounded property.</p>
+<p>This function writes a property definition for a numeric bounded property.
+It can be bounded above, below or both and the bound can either be a given
+number or another attribute/property on the same class.</p>
+<p>The bound can be specified by a constant numeric value e.g. <code class="code docutils literal notranslate"><span class="pre">1</span></code> or
+<code class="code docutils literal notranslate"><span class="pre">2.4</span></code> in which case you use the <code class="code docutils literal notranslate"><span class="pre">bounded_above</span></code> and
+<code class="code docutils literal notranslate"><span class="pre">bounded_below</span></code> arguments.</p>
+<p>Alternatively to specify the bound as the value of an attribute on the
+same class then use the <code class="code docutils literal notranslate"><span class="pre">bounded_above_by</span></code> and <code class="code docutils literal notranslate"><span class="pre">bounded_below_by</span></code>
+arugments and pass in the name of the attribute as a string.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">You cannot simultaneously use the <code class="code docutils literal notranslate"><span class="pre">bounded_xxx</span></code> and
+<code class="code docutils literal notranslate"><span class="pre">bounded_xxx_by</span></code> version of an argument.</p>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – The name of the property</li>
+<li><strong>bounded_above</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.7)"><em>float</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a>) – The value to bound the property above by. This cannot
+be used in conjunction with <code class="code docutils literal notranslate"><span class="pre">bounded_above_by</span></code></li>
+<li><strong>bounded_below</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.7)"><em>float</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a>) – The value to bound the property below by. This cannot
+be used in conjunction with <code class="code docutils literal notranslate"><span class="pre">bounded_below_by</span></code></li>
+<li><strong>bounded_above_by</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – The name of the attribute to bound the value by. This
+cannot be used in conjunction with <code class="code docutils literal notranslate"><span class="pre">bounded_above</span></code></li>
+<li><strong>bounded_below_by</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – The name of the attribute to bound the value by. This
+cannot be used in conjunction with <code class="code docutils literal notranslate"><span class="pre">bounded_below</span></code>.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first simple">
+<li><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.7)"><strong>ValueError</strong></a> – If the given arguments are inconsistent in some way.</li>
+<li><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#TypeError" title="(in Python v3.7)"><strong>TypeError</strong></a> – If the given arguments do not have their expected types</li>
+</ul>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">The constructed property instance</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="stylo.utils.get_message_bus">
+<code class="descclassname">stylo.utils.</code><code class="descname">get_message_bus</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/stylo/utils.html#get_message_bus"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#stylo.utils.get_message_bus" title="Permalink to this definition">¶</a></dt>
+<dd><p>A function that returns an instance of the message bus to ensure everyone uses
+the same instance.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="stylo.utils.get_parameters">
+<code class="descclassname">stylo.utils.</code><code class="descname">get_parameters</code><span class="sig-paren">(</span><em>f</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/stylo/utils.html#get_parameters"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#stylo.utils.get_parameters" title="Permalink to this definition">¶</a></dt>
+<dd><p>Given a function f, return a tuple of all its
+parameters</p>
+</dd></dl>
+
+</div>
+
+    
+</div>
+        </div>
+        <div class="footer">
+
+            
+                <p>
+                  Powered by <a href="http://www.sphinx-doc.org/">Sphinx</a> 1.8.2 &amp;
+                  <a href="https://github.com/alcarney/topos-theme">Topos Theme</a> 0.0.10
+                </p>
+        </div>
+    </body>
+</html>

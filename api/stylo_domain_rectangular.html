@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+        <link href="https://fonts.googleapis.com/css?family=Nanum+Myeongjo" rel="stylesheet">
+
+        <!-- TODO: Run CSS + JS through minifiers -->
+        <link rel="stylesheet" href="../_static/css/main.css" type="text/css" >
+        <link rel="stylesheet" href="../_static/css/highlight.css " type="text/css" >
+
+        <script type="text/javascript" id="documentation_options"
+                data-url_root="../"
+                src="../_static/documentation_options.js"></script>
+        <script async
+                src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"
+                type="application/javascript"></script>
+
+        <title>Stylo.Domain.Rectangular - Stylo v0.9.0</title>
+
+        
+    </head>
+    <body>
+        <!-- Slightly modified from the basic theme in the Sphinx repository
+        https://github.com/sphinx-doc/sphinx/blob/master/sphinx/themes/basic/layout.html -->
+
+        <div class="header">
+            <a href="../index.html" id="site-name"><h2>Stylo<sub>v0.9.0</sub></h2></a>
+            <label class="menu-toggle" for="menu-toggle">Menu</label>
+            <input type="checkbox" id="menu-toggle">
+            <div class="nav-sections">
+                <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../using/index.html">User’s Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../extending/index.html">Extending</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contributing/index.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../maths/index.html">Mathematics</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../glossary.html">Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changes.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../about.html">About the Docs</a></li>
+</ul>
+
+            </div>
+        </div>
+        <div class="nav">
+            <div>
+                <h3 class="nav-header">Page Contents</h3>
+                <ul>
+<li><a class="reference internal" href="#">Stylo.Domain.Rectangular</a></li>
+</ul>
+
+            </div>
+            <form class="search" action="../search.html" method="get">
+                  <input type="text" name="q" placeholder="Search"/>
+                  <input type="hidden" name="check_keywords" value="yes" />
+                  <input type="hidden" name="area" value="default" />
+            </form>
+        </div>
+        <div class="content">
+<div class="main">
+    <div class="section" id="module-stylo.domain.rectangular">
+<span id="id1"></span><span id="stylo-domain-rectangular"></span><h1>Stylo.Domain.Rectangular<a class="headerlink" href="#module-stylo.domain.rectangular" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="stylo.domain.rectangular.RectangularDomain">
+<em class="property">class </em><code class="descclassname">stylo.domain.rectangular.</code><code class="descname">RectangularDomain</code><span class="sig-paren">(</span><em>xmin</em>, <em>xmax</em>, <em>ymin</em>, <em>ymax</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/stylo/domain/rectangular.html#RectangularDomain"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#stylo.domain.rectangular.RectangularDomain" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="stylo_domain_helpers.html#stylo.domain.helpers.PolarConversion" title="stylo.domain.helpers.PolarConversion"><code class="xref py py-class docutils literal notranslate"><span class="pre">stylo.domain.helpers.PolarConversion</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">abc.RealDomain</span></code></p>
+<p>A domain of the form <span class="math notranslate nohighlight">\([a, b] \times [c, d] \subset \mathbb{R}^2\)</span></p>
+<dl class="attribute">
+<dt id="stylo.domain.rectangular.RectangularDomain._abc_cache">
+<code class="descname">_abc_cache</code><em class="property"> = &lt;_weakrefset.WeakSet object&gt;</em><a class="headerlink" href="#stylo.domain.rectangular.RectangularDomain._abc_cache" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="stylo.domain.rectangular.RectangularDomain._abc_negative_cache">
+<code class="descname">_abc_negative_cache</code><em class="property"> = &lt;_weakrefset.WeakSet object&gt;</em><a class="headerlink" href="#stylo.domain.rectangular.RectangularDomain._abc_negative_cache" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="stylo.domain.rectangular.RectangularDomain._abc_negative_cache_version">
+<code class="descname">_abc_negative_cache_version</code><em class="property"> = 47</em><a class="headerlink" href="#stylo.domain.rectangular.RectangularDomain._abc_negative_cache_version" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="stylo.domain.rectangular.RectangularDomain._abc_registry">
+<code class="descname">_abc_registry</code><em class="property"> = &lt;_weakrefset.WeakSet object&gt;</em><a class="headerlink" href="#stylo.domain.rectangular.RectangularDomain._abc_registry" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="stylo.domain.rectangular.RectangularDomain._get_x">
+<code class="descname">_get_x</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/stylo/domain/rectangular.html#RectangularDomain._get_x"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#stylo.domain.rectangular.RectangularDomain._get_x" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="stylo.domain.rectangular.RectangularDomain._get_y">
+<code class="descname">_get_y</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/stylo/domain/rectangular.html#RectangularDomain._get_y"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#stylo.domain.rectangular.RectangularDomain._get_y" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="stylo.domain.rectangular.RectangularDomain.xmax">
+<code class="descname">xmax</code><a class="headerlink" href="#stylo.domain.rectangular.RectangularDomain.xmax" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="stylo.domain.rectangular.RectangularDomain.xmin">
+<code class="descname">xmin</code><a class="headerlink" href="#stylo.domain.rectangular.RectangularDomain.xmin" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="stylo.domain.rectangular.RectangularDomain.ymax">
+<code class="descname">ymax</code><a class="headerlink" href="#stylo.domain.rectangular.RectangularDomain.ymax" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="stylo.domain.rectangular.RectangularDomain.ymin">
+<code class="descname">ymin</code><a class="headerlink" href="#stylo.domain.rectangular.RectangularDomain.ymin" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="stylo.domain.rectangular.get_real_domain">
+<code class="descclassname">stylo.domain.rectangular.</code><code class="descname">get_real_domain</code><span class="sig-paren">(</span><em>width</em>, <em>height</em>, <em>scale=2</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/stylo/domain/rectangular.html#get_real_domain"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#stylo.domain.rectangular.get_real_domain" title="Permalink to this definition">¶</a></dt>
+<dd><p>Given the width and height for an image return a rectangular domain with
+appropriate bounds for the image’s aspect ratio.</p>
+<p>So that shapes are not distorted when mapped onto non-square images the domain they
+are mapped onto needs to match the aspect ratio of the image otherwise the shape
+will be distorted in some way.</p>
+<p>This function will construct a RectangularDomain domain with <span class="math notranslate nohighlight">\((0, 0)\)</span> at the
+centre of the image, the overall size of the domain can be controlled with the
+<code class="code docutils literal notranslate"><span class="pre">scale</span></code> parameter</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>width</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a>) – The width of the image in pixels</li>
+<li><strong>height</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a>) – The height of the image in pixels</li>
+<li><strong>scale</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.7)"><em>float</em></a>) – This constrols the size of the domain and corresponds to the length of
+the interval <span class="math notranslate nohighlight">\([ymin, ymax]\)</span></li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">An appropriately sized domain.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#stylo.domain.rectangular.RectangularDomain" title="stylo.domain.rectangular.RectangularDomain">RectangularDomain</a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+
+    
+</div>
+        </div>
+        <div class="footer">
+
+            
+                <p>
+                  Powered by <a href="http://www.sphinx-doc.org/">Sphinx</a> 1.8.2 &amp;
+                  <a href="https://github.com/alcarney/topos-theme">Topos Theme</a> 0.0.10
+                </p>
+        </div>
+    </body>
+</html>

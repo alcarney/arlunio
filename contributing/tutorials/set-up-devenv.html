@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+        <link href="https://fonts.googleapis.com/css?family=Nanum+Myeongjo" rel="stylesheet">
+
+        <!-- TODO: Run CSS + JS through minifiers -->
+        <link rel="stylesheet" href="../../_static/css/main.css" type="text/css" >
+        <link rel="stylesheet" href="../../_static/css/highlight.css " type="text/css" >
+
+        <script type="text/javascript" id="documentation_options"
+                data-url_root="../../"
+                src="../../_static/documentation_options.js"></script>
+        <script async
+                src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"
+                type="application/javascript"></script>
+
+        <title>Setup the Development Environment - Stylo v0.9.0</title>
+
+        
+    </head>
+    <body>
+        <!-- Slightly modified from the basic theme in the Sphinx repository
+        https://github.com/sphinx-doc/sphinx/blob/master/sphinx/themes/basic/layout.html -->
+
+        <div class="header">
+            <a href="../../index.html" id="site-name"><h2>Stylo<sub>v0.9.0</sub></h2></a>
+            <label class="menu-toggle" for="menu-toggle">Menu</label>
+            <input type="checkbox" id="menu-toggle">
+            <div class="nav-sections">
+                <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../using/index.html">User’s Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../extending/index.html">Extending</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../maths/index.html">Mathematics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/index.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../glossary.html">Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../changes.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../about.html">About the Docs</a></li>
+</ul>
+
+            </div>
+        </div>
+        <div class="nav">
+            <div>
+                <h3 class="nav-header">Page Contents</h3>
+                <ul>
+<li><a class="reference internal" href="#">Setup the Development Environment</a><ul>
+<li><a class="reference internal" href="#before-we-start">Before we Start</a></li>
+<li><a class="reference internal" href="#using-a-script">Using a Script</a></li>
+<li><a class="reference internal" href="#manually">Manually</a></li>
+</ul>
+</li>
+</ul>
+
+            </div>
+            <form class="search" action="../../search.html" method="get">
+                  <input type="text" name="q" placeholder="Search"/>
+                  <input type="hidden" name="check_keywords" value="yes" />
+                  <input type="hidden" name="area" value="default" />
+            </form>
+        </div>
+        <div class="content">
+<div class="main">
+    <div class="section" id="setup-the-development-environment">
+<span id="contribute-tutorial-devenv-setup"></span><h1>Setup the Development Environment<a class="headerlink" href="#setup-the-development-environment" title="Permalink to this headline">¶</a></h1>
+<p>Before you can build the documentation or run the code and the tests you need to
+have setup your development environment so that all the tools you need are
+installed and configured.</p>
+<div class="admonition-todo admonition" id="index-0">
+<p class="first admonition-title">Todo</p>
+<p class="last">This guide is currently heavily biased towards UNIX style systems chances are
+portions of this guide won’t work on Windows. We probably should have a
+Windows setup guide at some point.</p>
+</div>
+<div class="section" id="before-we-start">
+<h2>Before we Start<a class="headerlink" href="#before-we-start" title="Permalink to this headline">¶</a></h2>
+<p>This guide assumes that:</p>
+<ul class="simple">
+<li>You have <a class="reference internal" href="fork-the-repo.html#contribute-tutorial-fork-repository"><span class="std std-ref">forked</span></a> the repository</li>
+<li>You have Python 3.6 or newer installed.</li>
+<li>You are comfortable using the command line.</li>
+</ul>
+<p>There are currently two supported methods of setting up your development
+environment.</p>
+<ul class="simple">
+<li><a class="reference internal" href="#contribute-tutorial-devenv-setup-script"><span class="std std-ref">Using a Script</span></a></li>
+<li><a class="reference internal" href="#contribute-tutorial-devenv-manual"><span class="std std-ref">Manually</span></a></li>
+</ul>
+<p>The goal of the script is to lower the barrier to getting people contributing to
+<code class="code docutils literal notranslate"><span class="pre">stylo</span></code>. Having a single command to run can be much more approachable than
+having to run half a dozen of them. Additionally by using a script everyone
+should end up with exactly the same setup - at least that is the theory.</p>
+<p>On the other hand the script may not work for you or some people may feel better
+doing the setup by hand as they want to know how things fit together or don’t
+like the idea of running some script they found on the internet. That is why we
+also have the manual process, it does exactly the same steps as the script but
+it’s a lot more transparent.</p>
+<p>At the end of the day, whichever approach you take we will happily support you
+either way - everyone’s system is different so there are bound to be a few
+issues now and then.</p>
+</div>
+<div class="section" id="using-a-script">
+<span id="contribute-tutorial-devenv-setup-script"></span><h2>Using a Script<a class="headerlink" href="#using-a-script" title="Permalink to this headline">¶</a></h2>
+<p>To setup your environment using the script from the root of the repository run
+the following command.</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>$ ./scripts/devenv-setup.sh
+</pre></div>
+</div>
+<p>The script will do the following:</p>
+<ul class="simple">
+<li>Check to see that you have a compatible version of Python installed.</li>
+<li>If you don’t have <a class="reference external" href="https://github.com/pypa/pipenv">Pipenv</a> installed it will install it using the command
+<code class="code docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">--user</span> <span class="pre">pipenv</span></code></li>
+<li>It will then use pipenv to create a virtual environment and install all the
+runtime and development dependencies into it.</li>
+<li>One of these dependencies is <a class="reference external" href="https://pre-commit.com/">pre-commit</a> the script configures it to
+run some checks automatically whenever you make a commit.</li>
+<li>Finally as a check to make sure everything is setup correctly, the script will
+do a complete build of the documentation. See <a class="reference internal" href="../reference/documentation-build.html#contribute-ref-docs-build"><span class="std std-ref">The Documentation Build Process</span></a>
+for more details on this process.</li>
+</ul>
+</div>
+<div class="section" id="manually">
+<span id="contribute-tutorial-devenv-manual"></span><h2>Manually<a class="headerlink" href="#manually" title="Permalink to this headline">¶</a></h2>
+<p>The manual setup follows the same process as the script above, the only
+difference is that you will be running each of the commands and not the script.</p>
+<ol class="arabic">
+<li><p class="first">The first step is to make sure you have <a class="reference external" href="https://github.com/pypa/pipenv">Pipenv</a> installed. Pipenv is a tool
+that brings together the management of <a class="reference internal" href="../../glossary.html#term-virtual-environments"><span class="xref std std-term">virtual environments</span></a> and
+project dependencies into a single command.</p>
+<p>Pipenv can be installed using the following command.</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>$ pip install --user pipenv
+</pre></div>
+</div>
+</li>
+<li><p class="first">Next use pipenv to create a virtual environment for the project and install
+all the runtime and development dependencies into it with the following
+command. This should be run from the root of the repository</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>$ pipenv install --dev
+</pre></div>
+</div>
+</li>
+<li><p class="first">The next two commands need to be run from inside your virtual environment so
+we can activate it as follows:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>$ pipenv shell
+</pre></div>
+</div>
+</li>
+<li><p class="first">Next we need to setup <a class="reference external" href="https://pre-commit.com/">pre-commit</a> to run a few checks for us each time we
+make a commit. But we need to tell it your Python version so open up the
+<code class="code docutils literal notranslate"><span class="pre">.pre-commit-config.yaml</span></code> file and change the following line</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">language_version</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">python3.7</span>
+</pre></div>
+</div>
+<p>to match your installed version of Python and then setup pre-commit with the
+command</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span><span class="o">(</span>stylo-xyz123<span class="o">)</span> $ pre-commit install
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Your prompt should look similar to the above as it indicates that your
+virtual environment is active. You can deactivate your virtual environment
+by running the command <code class="code docutils literal notranslate"><span class="pre">exit</span></code></p>
+</div>
+</li>
+<li><p class="first">Finally start a build of the documentation to ensure everything is working as
+expected</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span><span class="o">(</span>stylo-xyz123<span class="o">)</span> $ tox -q -e docs-build
+</pre></div>
+</div>
+</li>
+</ol>
+<p>That’s it! You should now have a functioning development environment and you can
+start working on your contribution! Be sure to check out
+<a class="reference internal" href="../reference/branching-policy.html#contribute-ref-branching"><span class="std std-ref">The Branching Policy</span></a> so that there are no surprises when it comes to
+merging in your work when it is ready</p>
+</div>
+</div>
+
+    
+</div>
+        </div>
+        <div class="footer">
+
+            
+                <p>
+                  Powered by <a href="http://www.sphinx-doc.org/">Sphinx</a> 1.8.2 &amp;
+                  <a href="https://github.com/alcarney/topos-theme">Topos Theme</a> 0.0.10
+                </p>
+        </div>
+    </body>
+</html>

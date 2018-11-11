@@ -1,0 +1,13 @@
+
+
+.. _stylo_image_layered:
+
+Stylo.Image.Layered
+===================
+
+.. automodule:: stylo.image.layered
+   :members:
+   :undoc-members:
+   :private-members:
+   :show-inheritance:
+

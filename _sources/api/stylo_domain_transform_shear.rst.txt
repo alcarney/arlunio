@@ -1,0 +1,13 @@
+
+
+.. _stylo_domain_transform_shear:
+
+Stylo.Domain.Transform.Shear
+============================
+
+.. automodule:: stylo.domain.transform.shear
+   :members:
+   :undoc-members:
+   :private-members:
+   :show-inheritance:
+

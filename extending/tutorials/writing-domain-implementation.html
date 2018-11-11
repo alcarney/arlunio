@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+        <link href="https://fonts.googleapis.com/css?family=Nanum+Myeongjo" rel="stylesheet">
+
+        <!-- TODO: Run CSS + JS through minifiers -->
+        <link rel="stylesheet" href="../../_static/css/main.css" type="text/css" >
+        <link rel="stylesheet" href="../../_static/css/highlight.css " type="text/css" >
+
+        <script type="text/javascript" id="documentation_options"
+                data-url_root="../../"
+                src="../../_static/documentation_options.js"></script>
+        <script async
+                src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"
+                type="application/javascript"></script>
+
+        <title>Writing a Domain Implementation - Stylo v0.9.0</title>
+
+        
+    </head>
+    <body>
+        <!-- Slightly modified from the basic theme in the Sphinx repository
+        https://github.com/sphinx-doc/sphinx/blob/master/sphinx/themes/basic/layout.html -->
+
+        <div class="header">
+            <a href="../../index.html" id="site-name"><h2>Stylo<sub>v0.9.0</sub></h2></a>
+            <label class="menu-toggle" for="menu-toggle">Menu</label>
+            <input type="checkbox" id="menu-toggle">
+            <div class="nav-sections">
+                <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../using/index.html">User’s Guide</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">Extending</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contributing/index.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../maths/index.html">Mathematics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/index.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../glossary.html">Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../changes.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../about.html">About the Docs</a></li>
+</ul>
+
+            </div>
+        </div>
+        <div class="nav">
+            <div>
+                <h3 class="nav-header">Page Contents</h3>
+                <ul>
+<li><a class="reference internal" href="#">Writing a Domain Implementation</a><ul>
+<li><a class="reference internal" href="#first-steps">First Steps</a></li>
+<li><a class="reference internal" href="#generating-values">Generating Values</a><ul>
+<li><a class="reference internal" href="#get-x">_get_x</a></li>
+<li><a class="reference internal" href="#get-y">_get_y</a></li>
+<li><a class="reference internal" href="#get-r">_get_r</a></li>
+<li><a class="reference internal" href="#get-t">_get_t</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#further-resources">Further Resources</a><ul>
+<li><a class="reference internal" href="#conversion-tools">Conversion Tools</a></li>
+<li><a class="reference internal" href="#testing-tools">Testing Tools</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#bringing-it-all-together">Bringing It All Together</a></li>
+</ul>
+</li>
+</ul>
+
+            </div>
+            <form class="search" action="../../search.html" method="get">
+                  <input type="text" name="q" placeholder="Search"/>
+                  <input type="hidden" name="check_keywords" value="yes" />
+                  <input type="hidden" name="area" value="default" />
+            </form>
+        </div>
+        <div class="content">
+<div class="main">
+    <div class="section" id="writing-a-domain-implementation">
+<span id="extend-tutorial-domain-implementation"></span><h1>Writing a Domain Implementation<a class="headerlink" href="#writing-a-domain-implementation" title="Permalink to this headline">¶</a></h1>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">This tutorial is for writing a domain implementation for an existing family of domain
+objects. If you are looking to create your own family of domains please refer to this
+tutorial.</p>
+</div>
+<div class="admonition-todo admonition" id="index-0">
+<p class="first admonition-title">Todo</p>
+<p class="last">Write this tutorial.</p>
+</div>
+<p><code class="code docutils literal notranslate"><span class="pre">Domain</span></code> classes such as <code class="code docutils literal notranslate"><span class="pre">RealDomain</span></code> define an interface common to all
+domain objects, by basing your class on one of these bases you do get some code for free.
+However you still need to generate the data yourself and it needs to be done in a way
+that the base class understands.</p>
+<p>In this tutorial we’ll outline how to implement your own domain as part of
+the <code class="code docutils literal notranslate"><span class="pre">RealDomain</span></code> family by creating our own version of the
+<a class="reference internal" href="../../api/stylo_domain_square.html#stylo.domain.square.SquareDomain" title="stylo.domain.square.SquareDomain"><code class="xref py py-class docutils literal notranslate"><span class="pre">SquareDomain</span></code></a> class which models the
+following mathematical domain.</p>
+<div class="math notranslate nohighlight">
+\[[a, b] \times [a, b]\, a, b \in \mathbb{R}\]</div>
+<p>This tutorial assumes that you are already familiar with the basics of domains and how
+a user typically interacts with them. It also assumes that you are familiar with the
+<a class="reference external" href="https://www.numpy.org">numpy</a> library. If needed you can refer to the following tutorials:</p>
+<ul class="simple">
+<li><a class="reference internal" href="../../using/tutorials/adv-domain-system.html#use-tutorial-domain-system"><span class="std std-ref">An Introduction to the Domain System</span></a></li>
+</ul>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Although this tutorial focuses on writing implementations for the <code class="code docutils literal notranslate"><span class="pre">RealDomain</span></code>
+family the process is very similar for other families.</p>
+</div>
+<p>You can refer to the complete implementation in the
+<a class="reference internal" href="#extend-tutorial-domain-implementation-complete"><span class="std std-ref">Bringing It All Together</span></a> section</p>
+<div class="section" id="first-steps">
+<h2>First Steps<a class="headerlink" href="#first-steps" title="Permalink to this headline">¶</a></h2>
+<p>The first step in implementing our domain is to import the <code class="code docutils literal notranslate"><span class="pre">RealDomain</span></code> class and
+subclass it</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">stylo.domain</span> <span class="kn">import</span> <span class="n">RealDomain</span>
+
+<span class="k">class</span> <span class="nc">SquareDomain</span><span class="p">(</span><span class="n">RealDomain</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">a</span> <span class="o">=</span> <span class="n">a</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">b</span> <span class="o">=</span> <span class="n">b</span>
+</pre></div>
+</div>
+<p>Since <code class="code docutils literal notranslate"><span class="pre">RealDomain</span></code> is an abstract class with undefined methods if we tried to
+create an instance of our class we would find that it would throw an error:</p>
+<div class="highlight-pycon notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">square</span> <span class="o">=</span> <span class="n">SquareDomain</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="gt">Traceback (most recent call last):</span>
+    <span class="o">...</span>
+<span class="gr">TypeError</span>: <span class="n">Can&#39;t instantiate abstract class SquareDomain with abstract methods _get_r, _get_t, _get_x, _get_y</span>
+</pre></div>
+</div>
+<p>The error message will tell us the methods we need to implement in order to integrate
+with the code contained in the base class. In our case we need to implement a
+method to return values for each of the exposed domain parameters.</p>
+<p>If you want to be able to try out your domain as you go, then you can create dummy
+implementations of each of the methods so you can at least create an instance of your
+class</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">stylo.domain</span> <span class="kn">import</span> <span class="n">RealDomain</span>
+
+<span class="k">class</span> <span class="nc">SquareDomain</span><span class="p">(</span><span class="n">RealDomain</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">a</span> <span class="o">=</span> <span class="n">a</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">b</span> <span class="o">=</span> <span class="n">b</span>
+
+    <span class="k">def</span> <span class="nf">_get_x</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">pass</span>
+
+    <span class="k">def</span> <span class="nf">_get_y</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">pass</span>
+
+    <span class="k">def</span> <span class="nf">_get_r</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">pass</span>
+
+    <span class="k">def</span> <span class="nf">_get_t</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">pass</span>
+
+<span class="n">square</span> <span class="o">=</span> <span class="n">SquareDomain</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Note however that the domain doesn’t return anything.</p>
+<div class="highlight-pycon notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">square</span><span class="o">.</span><span class="n">x</span>
+<span class="go">&gt;&gt;&gt;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="generating-values">
+<h2>Generating Values<a class="headerlink" href="#generating-values" title="Permalink to this headline">¶</a></h2>
+<p>The <code class="code docutils literal notranslate"><span class="pre">_get_***</span></code> methods are called by the <code class="code docutils literal notranslate"><span class="pre">RealDomain</span></code> class behind the
+scenes when a user accesses the corresponding parameter. This means that each of these
+methods need to return:</p>
+<ul class="simple">
+<li>A function that takes the arguments <code class="code docutils literal notranslate"><span class="pre">(width,</span> <span class="pre">height)</span></code></li>
+<li>When called this function has to return a numpy array</li>
+<li>The array must have the shape <code class="code docutils literal notranslate"><span class="pre">(height,</span> <span class="pre">width)</span></code>.</li>
+</ul>
+<p>The above constraints mean that each of the <code class="code docutils literal notranslate"><span class="pre">_get_***</span></code> methods typically
+have the following structure:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">_get_x</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+    <span class="c1"># Preprocessing steps can go here</span>
+
+    <span class="k">def</span> <span class="nf">mk_xs</span><span class="p">(</span><span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">):</span>
+        <span class="c1"># Construction of the domain goes here.</span>
+        <span class="k">return</span> <span class="n">xs</span>
+
+    <span class="k">return</span> <span class="n">mk_xs</span>
+</pre></div>
+</div>
+<p>The actual values to be returned are free for us to decide. We’ll take our time
+and implement <code class="code docutils literal notranslate"><span class="pre">_get_x</span></code> first, then move through each of the others a bit
+quicker.</p>
+<div class="section" id="get-x">
+<h3>_get_x<a class="headerlink" href="#get-x" title="Permalink to this headline">¶</a></h3>
+<p>The <span class="math notranslate nohighlight">\(x\)</span> values change as we move from left to right across the image with the
+leftmost pixel taking the user’s start value (<span class="math notranslate nohighlight">\(a\)</span>). Similarly the rightmost pixel
+will take the user’s end value (<span class="math notranslate nohighlight">\(b\)</span>). There are a number of ways we could
+interpolate between these values but it probably makes sense to do so linearly - although
+other schemes might give us some interesting results!</p>
+<p>Thankfully there is a numpy function <a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.linspace.html#numpy.linspace" title="(in NumPy v1.15)"><code class="xref py py-func docutils literal notranslate"><span class="pre">np.linspace</span></code></a> that does this
+for us, so constructing a row of pixels is quite straightforward:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">row</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">a</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">b</span><span class="p">,</span> <span class="n">width</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Since <span class="math notranslate nohighlight">\(x\)</span> values don’t change as we move up and down an image we only need to
+duplicate the row <code class="code docutils literal notranslate"><span class="pre">height</span></code> times and package it up into a numpy array.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">xs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">row</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">height</span><span class="p">)])</span>
+</pre></div>
+</div>
+<p>Which when combined with the general structure outlined above we get the complete
+definition for <code class="code docutils literal notranslate"><span class="pre">_get_x</span></code>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">_get_x</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="nf">mk_xs</span><span class="p">(</span><span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">):</span>
+
+        <span class="n">row</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">a</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">b</span><span class="p">,</span> <span class="n">width</span><span class="p">)</span>
+        <span class="n">xs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">row</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">height</span><span class="p">)])</span>
+        <span class="k">return</span> <span class="n">xs</span>
+
+    <span class="k">return</span> <span class="n">mk_xs</span>
+</pre></div>
+</div>
+<p>Now if we try our class out we’ll see that it returns the <span class="math notranslate nohighlight">\(x\)</span> values as expected.</p>
+<div class="highlight-pycon notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">square</span> <span class="o">=</span> <span class="n">SquareDomain</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">square</span><span class="o">.</span><span class="n">x</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
+<span class="go">array([[2.        , 2.33333333, 2.66666667, 3.        ],</span>
+<span class="go">       [2.        , 2.33333333, 2.66666667, 3.        ],</span>
+<span class="go">       [2.        , 2.33333333, 2.66666667, 3.        ],</span>
+<span class="go">       [2.        , 2.33333333, 2.66666667, 3.        ]])</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="get-y">
+<h3>_get_y<a class="headerlink" href="#get-y" title="Permalink to this headline">¶</a></h3>
+<p>The implementation for the <span class="math notranslate nohighlight">\(y\)</span> values is almost identical to the <span class="math notranslate nohighlight">\(x\)</span> values,
+except this time the values change as we move up and down the image so the roles of
+<code class="code docutils literal notranslate"><span class="pre">height</span></code> and <code class="code docutils literal notranslate"><span class="pre">width</span></code> from the previous example switch. We also need to
+<a class="reference internal" href="../../glossary.html#term-transpose"><span class="xref std std-term">transpose</span></a> the resulting array so that the values we’ve called <code class="code docutils literal notranslate"><span class="pre">col</span></code>
+actually appear as a column in the final array.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">_get_y</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="nf">mk_ys</span><span class="p">(</span><span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">):</span>
+
+        <span class="n">col</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">b</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">a</span><span class="p">,</span> <span class="n">height</span><span class="p">)</span>
+        <span class="n">ys</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">col</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">width</span><span class="p">)])</span>
+        <span class="k">return</span> <span class="n">ys</span><span class="o">.</span><span class="n">transpose</span><span class="p">()</span>
+
+    <span class="k">return</span> <span class="n">mk_ys</span>
+</pre></div>
+</div>
+<div class="admonition important">
+<p class="first admonition-title">Important</p>
+<p class="last">So that the image doesn’t appear upside down, the <span class="math notranslate nohighlight">\(y\)</span> values need to start at
+the final value (<span class="math notranslate nohighlight">\(b\)</span>) and end with the inital value (<span class="math notranslate nohighlight">\(a\)</span>).</p>
+</div>
+<p>If you are following along you should now see that the <code class="code docutils literal notranslate"><span class="pre">y</span></code> parameter now also
+returns values:</p>
+<div class="highlight-pycon notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">square</span> <span class="o">=</span> <span class="n">SquareDomain</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">square</span><span class="o">.</span><span class="n">y</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
+<span class="go">array([[1.        , 1.        , 1.        , 1.        ],</span>
+<span class="go">       [0.66666667, 0.66666667, 0.66666667, 0.66666667],</span>
+<span class="go">       [0.33333333, 0.33333333, 0.33333333, 0.33333333],</span>
+<span class="go">       [0.        , 0.        , 0.        , 0.        ]])</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="get-r">
+<h3>_get_r<a class="headerlink" href="#get-r" title="Permalink to this headline">¶</a></h3>
+<p>The next two methods may be a little unfamiliar to you if you haven’t come across
+<a class="reference internal" href="../../glossary.html#term-polar-coordinates"><span class="xref std std-term">polar coordinates</span></a> before. It’s an alternate system for representing a point in
+space based on the distance a point is from the origin and the angle it makes with the
+<span class="math notranslate nohighlight">\(x\)</span>-axis. For more details check out the <a class="reference internal" href="../../maths/polar-coordinates.html#math-polar-coordinates"><span class="std std-ref">Polar Coordinate System</span></a> page.</p>
+<p>Since we have already implemented functions for generating <span class="math notranslate nohighlight">\(x\)</span> and <span class="math notranslate nohighlight">\(y\)</span>
+values and we know how to convert between the different coordinate systems it makes
+sense to use the following formula:</p>
+<div class="math notranslate nohighlight">
+\[r = \sqrt{x^2 + y^2}\]</div>
+<p>By using numpy’s <a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.sqrt.html#numpy.sqrt" title="(in NumPy v1.15)"><code class="xref py py-data docutils literal notranslate"><span class="pre">np.sqrt</span></code></a> function, calculating the square
+root of every value in an array is both fast and easy and we get the following
+implementation.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">_get_r</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+    <span class="n">xs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_x</span><span class="p">()</span>
+    <span class="n">ys</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_y</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">mk_rs</span><span class="p">(</span><span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">):</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">xs</span><span class="p">(</span><span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">)</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="n">ys</span><span class="p">(</span><span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">x</span><span class="o">*</span><span class="n">x</span> <span class="o">+</span> <span class="n">y</span><span class="o">*</span><span class="n">y</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">mk_rs</span>
+</pre></div>
+</div>
+<p>And we can see that our domain now supports the <code class="code docutils literal notranslate"><span class="pre">r</span></code> property</p>
+<div class="highlight-pycon notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">square</span> <span class="o">=</span> <span class="n">SquareDomain</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">square</span><span class="o">.</span><span class="n">r</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
+<span class="go">array([[1.41421356, 1.05409255, 1.05409255, 1.41421356],</span>
+<span class="go">       [1.05409255, 0.47140452, 0.47140452, 1.05409255],</span>
+<span class="go">       [1.05409255, 0.47140452, 0.47140452, 1.05409255],</span>
+<span class="go">       [1.41421356, 1.05409255, 1.05409255, 1.41421356]])</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="get-t">
+<h3>_get_t<a class="headerlink" href="#get-t" title="Permalink to this headline">¶</a></h3>
+<p>Last but not least, this method corresponds to the <span class="math notranslate nohighlight">\(\theta\)</span> variable from
+<a class="reference internal" href="../../glossary.html#term-polar-coordinates"><span class="xref std std-term">polar coordinates</span></a>. As with the previous method, since we already have the means
+of generating <span class="math notranslate nohighlight">\(x\)</span> and <span class="math notranslate nohighlight">\(y\)</span> values that satisfy the user’s input it makes sense
+to use the conversion formula to generate values of <span class="math notranslate nohighlight">\(\theta\)</span></p>
+<div class="math notranslate nohighlight">
+\[\theta = \tan^{-1}{\left(\frac{y}{x}\right)}\]</div>
+<p>Numpy has a function <a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.arctan2.html#numpy.arctan2" title="(in NumPy v1.15)"><code class="xref py py-data docutils literal notranslate"><span class="pre">np.arctan2</span></code></a> which implements the
+<span class="math notranslate nohighlight">\(\tan^{-1}\)</span> function taking into account the quadrant the point <span class="math notranslate nohighlight">\((x, y)\)</span>
+is a part of ensuring that the sign of <span class="math notranslate nohighlight">\(\theta\)</span> is as expected.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">_get_t</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+    <span class="n">xs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_x</span><span class="p">()</span>
+    <span class="n">ys</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_y</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">mk_ts</span><span class="p">(</span><span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">):</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">xs</span><span class="p">(</span><span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">)</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="n">ys</span><span class="p">(</span><span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">arctan2</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">mk_ts</span>
+</pre></div>
+</div>
+<p>Which finally enables the <code class="code docutils literal notranslate"><span class="pre">t</span></code> property on the domain.</p>
+<div class="highlight-pycon notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">square</span> <span class="o">=</span> <span class="n">SquareDomain</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">square</span><span class="o">.</span><span class="n">t</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
+<span class="go">array([[ 2.35619449,  1.89254688,  1.24904577,  0.78539816],</span>
+<span class="go">       [ 2.8198421 ,  2.35619449,  0.78539816,  0.32175055],</span>
+<span class="go">       [-2.8198421 , -2.35619449, -0.78539816, -0.32175055],</span>
+<span class="go">       [-2.35619449, -1.89254688, -1.24904577, -0.78539816]])</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="further-resources">
+<h2>Further Resources<a class="headerlink" href="#further-resources" title="Permalink to this headline">¶</a></h2>
+<p>That’s it! You now know the bare minimum required to go off and write your own domain
+implementations, however <code class="code docutils literal notranslate"><span class="pre">stylo</span></code> comes with a few more tools and helpers that you
+can use to avoid doing a lot of the legwork work yourself. We’ll wrap up by briefly
+outlining what these helpers are and where you can go to find out more about them.</p>
+<div class="section" id="conversion-tools">
+<h3>Conversion Tools<a class="headerlink" href="#conversion-tools" title="Permalink to this headline">¶</a></h3>
+<p>When working through the sections for the <code class="code docutils literal notranslate"><span class="pre">_get_t</span></code> and <code class="code docutils literal notranslate"><span class="pre">_get_r</span></code> functions
+you might have thought that implementing a number of different domains might get
+laborious especially if these methods are always based off the <span class="math notranslate nohighlight">\(x\)</span> and <span class="math notranslate nohighlight">\(y\)</span>
+values. Similarly you might be working a lot with the <span class="math notranslate nohighlight">\(r\)</span> and <span class="math notranslate nohighlight">\(\theta\)</span>
+methods leaving you to implement a number of repetitive <code class="code docutils literal notranslate"><span class="pre">_get_x</span></code> and
+<code class="code docutils literal notranslate"><span class="pre">_get_y</span></code> methods.</p>
+<p>In an effort to reduce the amount of duplicated code <code class="code docutils literal notranslate"><span class="pre">stylo</span></code> comes with a few
+helper classes that you can use as a base for your class. These classes will provide
+default implementations for one or more of the methods required by your domain family
+letting you focus on just the interesting bits.</p>
+<p>For example, for the <code class="code docutils literal notranslate"><span class="pre">RealDomain</span></code> family we have the
+<a class="reference internal" href="../../api/stylo_domain_helpers.html#stylo.domain.helpers.CartesianConversion" title="stylo.domain.helpers.CartesianConversion"><code class="xref py py-class docutils literal notranslate"><span class="pre">CartesianConversion</span></code></a> and
+<a class="reference internal" href="../../api/stylo_domain_helpers.html#stylo.domain.helpers.PolarConversion" title="stylo.domain.helpers.PolarConversion"><code class="xref py py-class docutils literal notranslate"><span class="pre">PolarConversion</span></code></a> classes that provide
+implementations of methods that convert one coordinate system to another.</p>
+<p>Below are some links to tutorials introducing some of these classes.</p>
+<ul class="simple">
+<li><a class="reference internal" href="cartesian-conversion.html#extend-tutorial-cartesian-conversion"><span class="std std-ref">Using the CartesianConversion Helper</span></a></li>
+<li>polar</li>
+</ul>
+<div class="admonition-todo admonition" id="index-1">
+<p class="first admonition-title">Todo</p>
+<p class="last">Link to the tutorials outlining the usage of the various conversion helpers</p>
+</div>
+</div>
+<div class="section" id="testing-tools">
+<h3>Testing Tools<a class="headerlink" href="#testing-tools" title="Permalink to this headline">¶</a></h3>
+<p>By basing your domain off a class such as <code class="code docutils literal notranslate"><span class="pre">RealDomain</span></code> and implementing all of the
+abstract methods you know that the base class knows how to talk to your implementation
+but how do you know if your class integrates with <code class="code docutils literal notranslate"><span class="pre">stylo</span></code>’s other systems?</p>
+<p>This is where testing comes in, but you don’t want to have to keep your tests up to date
+with the expectations of the core library. So each domain family also has its own base
+test class in the <code class="code docutils literal notranslate"><span class="pre">stylo.testing</span></code> namespace.</p>
+<p>If you base your tests off one of these base classes such as
+<code class="xref py py-class docutils literal notranslate"><span class="pre">BaseRealDomainTest</span></code> then your implementation
+will be automatically tested that it conforms with the expectations of the rest of the
+library. If they change, then tests on the base class will be updated to enforce them.</p>
+<p>Below are links to tutorials that show you how to get started testing your newly
+implemented domain.</p>
+<div class="admonition-todo admonition" id="index-2">
+<p class="first admonition-title">Todo</p>
+<p class="last">Link to the tutorial outlining how to use the <code class="xref py py-class docutils literal notranslate"><span class="pre">BaseDomainTest</span></code></p>
+</div>
+</div>
+</div>
+<div class="section" id="bringing-it-all-together">
+<span id="extend-tutorial-domain-implementation-complete"></span><h2>Bringing It All Together<a class="headerlink" href="#bringing-it-all-together" title="Permalink to this headline">¶</a></h2>
+<p>Here is the complete definition of our <code class="code docutils literal notranslate"><span class="pre">SquareDomain</span></code> class.</p>
+<div class="highlight-python notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">stylo.domain</span> <span class="kn">import</span> <span class="n">RealDomain</span>
+
+<span class="k">class</span> <span class="nc">SquareDomain</span><span class="p">(</span><span class="n">RealDomain</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">a</span> <span class="o">=</span> <span class="n">a</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">b</span> <span class="o">=</span> <span class="n">b</span>
+
+    <span class="k">def</span> <span class="nf">_get_x</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+        <span class="k">def</span> <span class="nf">mk_xs</span><span class="p">(</span><span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">):</span>
+
+            <span class="n">row</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">a</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">b</span><span class="p">,</span> <span class="n">width</span><span class="p">)</span>
+            <span class="n">xs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">row</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">height</span><span class="p">)])</span>
+            <span class="k">return</span> <span class="n">xs</span>
+
+        <span class="k">return</span> <span class="n">mk_xs</span>
+
+    <span class="k">def</span> <span class="nf">_get_y</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+        <span class="k">def</span> <span class="nf">mk_ys</span><span class="p">(</span><span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">):</span>
+
+            <span class="n">col</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">b</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">a</span><span class="p">,</span> <span class="n">height</span><span class="p">)</span>
+            <span class="n">ys</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">col</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">width</span><span class="p">)])</span>
+            <span class="k">return</span> <span class="n">ys</span><span class="o">.</span><span class="n">transpose</span><span class="p">()</span>
+
+        <span class="k">return</span> <span class="n">mk_ys</span>
+
+    <span class="k">def</span> <span class="nf">_get_r</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+        <span class="n">xs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_x</span><span class="p">()</span>
+        <span class="n">ys</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_y</span><span class="p">()</span>
+
+        <span class="k">def</span> <span class="nf">mk_rs</span><span class="p">(</span><span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">):</span>
+            <span class="n">x</span> <span class="o">=</span> <span class="n">xs</span><span class="p">(</span><span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">)</span>
+            <span class="n">y</span> <span class="o">=</span> <span class="n">ys</span><span class="p">(</span><span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">)</span>
+
+            <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">x</span><span class="o">*</span><span class="n">x</span> <span class="o">+</span> <span class="n">y</span><span class="o">*</span><span class="n">y</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">mk_rs</span>
+
+    <span class="k">def</span> <span class="nf">_get_t</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+        <span class="n">xs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_x</span><span class="p">()</span>
+        <span class="n">ys</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_y</span><span class="p">()</span>
+
+        <span class="k">def</span> <span class="nf">mk_ts</span><span class="p">(</span><span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">):</span>
+            <span class="n">x</span> <span class="o">=</span> <span class="n">xs</span><span class="p">(</span><span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">)</span>
+            <span class="n">y</span> <span class="o">=</span> <span class="n">ys</span><span class="p">(</span><span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">)</span>
+
+            <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">arctan2</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">mk_ts</span>
+</pre></div>
+</td></tr></table></div>
+</div>
+</div>
+
+    
+</div>
+        </div>
+        <div class="footer">
+
+            
+                <p>
+                  Powered by <a href="http://www.sphinx-doc.org/">Sphinx</a> 1.8.2 &amp;
+                  <a href="https://github.com/alcarney/topos-theme">Topos Theme</a> 0.0.10
+                </p>
+        </div>
+    </body>
+</html>

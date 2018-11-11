@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+        <link href="https://fonts.googleapis.com/css?family=Nanum+Myeongjo" rel="stylesheet">
+
+        <!-- TODO: Run CSS + JS through minifiers -->
+        <link rel="stylesheet" href="../_static/css/main.css" type="text/css" >
+        <link rel="stylesheet" href="../_static/css/highlight.css " type="text/css" >
+
+        <script type="text/javascript" id="documentation_options"
+                data-url_root="../"
+                src="../_static/documentation_options.js"></script>
+        <script async
+                src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"
+                type="application/javascript"></script>
+
+        <title>Stylo.Shape.Curves - Stylo v0.9.0</title>
+
+        
+    </head>
+    <body>
+        <!-- Slightly modified from the basic theme in the Sphinx repository
+        https://github.com/sphinx-doc/sphinx/blob/master/sphinx/themes/basic/layout.html -->
+
+        <div class="header">
+            <a href="../index.html" id="site-name"><h2>Stylo<sub>v0.9.0</sub></h2></a>
+            <label class="menu-toggle" for="menu-toggle">Menu</label>
+            <input type="checkbox" id="menu-toggle">
+            <div class="nav-sections">
+                <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../using/index.html">User’s Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../extending/index.html">Extending</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contributing/index.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../maths/index.html">Mathematics</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../glossary.html">Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changes.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../about.html">About the Docs</a></li>
+</ul>
+
+            </div>
+        </div>
+        <div class="nav">
+            <div>
+                <h3 class="nav-header">Page Contents</h3>
+                <ul>
+<li><a class="reference internal" href="#">Stylo.Shape.Curves</a></li>
+</ul>
+
+            </div>
+            <form class="search" action="../search.html" method="get">
+                  <input type="text" name="q" placeholder="Search"/>
+                  <input type="hidden" name="check_keywords" value="yes" />
+                  <input type="hidden" name="area" value="default" />
+            </form>
+        </div>
+        <div class="content">
+<div class="main">
+    <div class="section" id="module-stylo.shape.curves">
+<span id="id1"></span><span id="stylo-shape-curves"></span><h1>Stylo.Shape.Curves<a class="headerlink" href="#module-stylo.shape.curves" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="stylo.shape.curves.ImplicitXY">
+<em class="property">class </em><code class="descclassname">stylo.shape.curves.</code><code class="descname">ImplicitXY</code><span class="sig-paren">(</span><em>f</em>, <em>pt=0.01</em>, <em>above=False</em>, <em>below=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/stylo/shape/curves.html#ImplicitXY"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#stylo.shape.curves.ImplicitXY" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="stylo_shape_shape.html#stylo.shape.shape.Shape" title="stylo.shape.shape.Shape"><code class="xref py py-class docutils literal notranslate"><span class="pre">stylo.shape.shape.Shape</span></code></a></p>
+<p>Define a curve using an implicit function in the <span class="math notranslate nohighlight">\(x\)</span> and <span class="math notranslate nohighlight">\(y\)</span>
+coordinates.</p>
+<p>A point <span class="math notranslate nohighlight">\((x, y)\)</span> lies on the curve defined by the function
+<span class="math notranslate nohighlight">\(f(x, y)\)</span> if the following holds.</p>
+<div class="math notranslate nohighlight">
+\[f(x, y) = 0\]</div>
+<p>However since paths are one dimensional objects and have no area, if we used
+this rule as it stands we would never see the curve in question. So instead we
+introduce some error margin <span class="math notranslate nohighlight">\(e &gt; 0\)</span> and say that a point is on the curve
+if the following holds.</p>
+<div class="math notranslate nohighlight">
+\[|f(x, y)| \leq e\]</div>
+<dl class="attribute">
+<dt id="stylo.shape.curves.ImplicitXY._abc_cache">
+<code class="descname">_abc_cache</code><em class="property"> = &lt;_weakrefset.WeakSet object&gt;</em><a class="headerlink" href="#stylo.shape.curves.ImplicitXY._abc_cache" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="stylo.shape.curves.ImplicitXY._abc_negative_cache">
+<code class="descname">_abc_negative_cache</code><em class="property"> = &lt;_weakrefset.WeakSet object&gt;</em><a class="headerlink" href="#stylo.shape.curves.ImplicitXY._abc_negative_cache" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="stylo.shape.curves.ImplicitXY._abc_negative_cache_version">
+<code class="descname">_abc_negative_cache_version</code><em class="property"> = 47</em><a class="headerlink" href="#stylo.shape.curves.ImplicitXY._abc_negative_cache_version" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="stylo.shape.curves.ImplicitXY._abc_registry">
+<code class="descname">_abc_registry</code><em class="property"> = &lt;_weakrefset.WeakSet object&gt;</em><a class="headerlink" href="#stylo.shape.curves.ImplicitXY._abc_registry" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="stylo.shape.curves.ImplicitXY.draw">
+<code class="descname">draw</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/stylo/shape/curves.html#ImplicitXY.draw"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#stylo.shape.curves.ImplicitXY.draw" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+
+    
+</div>
+        </div>
+        <div class="footer">
+
+            
+                <p>
+                  Powered by <a href="http://www.sphinx-doc.org/">Sphinx</a> 1.8.2 &amp;
+                  <a href="https://github.com/alcarney/topos-theme">Topos Theme</a> 0.0.10
+                </p>
+        </div>
+    </body>
+</html>

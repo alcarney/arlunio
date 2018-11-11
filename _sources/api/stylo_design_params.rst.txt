@@ -1,0 +1,13 @@
+
+
+.. _stylo_design_params:
+
+Stylo.Design.Params
+===================
+
+.. automodule:: stylo.design.params
+   :members:
+   :undoc-members:
+   :private-members:
+   :show-inheritance:
+

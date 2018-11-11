@@ -1,0 +1,13 @@
+
+
+.. _stylo_image_simple:
+
+Stylo.Image.Simple
+==================
+
+.. automodule:: stylo.image.simple
+   :members:
+   :undoc-members:
+   :private-members:
+   :show-inheritance:
+

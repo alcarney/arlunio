@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+        <link href="https://fonts.googleapis.com/css?family=Nanum+Myeongjo" rel="stylesheet">
+
+        <!-- TODO: Run CSS + JS through minifiers -->
+        <link rel="stylesheet" href="../../_static/css/main.css" type="text/css" >
+        <link rel="stylesheet" href="../../_static/css/highlight.css " type="text/css" >
+
+        <script type="text/javascript" id="documentation_options"
+                data-url_root="../../"
+                src="../../_static/documentation_options.js"></script>
+        <script async
+                src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"
+                type="application/javascript"></script>
+
+        <title>The Branching Policy - Stylo v0.9.0</title>
+
+        
+    </head>
+    <body>
+        <!-- Slightly modified from the basic theme in the Sphinx repository
+        https://github.com/sphinx-doc/sphinx/blob/master/sphinx/themes/basic/layout.html -->
+
+        <div class="header">
+            <a href="../../index.html" id="site-name"><h2>Stylo<sub>v0.9.0</sub></h2></a>
+            <label class="menu-toggle" for="menu-toggle">Menu</label>
+            <input type="checkbox" id="menu-toggle">
+            <div class="nav-sections">
+                <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../using/index.html">User’s Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../extending/index.html">Extending</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../maths/index.html">Mathematics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/index.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../glossary.html">Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../changes.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../about.html">About the Docs</a></li>
+</ul>
+
+            </div>
+        </div>
+        <div class="nav">
+            <div>
+                <h3 class="nav-header">Page Contents</h3>
+                <ul>
+<li><a class="reference internal" href="#">The Branching Policy</a><ul>
+<li><a class="reference internal" href="#the-golden-rule">The Golden Rule</a></li>
+<li><a class="reference internal" href="#our-recommendations">Our Recommendations</a></li>
+</ul>
+</li>
+</ul>
+
+            </div>
+            <form class="search" action="../../search.html" method="get">
+                  <input type="text" name="q" placeholder="Search"/>
+                  <input type="hidden" name="check_keywords" value="yes" />
+                  <input type="hidden" name="area" value="default" />
+            </form>
+        </div>
+        <div class="content">
+<div class="main">
+    <div class="section" id="the-branching-policy">
+<span id="contribute-ref-branching"></span><h1>The Branching Policy<a class="headerlink" href="#the-branching-policy" title="Permalink to this headline">¶</a></h1>
+<div class="admonition attention">
+<p class="first admonition-title">Attention</p>
+<p class="last">This page assumes that you are confortable with using git.</p>
+</div>
+<div class="section" id="the-golden-rule">
+<h2>The Golden Rule<a class="headerlink" href="#the-golden-rule" title="Permalink to this headline">¶</a></h2>
+<p>If there is one thing you take away from this page it is this <strong>we never work on
+master</strong>.</p>
+<p>We never do any work directly on the <code class="code docutils literal notranslate"><span class="pre">master</span></code> branch because the release
+process (explained in much greater detail <a class="reference internal" href="release-process.html#contribute-ref-release"><span class="std std-ref">here</span></a>)
+is set up to automatically package and publish code that is committed to the
+<code class="code docutils literal notranslate"><span class="pre">master</span></code> branch.</p>
+<p>So that we don’t accidentally publish broken or work in progress code we do all
+our work based on the <code class="code docutils literal notranslate"><span class="pre">develop</span></code> branch. The only time a commit is made to
+the master branch is when a new release of <code class="code docutils literal notranslate"><span class="pre">stylo</span></code> is made. Again it’s
+recommended that you read <a class="reference internal" href="release-process.html#contribute-ref-release"><span class="std std-ref">The Release Process</span></a> page for more information
+on this process.</p>
+</div>
+<div class="section" id="our-recommendations">
+<h2>Our Recommendations<a class="headerlink" href="#our-recommendations" title="Permalink to this headline">¶</a></h2>
+<div class="admonition-todo admonition" id="index-0">
+<p class="first admonition-title">Todo</p>
+<p class="last">Link to various articles explaining some of these steps in more detail when
+they are written.</p>
+</div>
+<div class="admonition tip">
+<p class="first admonition-title">Tip</p>
+<p class="last">Git can get very scary, very quickly. If you are having trouble with it at any
+stage you can always drop a message in the
+<a class="reference external" href="https://gitter.im/stylo-py/Lobby">chatroom</a> we’ll always be happy to help.</p>
+</div>
+<p>With that out of the way here is the recommended workflow when making changes to
+the repository.</p>
+<ol class="arabic simple">
+<li>Make sure you have the <code class="code docutils literal notranslate"><span class="pre">develop</span></code> branch checked out and that it is up
+to date with the latest in the main repository.</li>
+<li>Create a new branch to do your work on. It helps if you choose name that
+indicates the sort of work you intend to do e.g. <code class="code docutils literal notranslate"><span class="pre">add-new-shape</span></code> or
+<code class="code docutils literal notranslate"><span class="pre">fix-issue-123</span></code></li>
+<li>Make whatever changes and commits you need to complete the task.</li>
+<li>When you have finished, update your <code class="code docutils literal notranslate"><span class="pre">develop</span></code> branch to the
+latest and rebase your work on top of it.</li>
+<li>Push your changes up to your fork and open a PR against the <code class="code docutils literal notranslate"><span class="pre">develop</span></code>
+branch on the main repository.</li>
+</ol>
+<p>Don’t worry if you’re not using git “perfectly” at the end of the day it is a
+tool used for bookkeeping and the process outlined above is only a
+recommendation. What’s more important is your contribution so focus on that we
+can always guide you through the bookkeeping steps when it comes to getting your
+contribution merged.</p>
+</div>
+</div>
+
+    
+</div>
+        </div>
+        <div class="footer">
+
+            
+                <p>
+                  Powered by <a href="http://www.sphinx-doc.org/">Sphinx</a> 1.8.2 &amp;
+                  <a href="https://github.com/alcarney/topos-theme">Topos Theme</a> 0.0.10
+                </p>
+        </div>
+    </body>
+</html>

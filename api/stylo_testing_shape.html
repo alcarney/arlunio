@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+        <link href="https://fonts.googleapis.com/css?family=Nanum+Myeongjo" rel="stylesheet">
+
+        <!-- TODO: Run CSS + JS through minifiers -->
+        <link rel="stylesheet" href="../_static/css/main.css" type="text/css" >
+        <link rel="stylesheet" href="../_static/css/highlight.css " type="text/css" >
+
+        <script type="text/javascript" id="documentation_options"
+                data-url_root="../"
+                src="../_static/documentation_options.js"></script>
+        <script async
+                src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"
+                type="application/javascript"></script>
+
+        <title>Stylo.Testing.Shape - Stylo v0.9.0</title>
+
+        
+    </head>
+    <body>
+        <!-- Slightly modified from the basic theme in the Sphinx repository
+        https://github.com/sphinx-doc/sphinx/blob/master/sphinx/themes/basic/layout.html -->
+
+        <div class="header">
+            <a href="../index.html" id="site-name"><h2>Stylo<sub>v0.9.0</sub></h2></a>
+            <label class="menu-toggle" for="menu-toggle">Menu</label>
+            <input type="checkbox" id="menu-toggle">
+            <div class="nav-sections">
+                <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../using/index.html">User’s Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../extending/index.html">Extending</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contributing/index.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../maths/index.html">Mathematics</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../glossary.html">Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changes.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../about.html">About the Docs</a></li>
+</ul>
+
+            </div>
+        </div>
+        <div class="nav">
+            <div>
+                <h3 class="nav-header">Page Contents</h3>
+                <ul>
+<li><a class="reference internal" href="#">Stylo.Testing.Shape</a></li>
+</ul>
+
+            </div>
+            <form class="search" action="../search.html" method="get">
+                  <input type="text" name="q" placeholder="Search"/>
+                  <input type="hidden" name="check_keywords" value="yes" />
+                  <input type="hidden" name="area" value="default" />
+            </form>
+        </div>
+        <div class="content">
+<div class="main">
+    <div class="section" id="module-stylo.testing.shape">
+<span id="id1"></span><span id="stylo-testing-shape"></span><h1>Stylo.Testing.Shape<a class="headerlink" href="#module-stylo.testing.shape" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="stylo.testing.shape.BaseShapeTest">
+<em class="property">class </em><code class="descclassname">stylo.testing.shape.</code><code class="descname">BaseShapeTest</code><a class="reference internal" href="../_modules/stylo/testing/shape.html#BaseShapeTest"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#stylo.testing.shape.BaseShapeTest" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>A base class for testing <code class="code docutils literal notranslate"><span class="pre">Shape</span></code> implementations.</p>
+<p>When writing your test case for a new <code class="code docutils literal notranslate"><span class="pre">Shape</span></code> implementation you need to
+declare it as follows.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">unittest</span> <span class="kn">import</span> <span class="n">TestCase</span>
+<span class="kn">from</span> <span class="nn">stylo.testing.shape</span> <span class="kn">import</span> <span class="n">BaseShapeTest</span>
+
+<span class="k">class</span> <span class="nc">TestMyShape</span><span class="p">(</span><span class="n">TestCase</span><span class="p">,</span> <span class="n">BaseShapeTest</span><span class="p">):</span>
+    <span class="o">...</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The order in which you write the classes is <em>very</em> important.</p>
+</div>
+<p>You also need to define the <code class="code docutils literal notranslate"><span class="pre">setUp</span></code> method to set the <code class="code docutils literal notranslate"><span class="pre">shape</span></code> attribute
+equal to an instance of your shape implementation.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">setUp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">shape</span> <span class="o">=</span> <span class="n">MyShape</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Then in addition to any tests you write, your <code class="code docutils literal notranslate"><span class="pre">Shape</span></code> implementation will be
+automatically tested to see if it passes the checks defined below.</p>
+<dl class="method">
+<dt id="stylo.testing.shape.BaseShapeTest.test_add_transform">
+<code class="descname">test_add_transform</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/stylo/testing/shape.html#BaseShapeTest.test_add_transform"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#stylo.testing.shape.BaseShapeTest.test_add_transform" title="Permalink to this definition">¶</a></dt>
+<dd><p>Ensure that when transforms are added to the list that they are added to the
+front of the list.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="stylo.testing.shape.BaseShapeTest.test_apply_transform">
+<code class="descname">test_apply_transform</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/stylo/testing/shape.html#BaseShapeTest.test_apply_transform"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#stylo.testing.shape.BaseShapeTest.test_apply_transform" title="Permalink to this definition">¶</a></dt>
+<dd><p>Ensure that when a shape carries transforms that they are applied.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="stylo.testing.shape.BaseShapeTest.test_apply_transform_none">
+<code class="descname">test_apply_transform_none</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/stylo/testing/shape.html#BaseShapeTest.test_apply_transform_none"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#stylo.testing.shape.BaseShapeTest.test_apply_transform_none" title="Permalink to this definition">¶</a></dt>
+<dd><p>Ensure that when a shape carries no transforms that the domain is returned
+untouched.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="stylo.testing.shape.BaseShapeTest.test_draw_method">
+<code class="descname">test_draw_method</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/stylo/testing/shape.html#BaseShapeTest.test_draw_method"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#stylo.testing.shape.BaseShapeTest.test_draw_method" title="Permalink to this definition">¶</a></dt>
+<dd><p>Ensure that the <code class="code docutils literal notranslate"><span class="pre">draw</span></code> method returns a valid shape function. A shape
+function must</p>
+<ul class="simple">
+<li>Be callable</li>
+<li>Only take coordinate arguments defined in <code class="code docutils literal notranslate"><span class="pre">RealDomain</span></code></li>
+<li>These arguments must match those defined in the <code class="code docutils literal notranslate"><span class="pre">parameters</span></code> property.</li>
+</ul>
+</dd></dl>
+
+<dl class="method">
+<dt id="stylo.testing.shape.BaseShapeTest.test_has_transforms">
+<code class="descname">test_has_transforms</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/stylo/testing/shape.html#BaseShapeTest.test_has_transforms"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#stylo.testing.shape.BaseShapeTest.test_has_transforms" title="Permalink to this definition">¶</a></dt>
+<dd><p>Ensure that a shape has a <code class="code docutils literal notranslate"><span class="pre">_transforms</span></code> attribute that is equal to the
+empty list.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="stylo.testing.shape.BaseShapeTest.test_parameters_property">
+<code class="descname">test_parameters_property</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/stylo/testing/shape.html#BaseShapeTest.test_parameters_property"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#stylo.testing.shape.BaseShapeTest.test_parameters_property" title="Permalink to this definition">¶</a></dt>
+<dd><p>Ensure that the <code class="code docutils literal notranslate"><span class="pre">parameters</span></code> property returns the coordinates that the
+shape is defined with. The parameters must</p>
+<ul class="simple">
+<li>Be iterable</li>
+<li>Be unique</li>
+<li>Be declared on the <code class="code docutils literal notranslate"><span class="pre">RealDomain</span></code> interface.</li>
+</ul>
+</dd></dl>
+
+<dl class="method">
+<dt id="stylo.testing.shape.BaseShapeTest.test_render_with_args">
+<code class="descname">test_render_with_args</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; None<a class="reference internal" href="../_modules/stylo/testing/shape.html#BaseShapeTest.test_render_with_args"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#stylo.testing.shape.BaseShapeTest.test_render_with_args" title="Permalink to this definition">¶</a></dt>
+<dd><p>Ensure that a shape can be called with keyword arguments. Each of the
+arguments should be numpy arrays of the same shape with names corresponding to
+each of the coordinate names the shape is defined with. The result must:</p>
+<ul class="simple">
+<li>Be a numpy array</li>
+<li>With shape <code class="code docutils literal notranslate"><span class="pre">(height,</span> <span class="pre">width)</span></code></li>
+<li>With elements of type bool.</li>
+</ul>
+</dd></dl>
+
+<dl class="method">
+<dt id="stylo.testing.shape.BaseShapeTest.test_render_with_domain">
+<code class="descname">test_render_with_domain</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; None<a class="reference internal" href="../_modules/stylo/testing/shape.html#BaseShapeTest.test_render_with_domain"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#stylo.testing.shape.BaseShapeTest.test_render_with_domain" title="Permalink to this definition">¶</a></dt>
+<dd><p>Ensure that a shape can be called with a domain and integers representing the
+width and height in pixels of an image. The result must:</p>
+<ul class="simple">
+<li>Be numpy array</li>
+<li>With shape <code class="code docutils literal notranslate"><span class="pre">(height,</span> <span class="pre">width)</span></code></li>
+<li>With elements of type bool.</li>
+</ul>
+</dd></dl>
+
+<dl class="method">
+<dt id="stylo.testing.shape.BaseShapeTest.test_shape_can_be_anded">
+<code class="descname">test_shape_can_be_anded</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/stylo/testing/shape.html#BaseShapeTest.test_shape_can_be_anded"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#stylo.testing.shape.BaseShapeTest.test_shape_can_be_anded" title="Permalink to this definition">¶</a></dt>
+<dd><p>Ensure that a shape can be ANDed by checking that an instance of
+<code class="code docutils literal notranslate"><span class="pre">ANDedShape</span></code> is returned when the <code class="code docutils literal notranslate"><span class="pre">&amp;</span></code> operator is used.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="stylo.testing.shape.BaseShapeTest.test_shape_can_be_inverted">
+<code class="descname">test_shape_can_be_inverted</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/stylo/testing/shape.html#BaseShapeTest.test_shape_can_be_inverted"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#stylo.testing.shape.BaseShapeTest.test_shape_can_be_inverted" title="Permalink to this definition">¶</a></dt>
+<dd><p>Ensure that a shape can be inverted by checking that an instance of
+<code class="code docutils literal notranslate"><span class="pre">InvertedShape</span></code> is returned when the <code class="code docutils literal notranslate"><span class="pre">~</span></code> operator is used on the
+shape.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="stylo.testing.shape.BaseShapeTest.test_shape_can_be_ored">
+<code class="descname">test_shape_can_be_ored</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/stylo/testing/shape.html#BaseShapeTest.test_shape_can_be_ored"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#stylo.testing.shape.BaseShapeTest.test_shape_can_be_ored" title="Permalink to this definition">¶</a></dt>
+<dd><p>Ensure that a shape can be ored by checking that an instance of
+<code class="code docutils literal notranslate"><span class="pre">ORedShape</span></code> is returned when the <code class="code docutils literal notranslate"><span class="pre">|</span></code> operator is used.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="stylo.testing.shape.BaseShapeTest.test_shape_can_be_xored">
+<code class="descname">test_shape_can_be_xored</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/stylo/testing/shape.html#BaseShapeTest.test_shape_can_be_xored"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#stylo.testing.shape.BaseShapeTest.test_shape_can_be_xored" title="Permalink to this definition">¶</a></dt>
+<dd><p>Ensure that a shape can be xored by checking that an instance of
+<code class="code docutils literal notranslate"><span class="pre">XORedShape</span></code> is returned when the <code class="code docutils literal notranslate"><span class="pre">^</span></code> operator is used.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+    
+</div>
+        </div>
+        <div class="footer">
+
+            
+                <p>
+                  Powered by <a href="http://www.sphinx-doc.org/">Sphinx</a> 1.8.2 &amp;
+                  <a href="https://github.com/alcarney/topos-theme">Topos Theme</a> 0.0.10
+                </p>
+        </div>
+    </body>
+</html>

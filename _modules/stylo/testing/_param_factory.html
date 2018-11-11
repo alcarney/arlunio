@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+        <link href="https://fonts.googleapis.com/css?family=Nanum+Myeongjo" rel="stylesheet">
+
+        <!-- TODO: Run CSS + JS through minifiers -->
+        <link rel="stylesheet" href="../../../_static/css/main.css" type="text/css" >
+        <link rel="stylesheet" href="../../../_static/css/highlight.css " type="text/css" >
+
+        <script type="text/javascript" id="documentation_options"
+                data-url_root="../../../"
+                src="../../../_static/documentation_options.js"></script>
+        <script async
+                src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"
+                type="application/javascript"></script>
+
+        <title>stylo.testing._param_factory - Stylo v0.9.0</title>
+
+        
+    </head>
+    <body>
+        <!-- Slightly modified from the basic theme in the Sphinx repository
+        https://github.com/sphinx-doc/sphinx/blob/master/sphinx/themes/basic/layout.html -->
+
+        <div class="header">
+            <a href="../../../index.html" id="site-name"><h2>Stylo<sub>v0.9.0</sub></h2></a>
+            <label class="menu-toggle" for="menu-toggle">Menu</label>
+            <input type="checkbox" id="menu-toggle">
+            <div class="nav-sections">
+                <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../using/index.html">User’s Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../extending/index.html">Extending</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../contributing/index.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../maths/index.html">Mathematics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/index.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../glossary.html">Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../changes.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../about.html">About the Docs</a></li>
+</ul>
+
+            </div>
+        </div>
+        <div class="nav">
+            <div>
+                <h3 class="nav-header">Page Contents</h3>
+                
+            </div>
+            <form class="search" action="../../../search.html" method="get">
+                  <input type="text" name="q" placeholder="Search"/>
+                  <input type="hidden" name="check_keywords" value="yes" />
+                  <input type="hidden" name="area" value="default" />
+            </form>
+        </div>
+        <div class="content">
+<div class="main">
+    <h1>Source code for stylo.testing._param_factory</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;This module contains functions that automate the process of writing base test classes</span>
+<span class="sd">for :code:`ParameterGroup` objects.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">pytest</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">hypothesis</span> <span class="k">import</span> <span class="n">given</span>
+<span class="kn">from</span> <span class="nn">stylo.testing.strategies</span> <span class="k">import</span> <span class="n">real</span>
+
+
+<span class="n">PARAM_TEST_DOCSTRING</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">A base class to use when testing </span><span class="si">{0}</span><span class="s2"> implementations.</span>
+
+<span class="s2">When writing your test case, declare it as follows:</span>
+
+<span class="s2">.. code-block:: python</span>
+
+<span class="s2">   from unittest import TestCase</span>
+<span class="s2">   from stylo.testing.design import Base</span><span class="si">{0}</span><span class="s2">Test</span>
+
+<span class="s2">   class TestMyGroup(TestCase, Base</span><span class="si">{0}</span><span class="s2">Test):</span>
+<span class="s2">      ...</span>
+
+<span class="s2">.. note::</span>
+
+<span class="s2">   The order in which you include these classes is *very* important.</span>
+
+<span class="s2">You also need to define a :code:`setUp()` method to set the :code:`params` attribute</span>
+<span class="s2">to be an instance of your class.</span>
+
+<span class="s2">.. code-block:: python</span>
+
+<span class="s2">   def setUp(self):</span>
+<span class="s2">       self.params = MyParams()</span>
+
+<span class="s2">If you follow these steps in addition to the test cases you write your class will be</span>
+<span class="s2">automatically checked to see that it conforms to the behavior expected from every </span><span class="si">{0}</span><span class="s2">.</span>
+<span class="s2">&quot;&quot;&quot;</span>
+
+
+<div class="viewcode-block" id="keys_check"><a class="viewcode-back" href="../../../api/stylo_testing_param_factory.html#stylo.testing._param_factory.keys_check">[docs]</a><span class="k">def</span> <span class="nf">keys_check</span><span class="p">(</span><span class="n">expected_keys</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Parameter groups should define a :code:`keys()` method that returns the name of</span>
+<span class="sd">    each of the parameters in the group.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">check</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">params</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span> <span class="o">==</span> <span class="n">expected_keys</span>
+
+    <span class="k">return</span> <span class="n">check</span></div>
+
+
+<div class="viewcode-block" id="getitem_check"><a class="viewcode-back" href="../../../api/stylo_testing_param_factory.html#stylo.testing._param_factory.getitem_check">[docs]</a><span class="k">def</span> <span class="nf">getitem_check</span><span class="p">(</span><span class="n">keys</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Parameter groups should define :code:`__getitem__` and return a value for each</span>
+<span class="sd">    parameter in the group.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">check</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+        <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">keys</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+
+    <span class="k">return</span> <span class="n">check</span></div>
+
+
+<div class="viewcode-block" id="mapping_check"><a class="viewcode-back" href="../../../api/stylo_testing_param_factory.html#stylo.testing._param_factory.mapping_check">[docs]</a><span class="k">def</span> <span class="nf">mapping_check</span><span class="p">(</span><span class="n">expected_keys</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Parameter groups should support the dictionary unpacking syntax :code:`**params`.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">check</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">def</span> <span class="nf">map_func</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+            <span class="k">assert</span> <span class="nb">set</span><span class="p">(</span><span class="n">kwargs</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span> <span class="o">==</span> <span class="nb">set</span><span class="p">(</span><span class="n">expected_keys</span><span class="p">)</span>
+
+        <span class="n">map_func</span><span class="p">(</span><span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">params</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">check</span></div>
+
+
+<div class="viewcode-block" id="parameters_check"><a class="viewcode-back" href="../../../api/stylo_testing_param_factory.html#stylo.testing._param_factory.parameters_check">[docs]</a><span class="k">def</span> <span class="nf">parameters_check</span><span class="p">(</span><span class="n">expected_params</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Parameter groups should define a :code:`parameters` property that returns a list</span>
+<span class="sd">    of the parameter names.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">check</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">params</span><span class="o">.</span><span class="n">parameters</span> <span class="o">==</span> <span class="n">expected_params</span>
+
+    <span class="k">return</span> <span class="n">check</span></div>
+
+
+<div class="viewcode-block" id="parameters_check_read_only"><a class="viewcode-back" href="../../../api/stylo_testing_param_factory.html#stylo.testing._param_factory.parameters_check_read_only">[docs]</a><span class="k">def</span> <span class="nf">parameters_check_read_only</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;The :code:`parameters` property should be read only.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">check</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">with</span> <span class="n">pytest</span><span class="o">.</span><span class="n">raises</span><span class="p">(</span><span class="ne">AttributeError</span><span class="p">)</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">params</span><span class="o">.</span><span class="n">parameters</span> <span class="o">=</span> <span class="s2">&quot;2&quot;</span>
+
+        <span class="k">assert</span> <span class="s2">&quot;can&#39;t set attribute&quot;</span> <span class="ow">in</span> <span class="nb">str</span><span class="p">(</span><span class="n">err</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">check</span></div>
+
+
+<div class="viewcode-block" id="parameter_check"><a class="viewcode-back" href="../../../api/stylo_testing_param_factory.html#stylo.testing._param_factory.parameter_check">[docs]</a><span class="k">def</span> <span class="nf">parameter_check</span><span class="p">(</span><span class="n">parameter</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Parameter groups should define a property for each parameter name.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">check</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">params</span><span class="o">.</span><span class="fm">__getattribute__</span><span class="p">(</span><span class="n">parameter</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">check</span></div>
+
+
+<div class="viewcode-block" id="parameter_check_read_only"><a class="viewcode-back" href="../../../api/stylo_testing_param_factory.html#stylo.testing._param_factory.parameter_check_read_only">[docs]</a><span class="k">def</span> <span class="nf">parameter_check_read_only</span><span class="p">(</span><span class="n">parameter</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;The declared parameter should be read only.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">check</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+        <span class="k">with</span> <span class="n">pytest</span><span class="o">.</span><span class="n">raises</span><span class="p">(</span><span class="ne">AttributeError</span><span class="p">)</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">params</span><span class="o">.</span><span class="fm">__setattr__</span><span class="p">(</span><span class="n">parameter</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+
+        <span class="k">assert</span> <span class="s2">&quot;can&#39;t set attribute&quot;</span> <span class="ow">in</span> <span class="nb">str</span><span class="p">(</span><span class="n">err</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">check</span></div>
+
+
+<div class="viewcode-block" id="define_base_tests"><a class="viewcode-back" href="../../../api/stylo_testing_param_factory.html#stylo.testing._param_factory.define_base_tests">[docs]</a><span class="k">def</span> <span class="nf">define_base_tests</span><span class="p">(</span><span class="n">pgroup</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Define the test cases that are common to every type of parameter group.</span>
+
+<span class="sd">    :param list pgroup: The parameter group to define test cases for.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">params</span> <span class="o">=</span> <span class="n">pgroup</span><span class="o">.</span><span class="n">_parameters</span>
+    <span class="n">attributes</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;__doc__&quot;</span><span class="p">:</span> <span class="n">PARAM_TEST_DOCSTRING</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">pgroup</span><span class="o">.</span><span class="vm">__name__</span><span class="p">),</span>
+        <span class="s2">&quot;test_getitem&quot;</span><span class="p">:</span> <span class="n">getitem_check</span><span class="p">(</span><span class="n">params</span><span class="p">),</span>
+        <span class="s2">&quot;test_keys&quot;</span><span class="p">:</span> <span class="n">keys_check</span><span class="p">(</span><span class="n">params</span><span class="p">),</span>
+        <span class="s2">&quot;test_parameters&quot;</span><span class="p">:</span> <span class="n">parameters_check</span><span class="p">(</span><span class="n">params</span><span class="p">),</span>
+        <span class="s2">&quot;test_parameters_read_only&quot;</span><span class="p">:</span> <span class="n">parameters_check_read_only</span><span class="p">(),</span>
+        <span class="s2">&quot;test_mapping&quot;</span><span class="p">:</span> <span class="n">mapping_check</span><span class="p">(</span><span class="n">params</span><span class="p">),</span>
+    <span class="p">}</span>
+
+    <span class="k">for</span> <span class="n">pname</span> <span class="ow">in</span> <span class="n">params</span><span class="p">:</span>
+        <span class="n">property_check</span> <span class="o">=</span> <span class="s2">&quot;test_</span><span class="si">{}</span><span class="s2">_property&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">pname</span><span class="p">)</span>
+        <span class="n">read_only_check</span> <span class="o">=</span> <span class="s2">&quot;test_</span><span class="si">{}</span><span class="s2">_property_read_only&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">pname</span><span class="p">)</span>
+
+        <span class="n">attributes</span><span class="p">[</span><span class="n">property_check</span><span class="p">]</span> <span class="o">=</span> <span class="n">parameter_check</span><span class="p">(</span><span class="n">pname</span><span class="p">)</span>
+        <span class="n">attributes</span><span class="p">[</span><span class="n">read_only_check</span><span class="p">]</span> <span class="o">=</span> <span class="n">parameter_check_read_only</span><span class="p">(</span><span class="n">pname</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">attributes</span></div>
+
+
+<div class="viewcode-block" id="define_parameter_group_test"><a class="viewcode-back" href="../../../api/stylo_testing_param_factory.html#stylo.testing._param_factory.define_parameter_group_test">[docs]</a><span class="k">def</span> <span class="nf">define_parameter_group_test</span><span class="p">(</span><span class="n">pgroup</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Given a parameter group, write the test class that will automatically verify that</span>
+<span class="sd">    a given subclass follows the expected interface.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">test_name</span> <span class="o">=</span> <span class="s2">&quot;Base&quot;</span> <span class="o">+</span> <span class="n">pgroup</span><span class="o">.</span><span class="vm">__name__</span> <span class="o">+</span> <span class="s2">&quot;Test&quot;</span>
+    <span class="n">attributes</span> <span class="o">=</span> <span class="n">define_base_tests</span><span class="p">(</span><span class="n">pgroup</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="nb">type</span><span class="p">(</span><span class="n">test_name</span><span class="p">,</span> <span class="p">(),</span> <span class="n">attributes</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="call_check"><a class="viewcode-back" href="../../../api/stylo_testing_param_factory.html#stylo.testing._param_factory.call_check">[docs]</a><span class="k">def</span> <span class="nf">call_check</span><span class="p">(</span><span class="n">expected_keys</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Time dependent parameter groups should be able to be called as a function, taking</span>
+<span class="sd">    the time :code:`t` as an argument.&quot;&quot;&quot;</span>
+
+    <span class="n">context</span> <span class="o">=</span> <span class="n">given</span><span class="p">(</span><span class="n">t</span><span class="o">=</span><span class="n">real</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">check</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="p">):</span>
+        <span class="k">def</span> <span class="nf">map_check</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+            <span class="k">assert</span> <span class="nb">set</span><span class="p">(</span><span class="n">kwargs</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span> <span class="o">==</span> <span class="nb">set</span><span class="p">(</span><span class="n">expected_keys</span><span class="p">)</span>
+
+        <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">params</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
+
+        <span class="c1"># The parameter group should return itself.</span>
+        <span class="k">assert</span> <span class="n">result</span> <span class="ow">is</span> <span class="bp">self</span><span class="o">.</span><span class="n">params</span>
+        <span class="n">map_check</span><span class="p">(</span><span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">params</span><span class="p">(</span><span class="n">t</span><span class="p">))</span>
+
+    <span class="k">return</span> <span class="n">context</span><span class="p">(</span><span class="n">check</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="call_check_numpy"><a class="viewcode-back" href="../../../api/stylo_testing_param_factory.html#stylo.testing._param_factory.call_check_numpy">[docs]</a><span class="k">def</span> <span class="nf">call_check_numpy</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;Time dependent parameter groups should be able to take numpy arrays as an</span>
+<span class="sd">    argument.&quot;&quot;&quot;</span>
+
+    <span class="n">ts</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">128</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">check</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">params</span><span class="p">(</span><span class="n">ts</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">check</span></div>
+
+
+<div class="viewcode-block" id="define_time_dependent_parameter_group_test"><a class="viewcode-back" href="../../../api/stylo_testing_param_factory.html#stylo.testing._param_factory.define_time_dependent_parameter_group_test">[docs]</a><span class="k">def</span> <span class="nf">define_time_dependent_parameter_group_test</span><span class="p">(</span><span class="n">pgroup</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Given a time dependent parameter group, write the test calss that will</span>
+<span class="sd">    automatically verify that a given subclass follows the expected interface.&quot;&quot;&quot;</span>
+
+    <span class="n">test_name</span> <span class="o">=</span> <span class="s2">&quot;Base&quot;</span> <span class="o">+</span> <span class="n">pgroup</span><span class="o">.</span><span class="vm">__name__</span> <span class="o">+</span> <span class="s2">&quot;Test&quot;</span>
+    <span class="n">params</span> <span class="o">=</span> <span class="n">pgroup</span><span class="o">.</span><span class="n">_parameters</span>
+
+    <span class="n">attributes</span> <span class="o">=</span> <span class="n">define_base_tests</span><span class="p">(</span><span class="n">pgroup</span><span class="p">)</span>
+    <span class="n">attributes</span><span class="p">[</span><span class="s2">&quot;test_call&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">call_check</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
+    <span class="n">attributes</span><span class="p">[</span><span class="s2">&quot;test_call_numpy&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">call_check_numpy</span><span class="p">()</span>
+
+    <span class="k">return</span> <span class="nb">type</span><span class="p">(</span><span class="n">test_name</span><span class="p">,</span> <span class="p">(),</span> <span class="n">attributes</span><span class="p">)</span></div>
+</pre></div>
+    
+</div>
+        </div>
+        <div class="footer">
+
+            
+                <p>
+                  Powered by <a href="http://www.sphinx-doc.org/">Sphinx</a> 1.8.2 &amp;
+                  <a href="https://github.com/alcarney/topos-theme">Topos Theme</a> 0.0.10
+                </p>
+        </div>
+    </body>
+</html>

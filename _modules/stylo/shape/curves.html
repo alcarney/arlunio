@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+        <link href="https://fonts.googleapis.com/css?family=Nanum+Myeongjo" rel="stylesheet">
+
+        <!-- TODO: Run CSS + JS through minifiers -->
+        <link rel="stylesheet" href="../../../_static/css/main.css" type="text/css" >
+        <link rel="stylesheet" href="../../../_static/css/highlight.css " type="text/css" >
+
+        <script type="text/javascript" id="documentation_options"
+                data-url_root="../../../"
+                src="../../../_static/documentation_options.js"></script>
+        <script async
+                src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"
+                type="application/javascript"></script>
+
+        <title>stylo.shape.curves - Stylo v0.9.0</title>
+
+        
+    </head>
+    <body>
+        <!-- Slightly modified from the basic theme in the Sphinx repository
+        https://github.com/sphinx-doc/sphinx/blob/master/sphinx/themes/basic/layout.html -->
+
+        <div class="header">
+            <a href="../../../index.html" id="site-name"><h2>Stylo<sub>v0.9.0</sub></h2></a>
+            <label class="menu-toggle" for="menu-toggle">Menu</label>
+            <input type="checkbox" id="menu-toggle">
+            <div class="nav-sections">
+                <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../using/index.html">User’s Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../extending/index.html">Extending</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../contributing/index.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../maths/index.html">Mathematics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/index.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../glossary.html">Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../changes.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../about.html">About the Docs</a></li>
+</ul>
+
+            </div>
+        </div>
+        <div class="nav">
+            <div>
+                <h3 class="nav-header">Page Contents</h3>
+                
+            </div>
+            <form class="search" action="../../../search.html" method="get">
+                  <input type="text" name="q" placeholder="Search"/>
+                  <input type="hidden" name="check_keywords" value="yes" />
+                  <input type="hidden" name="area" value="default" />
+            </form>
+        </div>
+        <div class="content">
+<div class="main">
+    <h1>Source code for stylo.shape.curves</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">stylo.shape.shape</span> <span class="k">import</span> <span class="n">Shape</span>
+
+
+<div class="viewcode-block" id="ImplicitXY"><a class="viewcode-back" href="../../../api/stylo_shape_curves.html#stylo.shape.curves.ImplicitXY">[docs]</a><span class="k">class</span> <span class="nc">ImplicitXY</span><span class="p">(</span><span class="n">Shape</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Define a curve using an implicit function in the :math:`x` and :math:`y`</span>
+<span class="sd">    coordinates.</span>
+
+<span class="sd">    A point :math:`(x, y)` lies on the curve defined by the function</span>
+<span class="sd">    :math:`f(x, y)` if the following holds.</span>
+
+<span class="sd">    .. math::</span>
+
+<span class="sd">       f(x, y) = 0</span>
+
+<span class="sd">    However since paths are one dimensional objects and have no area, if we used</span>
+<span class="sd">    this rule as it stands we would never see the curve in question. So instead we</span>
+<span class="sd">    introduce some error margin :math:`e &gt; 0` and say that a point is on the curve</span>
+<span class="sd">    if the following holds.</span>
+
+<span class="sd">    .. math::</span>
+
+<span class="sd">       |f(x, y)| \\leq e</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">pt</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">above</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">below</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Construct an instance of :code:`ImplicitXY` according to the given</span>
+<span class="sd">        parameters.</span>
+
+<span class="sd">        :param f: The function that defines the curve.</span>
+<span class="sd">        :param pt: The error margin, corresponds to :math:`e` in the above.</span>
+<span class="sd">                   (Default: 0.01)</span>
+<span class="sd">        :param above: If :code:`True` draw the area above the curve as a shaded</span>
+<span class="sd">                      region (Default: :code:`False`)</span>
+<span class="sd">        :param below: If :code:`True` draw the area underneath the curve as a shaded</span>
+<span class="sd">                      region (Default: False)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">f</span> <span class="o">=</span> <span class="n">f</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pt</span> <span class="o">=</span> <span class="n">pt</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">above</span> <span class="o">=</span> <span class="n">above</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">below</span> <span class="o">=</span> <span class="n">below</span>
+
+<div class="viewcode-block" id="ImplicitXY.draw"><a class="viewcode-back" href="../../../api/stylo_shape_curves.html#stylo.shape.curves.ImplicitXY.draw">[docs]</a>    <span class="k">def</span> <span class="nf">draw</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">below</span><span class="p">:</span>
+
+            <span class="k">def</span> <span class="nf">below_curve</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+                <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">f</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">0</span>
+
+            <span class="k">return</span> <span class="n">below_curve</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">above</span><span class="p">:</span>
+
+            <span class="k">def</span> <span class="nf">above_curve</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+                <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">f</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="mi">0</span>
+
+            <span class="k">return</span> <span class="n">above_curve</span>
+
+        <span class="k">def</span> <span class="nf">curve</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+            <span class="n">error</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">f</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">error</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pt</span>
+
+        <span class="k">return</span> <span class="n">curve</span></div></div>
+</pre></div>
+    
+</div>
+        </div>
+        <div class="footer">
+
+            
+                <p>
+                  Powered by <a href="http://www.sphinx-doc.org/">Sphinx</a> 1.8.2 &amp;
+                  <a href="https://github.com/alcarney/topos-theme">Topos Theme</a> 0.0.10
+                </p>
+        </div>
+    </body>
+</html>

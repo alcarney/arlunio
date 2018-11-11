@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+        <link href="https://fonts.googleapis.com/css?family=Nanum+Myeongjo" rel="stylesheet">
+
+        <!-- TODO: Run CSS + JS through minifiers -->
+        <link rel="stylesheet" href="../_static/css/main.css" type="text/css" >
+        <link rel="stylesheet" href="../_static/css/highlight.css " type="text/css" >
+
+        <script type="text/javascript" id="documentation_options"
+                data-url_root="../"
+                src="../_static/documentation_options.js"></script>
+        <script async
+                src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"
+                type="application/javascript"></script>
+
+        <title>Stylo.Testing.Image - Stylo v0.9.0</title>
+
+        
+    </head>
+    <body>
+        <!-- Slightly modified from the basic theme in the Sphinx repository
+        https://github.com/sphinx-doc/sphinx/blob/master/sphinx/themes/basic/layout.html -->
+
+        <div class="header">
+            <a href="../index.html" id="site-name"><h2>Stylo<sub>v0.9.0</sub></h2></a>
+            <label class="menu-toggle" for="menu-toggle">Menu</label>
+            <input type="checkbox" id="menu-toggle">
+            <div class="nav-sections">
+                <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../using/index.html">User’s Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../extending/index.html">Extending</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contributing/index.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../maths/index.html">Mathematics</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../glossary.html">Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changes.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../about.html">About the Docs</a></li>
+</ul>
+
+            </div>
+        </div>
+        <div class="nav">
+            <div>
+                <h3 class="nav-header">Page Contents</h3>
+                <ul>
+<li><a class="reference internal" href="#">Stylo.Testing.Image</a></li>
+</ul>
+
+            </div>
+            <form class="search" action="../search.html" method="get">
+                  <input type="text" name="q" placeholder="Search"/>
+                  <input type="hidden" name="check_keywords" value="yes" />
+                  <input type="hidden" name="area" value="default" />
+            </form>
+        </div>
+        <div class="content">
+<div class="main">
+    <div class="section" id="module-stylo.testing.image">
+<span id="id1"></span><span id="stylo-testing-image"></span><h1>Stylo.Testing.Image<a class="headerlink" href="#module-stylo.testing.image" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="stylo.testing.image.BaseImageTest">
+<em class="property">class </em><code class="descclassname">stylo.testing.image.</code><code class="descname">BaseImageTest</code><a class="reference internal" href="../_modules/stylo/testing/image.html#BaseImageTest"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#stylo.testing.image.BaseImageTest" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>A base class for writing <code class="code docutils literal notranslate"><span class="pre">Image</span></code> implementations.</p>
+<p>When writing your test case for a new <code class="code docutils literal notranslate"><span class="pre">Image</span></code> implementation you need to
+declare it as follows.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">unittest</span> <span class="kn">import</span> <span class="n">TestCase</span>
+<span class="kn">from</span> <span class="nn">stylo.testing.image</span> <span class="kn">import</span> <span class="n">BaseImageTest</span>
+
+<span class="k">class</span> <span class="nc">TestMyImage</span><span class="p">(</span><span class="n">TestCase</span><span class="p">,</span> <span class="n">BaseImageTest</span><span class="p">):</span>
+    <span class="o">...</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The order in which you write the classes is <em>very</em> important.</p>
+</div>
+<p>You also need to define the <code class="code docutils literal notranslate"><span class="pre">setUp</span></code> method to set the <code class="code docutils literal notranslate"><span class="pre">image</span></code> attribute
+equal to an instance of your image implementation.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">setUp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">image</span> <span class="o">=</span> <span class="n">MyImage</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Then in addition to any tests you write, your <code class="code docutils literal notranslate"><span class="pre">Image</span></code> implementation will be
+automatically tested to see if passes the checks defined below.</p>
+<dl class="method">
+<dt id="stylo.testing.image.BaseImageTest.test_encode">
+<code class="descname">test_encode</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; None<a class="reference internal" href="../_modules/stylo/testing/image.html#BaseImageTest.test_encode"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#stylo.testing.image.BaseImageTest.test_encode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Ensure that if the <code class="code docutils literal notranslate"><span class="pre">encode=True</span></code> keyword argument is given then a
+base64 encoded string representing the image in PNG format is returned.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+    
+</div>
+        </div>
+        <div class="footer">
+
+            
+                <p>
+                  Powered by <a href="http://www.sphinx-doc.org/">Sphinx</a> 1.8.2 &amp;
+                  <a href="https://github.com/alcarney/topos-theme">Topos Theme</a> 0.0.10
+                </p>
+        </div>
+    </body>
+</html>

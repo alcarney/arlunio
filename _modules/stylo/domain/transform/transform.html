@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+        <link href="https://fonts.googleapis.com/css?family=Nanum+Myeongjo" rel="stylesheet">
+
+        <!-- TODO: Run CSS + JS through minifiers -->
+        <link rel="stylesheet" href="../../../../_static/css/main.css" type="text/css" >
+        <link rel="stylesheet" href="../../../../_static/css/highlight.css " type="text/css" >
+
+        <script type="text/javascript" id="documentation_options"
+                data-url_root="../../../../"
+                src="../../../../_static/documentation_options.js"></script>
+        <script async
+                src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"
+                type="application/javascript"></script>
+
+        <title>stylo.domain.transform.transform - Stylo v0.9.0</title>
+
+        
+    </head>
+    <body>
+        <!-- Slightly modified from the basic theme in the Sphinx repository
+        https://github.com/sphinx-doc/sphinx/blob/master/sphinx/themes/basic/layout.html -->
+
+        <div class="header">
+            <a href="../../../../index.html" id="site-name"><h2>Stylo<sub>v0.9.0</sub></h2></a>
+            <label class="menu-toggle" for="menu-toggle">Menu</label>
+            <input type="checkbox" id="menu-toggle">
+            <div class="nav-sections">
+                <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../using/index.html">User’s Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../extending/index.html">Extending</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../contributing/index.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../maths/index.html">Mathematics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../api/index.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../glossary.html">Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../changes.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../about.html">About the Docs</a></li>
+</ul>
+
+            </div>
+        </div>
+        <div class="nav">
+            <div>
+                <h3 class="nav-header">Page Contents</h3>
+                
+            </div>
+            <form class="search" action="../../../../search.html" method="get">
+                  <input type="text" name="q" placeholder="Search"/>
+                  <input type="hidden" name="check_keywords" value="yes" />
+                  <input type="hidden" name="area" value="default" />
+            </form>
+        </div>
+        <div class="content">
+<div class="main">
+    <h1>Source code for stylo.domain.transform.transform</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">stylo.domain</span> <span class="k">import</span> <span class="n">RealDomain</span>
+<span class="kn">from</span> <span class="nn">stylo.domain._factory</span> <span class="k">import</span> <span class="n">define_domain_transform</span>
+<span class="kn">from</span> <span class="nn">stylo.shape</span> <span class="k">import</span> <span class="n">Shape</span>
+
+<span class="n">RealDomainTransform</span> <span class="o">=</span> <span class="n">define_domain_transform</span><span class="p">(</span><span class="n">RealDomain</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="find_base_transform"><a class="viewcode-back" href="../../../../api/stylo_domain_transform_transform.html#stylo.domain.transform.transform.find_base_transform">[docs]</a><span class="k">def</span> <span class="nf">find_base_transform</span><span class="p">(</span><span class="n">transform</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Given a domain transform, find its base class&quot;&quot;&quot;</span>
+
+    <span class="k">for</span> <span class="n">base</span> <span class="ow">in</span> <span class="n">transform</span><span class="o">.</span><span class="vm">__bases__</span><span class="p">:</span>
+
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">base</span><span class="p">,</span> <span class="s2">&quot;domain&quot;</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">base</span>
+
+    <span class="n">name</span> <span class="o">=</span> <span class="n">transform</span><span class="o">.</span><span class="vm">__name__</span>
+    <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2"> is not a domain transform&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="find_base_domain"><a class="viewcode-back" href="../../../../api/stylo_domain_transform_transform.html#stylo.domain.transform.transform.find_base_domain">[docs]</a><span class="k">def</span> <span class="nf">find_base_domain</span><span class="p">(</span><span class="n">base_transform</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Given a base domain transform class, find the base domain that</span>
+<span class="sd">    it transform.&quot;&quot;&quot;</span>
+
+    <span class="k">for</span> <span class="n">base</span> <span class="ow">in</span> <span class="n">base_transform</span><span class="o">.</span><span class="vm">__bases__</span><span class="p">:</span>
+
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">base</span><span class="p">,</span> <span class="s2">&quot;_parameters&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">base</span><span class="p">,</span> <span class="s2">&quot;domain&quot;</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">base</span>
+
+    <span class="n">name</span> <span class="o">=</span> <span class="n">base_transform</span><span class="o">.</span><span class="vm">__name__</span>
+    <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2"> is not a base domain transform&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="DomainTransformer"><a class="viewcode-back" href="../../../../api/stylo_domain_transform_transform.html#stylo.domain.transform.transform.DomainTransformer">[docs]</a><span class="k">class</span> <span class="nc">DomainTransformer</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;A class used to apply transformations, it enables us to do the syntactic</span>
+<span class="sd">    nicities when applying domain transforms.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">transform</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">transform</span> <span class="o">=</span> <span class="n">transform</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">args</span> <span class="o">=</span> <span class="n">args</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">kwargs</span> <span class="o">=</span> <span class="n">kwargs</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">base_transform</span> <span class="o">=</span> <span class="n">find_base_transform</span><span class="p">(</span><span class="n">transform</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">base_domain</span> <span class="o">=</span> <span class="n">find_base_domain</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">base_transform</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">transform</span><span class="o">.</span><span class="vm">__name__</span><span class="o">.</span><span class="n">lower</span>
+
+    <span class="k">def</span> <span class="nf">__rrshift__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">apply_transform</span><span class="p">(</span><span class="n">other</span><span class="p">)</span>
+
+<div class="viewcode-block" id="DomainTransformer.apply_transform"><a class="viewcode-back" href="../../../../api/stylo_domain_transform_transform.html#stylo.domain.transform.transform.DomainTransformer.apply_transform">[docs]</a>    <span class="k">def</span> <span class="nf">apply_transform</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj</span><span class="p">):</span>
+
+        <span class="n">transform</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">transform</span>
+        <span class="n">args</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">args</span>
+        <span class="n">kwargs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">kwargs</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">base_domain</span><span class="p">,)):</span>
+            <span class="k">return</span> <span class="n">transform</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="p">(</span><span class="n">Shape</span><span class="p">,)):</span>
+            <span class="n">obj</span><span class="o">.</span><span class="n">_add_transform</span><span class="p">(</span><span class="k">lambda</span> <span class="n">domain</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">domain</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">))</span>
+            <span class="k">return</span> <span class="n">obj</span>
+
+        <span class="n">obj_name</span> <span class="o">=</span> <span class="n">obj</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span>
+        <span class="n">message</span> <span class="o">=</span> <span class="s2">&quot;Unable to perform a </span><span class="si">{}</span><span class="s2"> to a </span><span class="si">{}</span><span class="s2">.&quot;</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="n">message</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">obj_name</span><span class="p">))</span></div></div>
+
+
+<div class="viewcode-block" id="define_transform"><a class="viewcode-back" href="../../../../api/stylo_domain_transform_transform.html#stylo.domain.transform.transform.define_transform">[docs]</a><span class="k">def</span> <span class="nf">define_transform</span><span class="p">(</span><span class="n">transform</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">transform_func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">DomainTransformer</span><span class="p">(</span><span class="n">transform</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">transform_func</span></div>
+</pre></div>
+    
+</div>
+        </div>
+        <div class="footer">
+
+            
+                <p>
+                  Powered by <a href="http://www.sphinx-doc.org/">Sphinx</a> 1.8.2 &amp;
+                  <a href="https://github.com/alcarney/topos-theme">Topos Theme</a> 0.0.10
+                </p>
+        </div>
+    </body>
+</html>
