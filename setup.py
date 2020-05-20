@@ -79,7 +79,7 @@ setup(
         "arlunio.cli.commands": [
             "repl = arlunio.cli.repl:Repl",
             "tutorial = arlunio.cli.tutorial:Tutorial",
-            "shapes = arlunio.tk:Shapes",
+            "nbedit = arlunio.tk:NbEdit",
         ],
     },
 )
