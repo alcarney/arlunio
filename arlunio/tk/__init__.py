@@ -34,4 +34,5 @@ class NbEdit:
 
         root = tk.Tk()
         app = NotebookViewer(root)
+        app.grid(row=0)
         app.mainloop()

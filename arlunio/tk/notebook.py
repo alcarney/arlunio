@@ -1,48 +1,75 @@
+import logging
 import tkinter as tk
 import tkinter.filedialog as filedialog
 import tkinter.ttk as ttk
 
 import nbformat
 
+logger = logging.getLogger(__name__)
 
-class NbCell:
-    """Mixin for common code across both cell types."""
 
-    def resize_cell(self, cell):
-        """Calculate the height a cell should be based on its contents"""
+class NbCell(tk.Frame):
+    """Base class for common code across both cell types."""
 
-        end = cell.index("end-1c")
+    def __init__(self, cell, parent=None):
+        super().__init__(parent)
+        # self.pack(padx=10, pady=10)
+
+        self.cell = cell
+
+        self.textbox = tk.Text(self)
+        self.textbox.insert("1.0", self.cell.source)
+
+        # We want to resize the textbox only once the default Text handler
+        # has processed the event. So using the concept of "bind tags" we can
+        # create a custom tag in the event handler chain right where we need it
+        # to be and then bind to that.
+        #
+        # https://stackoverflow.com/questions/2458026/python-gui-events-out-of-order
+        # https://stackoverflow.com/questions/40421993/confused-about-tkinter-bind-class
+        btags = list(self.textbox.bindtags())
+        index = btags.index("Text")
+
+        wid = str(self.textbox).replace("!", "").replace(".", "")
+        tag = f"{wid}-post-Text"  # Tag must be unique
+        btags.insert(index + 1, tag)
+
+        self.textbox.bindtags(tuple(btags))
+        self.textbox.bind_class(tag, "<KeyPress>", self.on_input)
+
+        # Ensure that the textbox has an appropriate size for the initial content.
+        self.resize_textbox()
+        self.textbox.grid(row=0)
+
+    def on_input(self, event):
+        """Called whenever the user enters text."""
+        logger.debug("%s", self.textbox)
+        self.resize_textbox()
+
+    def resize_textbox(self):
+        """Calculate the height a cell should be based on its contents
+
+        TODO: Handle the case where we have line wrapping enabled.
+        """
+        end = self.textbox.index("end-1c")
+
         lines = int(end.split(".")[0])
-
-        cell.config(height=lines)
-
-
-class MarkdownCell(tk.Frame, NbCell):
-    """Our representation of a code cell."""
-
-    def __init__(self, cell, parent=None):
-        super().__init__(parent)
-        self.pack(padx=10, pady=10)
-
-        source = tk.Text(self)
-        source.insert("1.0", cell.source)
-        source["wrap"] = "word"
-        self.resize_cell(source)
-
-        source.pack()
+        self.textbox.config(height=lines)
 
 
-class CodeCell(tk.Frame, NbCell):
-    """Our representation of a code cell."""
+class MarkdownCell(NbCell):
+    """A NbCell specialised to handle markdown content."""
 
     def __init__(self, cell, parent=None):
-        super().__init__(parent)
-        self.pack(padx=10, pady=10)
+        super().__init__(cell, parent)
+        self.textbox["wrap"] = "word"
 
-        source = tk.Text(self)
-        source.insert("1.0", cell.source)
-        self.resize_cell(source)
-        source.pack(fill=tk.X, expand=True)
+
+class CodeCell(NbCell):
+    """An NbCell specialised to handle code."""
+
+    def __init__(self, cell, parent=None):
+        super().__init__(cell, parent)
 
 
 class NotebookViewer(tk.Frame):
@@ -78,7 +105,8 @@ class NotebookViewer(tk.Frame):
 
         notebook = nbformat.read(nb, as_version=nbformat.NO_CONVERT)
 
-        for cell in notebook.cells:
+        for i, cell in enumerate(notebook.cells):
+            logger.debug("Loading cell: %s", i)
 
             if cell.cell_type == "markdown":
                 tkcell = MarkdownCell(cell, parent=self)
@@ -86,7 +114,11 @@ class NotebookViewer(tk.Frame):
             if cell.cell_type == "code":
                 tkcell = CodeCell(cell, parent=self)
 
-        self.pack()
+                label = ttk.Label(self, text="[ ]: ")
+                label.grid(row=i, column=0)
+                label.config(anchor=tk.N)
+
+            tkcell.grid(row=i, column=1)
 
     def on_quit(self, event=None):
         self.quit()
