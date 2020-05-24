@@ -10,3 +10,4 @@ Contributing
 
    get-started
    ci/index
+   notes/index

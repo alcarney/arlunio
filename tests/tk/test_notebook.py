@@ -1,8 +1,10 @@
 import tkinter as tk
 
 import nbformat.v4 as nb
+import PIL.Image as Image
 import py.test
 
+from arlunio.lib.image import encode
 from arlunio.tk.notebook import CodeCell, MarkdownCell
 
 
@@ -14,7 +16,7 @@ def tk_root():
     root.deiconify()
 
     yield root
-    # root.mainloop()
+
     root.update()
 
     for w in root.winfo_children():
@@ -84,6 +86,77 @@ class TestCodeCell:
         assert value == final
 
         assert code_cell.textbox.cget("height") == height
+
+    @py.test.mark.tk
+    def test_stream(self, tk_root):
+        """Ensure that we can add output to a cell that didn't previously have any."""
+
+        cell = CodeCell(nb.new_code_cell(), parent=tk_root)
+        cell.grid(row=1)
+        cell.add_stream_output("Hi there.")
+
+        tk_root.update()
+        assert cell.stream["text"] == "Hi there."
+
+    @py.test.mark.tk
+    def test_stream_multiple(self, tk_root):
+        """Ensure that we can add output to a cell incrementally."""
+
+        cell = CodeCell(nb.new_code_cell(), parent=tk_root)
+        cell.grid(row=1)
+        cell.add_stream_output("Hello\n")
+        cell.add_stream_output("World\n")
+
+        tk_root.update()
+        assert cell.stream["text"] == "Hello\nWorld\n"
+
+    @py.test.mark.tk
+    def test_textdata(self, tk_root):
+        """Ensure that we can associate text data to a cell that didn't previously have
+        any."""
+
+        data = {"text/plain": "3"}
+
+        cell = CodeCell(nb.new_code_cell(), parent=tk_root)
+        cell.grid(row=1)
+        cell.add_data_output(data)
+
+        tk_root.update()
+        assert cell.textdata["text"] == "3"
+
+    @py.test.mark.tk
+    def test_textdata_multiple(self, tk_root):
+        """Ensure that we can associate text data to a cell incrementally."""
+
+        data = {"text/plain": "3"}
+        data2 = {"text/plain": "4"}
+        data3 = {"text/plain": "5"}
+
+        cell = CodeCell(nb.new_code_cell(), parent=tk_root)
+        cell.grid(row=1)
+        cell.add_data_output(data)
+        cell.add_data_output(data2)
+        cell.add_data_output(data3)
+
+        tk_root.update()
+        assert cell.textdata["text"] == "3\n4\n5"
+
+    @py.test.mark.tk
+    def test_imgdata(self, tk_root, testdata):
+        """Ensure that we can associate an image with a cell"""
+
+        imgpath = testdata("tk/circle.png", path_only=True)
+        img = Image.open(imgpath)
+        image = encode(img).decode("utf-8")
+
+        data = {"image/png": image + "\n"}
+
+        cell = CodeCell(nb.new_code_cell(), parent=tk_root)
+        cell.grid(row=1)
+        cell.add_data_output(data)
+
+        tk_root.update()
+        assert cell.imgdata is not None  # Is there a better check than this?
 
 
 class TestMarkdownCell:

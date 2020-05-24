@@ -80,7 +80,14 @@ def save(image, filename: str, mkdirs: bool = False) -> None:
         image.save(f)
 
 
-def encode(image) -> bytes:
+def decode(bytes_: str) -> Image:
+    """Return an image as represented by a base64 string"""
+
+    data = base64.b64decode(bytes_)
+    return PImage.open(io.BytesIO(data))
+
+
+def encode(image: Image) -> bytes:
     """Return the image encoded as a base64 string."""
 
     with io.BytesIO() as byte_stream:
