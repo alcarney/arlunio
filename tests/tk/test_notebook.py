@@ -1,3 +1,4 @@
+import time
 import tkinter as tk
 
 import nbformat.v4 as nb
@@ -32,23 +33,69 @@ class TestCodeCell:
     @py.test.mark.parametrize(
         "txt,height",
         [
-            (None, 1),
+            ("", 1),
             ("print('Hello, World!')", 1),
             ("def f(a,b):\n    '''A docstring.'''\n    return a + b", 3),
         ],
     )
-    def test_init_cell(self, tk_root, txt, height):
-        """Ensure that the cell handles being given an empty code cell"""
+    def test_init_existing_cell_source(self, tk_root, txt, height):
+        """Ensure that the cell handles being given an existing cell containing source
+        code."""
 
         cell = nb.new_code_cell()
-
-        if txt is not None:
-            cell.source = txt
+        cell.source = txt
 
         code_cell = CodeCell(cell, parent=tk_root)
         code_cell.grid(row=1)
 
+        tk_root.update()
+        assert code_cell.textbox.get("1.0", "end-1c") == txt
         assert code_cell.textbox.cget("height") == height
+
+    @py.test.mark.tk
+    @py.test.mark.parametrize(
+        "count,label", [(None, "[ ]: "), (4, "[4]: "), (128, "[128]: ")]
+    )
+    def test_init_existing_cell_exec_count(self, tk_root, count, label):
+        """Ensure that the cell handles being given an existing cell with an execution
+        count."""
+
+        cell = nb.new_code_cell()
+        cell.execution_count = count
+
+        code_cell = CodeCell(cell, parent=tk_root)
+        code_cell.grid(row=0)
+
+        tk_root.update()
+        assert code_cell.exec_count["text"] == label
+
+    @py.test.mark.tk
+    @py.test.mark.this
+    @py.test.mark.parametrize(
+        "txt,stream,height",
+        [
+            ("Hi there\n", "stdout", 1),
+            ("a\nb\nc\n", "stdout", 3),
+            ("1\n2\n3\n4\n5\n6\n7\n8\n9\n10\n", "stdout", 5),
+            ("Logging info\n", "stderr", 1),
+        ],
+    )
+    def test_init_existing_cell_stream(self, tk_root, txt, stream, height):
+        """Ensure that the cell handles being given an existing cell with stream
+        output."""
+
+        cell = nb.new_code_cell()
+        cell.outputs.append(nb.new_output("stream", name=stream, text=txt))
+
+        code_cell = CodeCell(cell, parent=tk_root)
+        code_cell.grid(row=0)
+
+        tk_root.update()
+
+        assert code_cell.stream.get("1.0", "end-1c") == txt
+        assert code_cell.stream.cget("height") == height
+
+        time.sleep(3)
 
     @py.test.mark.tk
     @py.test.mark.parametrize(
@@ -83,8 +130,9 @@ class TestCodeCell:
             code_cell.textbox.event_generate("<KeyPress>", keysym=sym)
 
         value = code_cell.textbox.get("1.0", "end-1c")
-        assert value == final
+        tk_root.update()
 
+        assert value == final
         assert code_cell.textbox.cget("height") == height
 
     @py.test.mark.tk

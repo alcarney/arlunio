@@ -10,6 +10,8 @@ from arlunio.lib.image import decode
 from jupyter_client import KernelManager
 from PIL import ImageTk
 
+from .components import View
+
 logger = logging.getLogger(__name__)
 
 
@@ -54,7 +56,7 @@ def create_bind_tag(obj, tag, after=None, before=None):
     return tag
 
 
-class NbCell(tk.Frame):
+class NbCell(ttk.Frame):
     """Base class for common code across both cell types."""
 
     def __init__(self, cell, parent=None):
@@ -73,7 +75,7 @@ class NbCell(tk.Frame):
 
         # Ensure that the textbox has an appropriate size for the initial content.
         self.resize_textbox()
-        self.textbox.grid(row=0)
+        self.textbox.grid(row=0, column=1, sticky=tk.N + tk.W + tk.E)
 
     def on_run(self, event):
         """Called whenever the user runs the cell."""
@@ -117,14 +119,44 @@ class CodeCell(NbCell):
         self.textdata = None
         self.imgdata = None
 
-    def add_stream_output(self, txt):
+        # Populate the cell with any exising data
+        self.exec_count = ttk.Label(
+            self, text=self._fmt_exec_count(cell.execution_count), font="TkFixedFont"
+        )
+        self.exec_count.grid(row=0, column=0, sticky=tk.N + tk.W)
+        self.add_output(cell.outputs)
+
+    def _add_stream(self, output):
         """Add more text to the output stream"""
 
         if self.stream is None:
-            self.stream = ttk.Label(self, text="", anchor=tk.W)
-            self.stream.grid(row=1, sticky=tk.W)
+            self.stream = tk.Text(self)
+            self.stream.grid(row=1, column=1)
 
-        self.stream["text"] += txt
+            self.stream.tag_config("stderr", background="#d33", foreground="#333")
+            self.stream.tag_config("stdout", foreground="#333")
+
+        # The text widget needs to be enabled to modify text
+        self.stream.config(state=tk.NORMAL)
+        self.stream.insert("end", output.text, output.name)
+        self.stream.config(state=tk.DISABLED)
+
+        # Resize the box according to output size
+        lines = int(self.stream.index("end-1c").split(".")[0])
+
+        if self.stream.get("end-1c") == "\n":
+            lines -= 1
+
+        height = min(lines, 5)  # Max height of 5 lines.
+        self.stream.config(height=height)
+        self.stream.see("end-2c")
+
+    def _fmt_exec_count(self, exec_count):
+
+        if exec_count is None:
+            return "[ ]: "
+
+        return f"[{exec_count}]: "
 
     def _add_plain_text(self, txt):
 
@@ -135,7 +167,7 @@ class CodeCell(NbCell):
 
         if self.textdata is None:
             self.textdata = ttk.Label(self, text="", anchor=tk.W)
-            self.textdata.grid(row=2, sticky=tk.W)
+            self.textdata.grid(row=2, column=1, sticky=tk.W)
             prefix = ""
 
         self.textdata["text"] += prefix + txt
@@ -151,15 +183,25 @@ class CodeCell(NbCell):
         image = decode(image)
         imagetk = ImageTk.PhotoImage(image)
 
-        self.imgdata = ttk.Label(image=imagetk)
+        self.imgdata = ttk.Label(self, image=imagetk)
         self.imgdata.image = imagetk
-        self.imgdata.grid(row=3)
+        self.imgdata.grid(row=3, column=1)
 
-    def add_data_output(self, data):
-        """Add extra data to the cell's output"""
+    def add_output(self, outputs):
+        """Process outputs for a cell."""
 
-        self._add_plain_text(data.get("text/plain", None))
-        self._add_image(data.get("image/png", None))
+        for output in outputs:
+
+            if output.output_type == "stream":
+                self._add_stream(output)
+                continue
+
+            if output.output_type == "execute_result":
+                data = output["data"]
+                self._add_plain_text(data.get("text/plain", None))
+                self._add_image(data.get("image/png", None))
+
+                continue
 
     def on_run(self, event):
         code = self.textbox.get("1.0", "end-1c")
@@ -179,13 +221,13 @@ class CodeCell(NbCell):
         return "break"
 
 
-class NotebookViewer(tk.Frame):
+class NotebookViewer(View):
     """A viewer for notebook files."""
 
     def __init__(self, parent=None):
         super().__init__(parent)
 
-        self.init_menu()
+        #        self.init_menu()
         self.init_shortcuts()
 
         self.cells = []
@@ -245,18 +287,13 @@ class NotebookViewer(tk.Frame):
             cell.destroy()
 
         for i, cell in enumerate(notebook.cells):
-            logger.debug("Loading cell: %s", i)
             self.grid_rowconfigure(i, pad=10)
 
             if cell.cell_type == "markdown":
-                tkcell = MarkdownCell(cell, parent=self)
+                tkcell = MarkdownCell(cell, parent=self.view)
 
             if cell.cell_type == "code":
-                tkcell = CodeCell(cell, parent=self)
-
-                label = ttk.Label(self, text="[ ]: ")
-                label.grid(row=i, column=0)
-                label.config(anchor=tk.N)
+                tkcell = CodeCell(cell, parent=self.view)
 
             tkcell.grid(row=i, column=1)
             self.cells.append(tkcell)
