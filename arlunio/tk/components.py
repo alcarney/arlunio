@@ -28,21 +28,23 @@ class View(ttk.Frame):
         self.view.bind("<Configure>", self._resize_view)
 
         # Allow users to scroll on the view itself.
-        self.view.bind("<Button-4>", self._on_scroll)
-        self.view.bind("<Button-5>", self._on_scroll)
+        self.view.bind_all("<Button-4>", self._on_scroll)
+        self.view.bind_all("<Button-5>", self._on_scroll)
 
         self._canvas.create_window((0, 0), window=self.view, anchor="nw")
         self._canvas.configure(yscrollcommand=self._scrollbar.set)
         self._canvas.grid(row=0, column=0, sticky=tk.N + tk.E + tk.S + tk.W)
+        self._canvas.bind("<Configure>", self._resize_canvas)
 
         self._scrollbar.grid(row=0, column=1, sticky=tk.N + tk.E + tk.S + tk.W)
 
     def _on_scroll(self, event):
         """Allow the user to scroll the view with the mouse."""
         direction = -1 if event.num == 4 else 1
-
         self._canvas.yview_scroll(direction, "units")
-        logger.debug("Scroll: %s, %s", event, direction)
+
+    def _resize_canvas(self, event):
+        logger.debug("Configure: %s", event)
 
     def _resize_view(self, event):
         self._canvas.configure(scrollregion=self._canvas.bbox("all"))

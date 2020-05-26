@@ -62,6 +62,7 @@ class NbCell(ttk.Frame):
     def __init__(self, cell, parent=None):
         super().__init__(parent)
         self.cell = cell
+        self.grid_columnconfigure(1, weight=1)
 
         self.textbox = tk.Text(self)
         self.textbox.insert("1.0", self.cell.source)
@@ -107,6 +108,9 @@ class MarkdownCell(NbCell):
         super().__init__(cell, parent)
         self.textbox["wrap"] = "word"
 
+        self.lbl = ttk.Label(self, text="     ", font="TkFixedFont")
+        self.lbl.grid(row=0, column=0, sticky=tk.N + tk.W)
+
 
 class CodeCell(NbCell):
     """An NbCell specialised to handle code."""
@@ -131,7 +135,7 @@ class CodeCell(NbCell):
 
         if self.stream is None:
             self.stream = tk.Text(self)
-            self.stream.grid(row=1, column=1)
+            self.stream.grid(row=1, column=1, pady=10, sticky=tk.N + tk.E + tk.W)
 
             self.stream.tag_config("stderr", background="#d33", foreground="#333")
             self.stream.tag_config("stdout", foreground="#333")
@@ -167,7 +171,7 @@ class CodeCell(NbCell):
 
         if self.textdata is None:
             self.textdata = ttk.Label(self, text="", anchor=tk.W)
-            self.textdata.grid(row=2, column=1, sticky=tk.W)
+            self.textdata.grid(row=2, column=1, sticky=tk.N + tk.W + tk.E)
             prefix = ""
 
         self.textdata["text"] += prefix + txt
@@ -279,15 +283,11 @@ class NotebookViewer(View):
     def load_notebook(self, notebook):
         """Load the given notebook object."""
 
-        self.grid_columnconfigure(0, pad=10)
-        self.grid_columnconfigure(1, pad=10)
-
         for cell in self.cells:
             cell.grid_remove()
             cell.destroy()
 
         for i, cell in enumerate(notebook.cells):
-            self.grid_rowconfigure(i, pad=10)
 
             if cell.cell_type == "markdown":
                 tkcell = MarkdownCell(cell, parent=self.view)
@@ -295,7 +295,7 @@ class NotebookViewer(View):
             if cell.cell_type == "code":
                 tkcell = CodeCell(cell, parent=self.view)
 
-            tkcell.grid(row=i, column=1)
+            tkcell.grid(row=i, column=0, pady=10, padx=20, sticky=tk.N + tk.W + tk.E)
             self.cells.append(tkcell)
 
         self.restart_kernel()
