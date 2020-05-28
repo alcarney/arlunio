@@ -36,7 +36,7 @@ class NbEdit:
         root.rowconfigure(0, weight=1)
         root.columnconfigure(0, weight=1)
 
-        app = NotebookViewer(root)
+        app = NotebookViewer(root, root=root)
         app.grid(row=0, column=0, sticky=tk.N + tk.S + tk.E + tk.W)
 
         root.mainloop()

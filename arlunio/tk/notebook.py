@@ -59,9 +59,11 @@ def create_bind_tag(obj, tag, after=None, before=None):
 class NbCell(ttk.Frame):
     """Base class for common code across both cell types."""
 
-    def __init__(self, cell, parent=None):
-        super().__init__(parent)
+    def __init__(self, cell, *args, parent=None, nb=None, **kwargs):
+        super().__init__(parent, *args, **kwargs)
         self.cell = cell
+        self.nb = nb
+
         self.grid_columnconfigure(1, weight=1)
 
         self.textbox = tk.Text(self)
@@ -228,12 +230,10 @@ class CodeCell(NbCell):
 class NotebookViewer(View):
     """A viewer for notebook files."""
 
-    def __init__(self, parent=None):
-        super().__init__(parent)
+    def __init__(self, parent=None, *args, **kwargs):
+        super().__init__(parent, *args, **kwargs)
 
-        #        self.init_menu()
         self.init_shortcuts()
-
         self.cells = []
 
         self.kmanager = KernelManager(kernel_name="python3")
@@ -253,7 +253,7 @@ class NotebookViewer(View):
         nb = nbv4.new_notebook(cells=[nbv4.new_code_cell()])
         self.load_notebook(nb)
 
-    def init_menu(self):
+    def init_menu(self, root):
 
         menubar = tk.Menu(self)
 
@@ -262,8 +262,7 @@ class NotebookViewer(View):
         filemenu.add_command(label="Exit", command=self.on_quit, accelerator="Ctrl-Q")
 
         menubar.add_cascade(label="File", menu=filemenu)
-        self.master.title("Notebook Editor | Arlunio")
-        self.master.config(menu=menubar)
+        root.config(menu=menubar)
 
     def init_shortcuts(self):
         self.bind_all("<Control-o>", self.on_open)
@@ -290,10 +289,10 @@ class NotebookViewer(View):
         for i, cell in enumerate(notebook.cells):
 
             if cell.cell_type == "markdown":
-                tkcell = MarkdownCell(cell, parent=self.view)
+                tkcell = MarkdownCell(cell, parent=self.view, nb=self)
 
             if cell.cell_type == "code":
-                tkcell = CodeCell(cell, parent=self.view)
+                tkcell = CodeCell(cell, parent=self.view, nb=self)
 
             tkcell.grid(row=i, column=0, pady=10, padx=20, sticky=tk.N + tk.W + tk.E)
             self.cells.append(tkcell)

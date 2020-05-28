@@ -9,8 +9,11 @@ class View(ttk.Frame):
     """A complete 'mini-application' that hopefully will be composable into larger
     apps at some point."""
 
-    def __init__(self, parent, *args, **kwargs):
+    def __init__(self, parent, *args, root=None, **kwargs):
         super().__init__(parent, *args, **kwargs)
+
+        if root is not None:
+            self.init_menu(root)
 
         self.rowconfigure(0, weight=1)
 
@@ -37,6 +40,9 @@ class View(ttk.Frame):
         self._canvas.bind("<Configure>", self._resize_canvas)
 
         self._scrollbar.grid(row=0, column=1, sticky=tk.N + tk.E + tk.S + tk.W)
+
+    def init_menu(self, root):
+        """Views should override this if they provide a menubar."""
 
     def _on_scroll(self, event):
         """Allow the user to scroll the view with the mouse."""
