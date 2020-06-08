@@ -11,35 +11,43 @@ logger = logging.getLogger(__name__)
 
 def _build_bool_option(parameter: inspect.Parameter) -> Dict[str, Any]:
     """Provide the argparse options for a boolean option."""
-    params = {"action": "store_false" if parameter.default is True else "store_true"}
 
-    return params
+    return {"action": "store_false" if parameter.default is True else "store_true"}
 
 
 def _build_float_option(parameter: inspect.Parameter) -> Dict[str, Any]:
     """Provide the argparse options for a float option."""
-    params = {
+
+    return {
         "type": float,
         "default": None if parameter.default == parameter.empty else parameter.default,
     }
 
-    return params
-
 
 def _build_int_option(parameter: inspect.Parameter) -> Dict[str, Any]:
     """Provides the argparse options for an integer option."""
-    params = {
+
+    return {
         "type": int,
         "default": None if parameter.default == parameter.empty else parameter.default,
     }
 
-    return params
+
+def _build_str_option(parameter: inspect.Parameter) -> Dict[str, Any]:
+    """Provides the argparse options for a string option."""
+
+    return {
+        "type": str,
+        "default": None if parameter.default == parameter.empty else parameter.default,
+        "required": parameter.default == parameter.empty,
+    }
 
 
 _STD_TYPES = {
     bool: _build_bool_option,
     float: _build_float_option,
     int: _build_int_option,
+    str: _build_str_option,
 }
 
 

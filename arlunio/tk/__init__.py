@@ -1,8 +1,7 @@
+import importlib
 import logging
 
-import arlunio as ar
-
-from .components import ImageViewer
+from .inspect import Inspector
 
 try:
     import tkinter as tk
@@ -18,38 +17,15 @@ except ImportError:
     TK = False
 
 
-logger = logging.getLogger(__name__)
+class Inspect:
+    """Open the arlunio inspector.
 
+    TODO: Add support for notebooks!
 
-class ShapeDesigner(tk.Frame):
-    """UI for designing new shapes"""
+    :param module: The module to inspect."""
 
-    def __init__(self, parent=None):
-        super().__init__(parent)
-        self.pack(fill=tk.BOTH, expand=tk.TRUE)
-
-        self.viewer = ImageViewer(self)
-        self.viewer.pack(fill=tk.BOTH, expand=tk.TRUE, side=tk.LEFT)
-        self.viewer.set_item(ar.S.Circle())
-        self.shapes = {s.__name__: s for s in ar.S._items.values()}
-
-        self.shape_picker = ttk.Combobox(self, values=list(self.shapes.keys()))
-        self.shape_picker.pack(side=tk.TOP)
-        self.shape_picker.current(0)
-        self.shape_picker.bind("<<ComboboxSelected>>", self.render_shape)
-
-    def render_shape(self, event):
-        logger.debug(event)
-        name = self.shape_picker.get()
-        shape = self.shapes[name]()
-
-        self.viewer.set_item(shape)
-
-
-class Shapes:
-    """Launches a simple shape previewer."""
-
-    def run(self):
+    def run(self, module: str):
+        logger = logging.getLogger(__name__)
 
         if not TK:
             logger.info(
@@ -59,6 +35,19 @@ class Shapes:
             )
             return 1
 
+        try:
+            mod = importlib.import_module(module)
+        except ImportError as exc:
+            logger.error("Unable to inspect module '%s': %s", module, exc)
+            return 1
+
         root = tk.Tk()
-        app = ShapeDesigner(root)
-        app.mainloop()
+        root.rowconfigure(0, weight=1)
+        root.columnconfigure(0, weight=1)
+
+        app = Inspector(mod, root)
+        app.grid(row=0, column=0, sticky=tk.N + tk.S + tk.E + tk.W)
+
+        root.title(f"{module} - Arlunio Inspector")
+        root.geometry("800x600")
+        root.mainloop()
